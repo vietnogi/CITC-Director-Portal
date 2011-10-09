@@ -1,0 +1,7 @@
+1) simple, maintainable, light weight, object oriented
+2) classes should not be procedural, member variables should be private, most functions should have an input and a return value.
+3) php variables/functions should be camel case.
+4) string indexes should be underscored.
+5) simple array objects strategy: data from db should be treated as an object although it is only defined by an array.  try not to redefined existing objects!
+ie. $customer = array('user_id', 'first_name', 'last_name'); do not declare, $customer = array('user_id', 'first_name', 'last_name', 'random');
+6) try not to hard code.

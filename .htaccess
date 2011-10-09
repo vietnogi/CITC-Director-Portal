@@ -1,0 +1,72 @@
+
+#11:34 AM 4/23/2010
+#php stuff
+php_flag display_errors on
+php_value upload_max_filesize 100M
+php_value post_max_size 100M
+php_value error_reporting -1
+php_value output_buffering "0"
+
+
+RewriteEngine on
+Options -Indexes
+Options -MultiViews
+
+#may need this for some servers, specifically network solutions
+#RewriteBase /
+
+# System down
+#RewriteRule ^(.*)/?$ system-down.php [QSA,L]
+
+# Enforce Canonical Hostname Redirect (non-www to www):
+#RewriteCond %{HTTP_HOST} ^domain\.com
+#RewriteRule (.*) http://www.domain.com/$1 [R=301,L]
+
+# Enforce https
+RewriteCond %{HTTPS} off
+# Public
+RewriteCond %{REQUEST_URI} !(action|ajax)
+RewriteRule ^(account|login|register|checkout)(.*)?$ https://%{SERVER_NAME}%{REQUEST_URI} [R=301,L]
+# Admin
+#RewriteRule ^(.*)$ https://%{SERVER_NAME}%{REQUEST_URI} [QSA,L]
+
+# Enforce http
+RewriteCond %{HTTPS} on
+# Public
+RewriteCond %{REQUEST_URI} !(action|ajax)
+RewriteCond %{REQUEST_URI} !(account|login|register|checkout|js|css|images|flash|fonts)
+RewriteCond %{REQUEST_URI} !index.php
+RewriteRule ^(.*)$ http://%{SERVER_NAME}%{REQUEST_URI} [R=301,QSA,L]
+
+# Minify JS
+RewriteRule ^js/minify\.js$ js/minify.php [QSA,L]
+RewriteRule ^js/(.+)\.js$ js/$1.js.php [QSA,L]
+# Minify CSS
+RewriteRule ^css/minify\.css$ css/minify.php [QSA,L]
+RewriteRule ^css/(.+)\.css$ css/$1.css.php [QSA,L]
+
+# Action/Ajax
+RewriteRule ^(action)/(.*)$ $2?index=$1 [QSA]
+RewriteRule ^(ajax)/(.*)$ ?index=$1 [QSA]
+
+# Sub-directories
+RewriteCond %{REQUEST_FILENAME} -d
+RewriteRule ^([a-z0-9-]+)$ index.php [QSA,L]
+
+# Emails
+RewriteRule ^emails/(html|text)/([a-z0-9-]+)/?$ index.php?p=emails/$1.php&email-type=$1&email-name=$2 [QSA,L]
+
+# Default clean urls and framework template file
+RewriteCond %{REQUEST_URI} !(alone|crons|css|flv|fonts|js|images|library|pdf|swf|testing|tinymce|uploads|videos|xml)/
+RewriteCond %{REQUEST_URI} !^(development)
+RewriteCond %{REQUEST_URI} !favicon.ico
+RewriteCond %{REQUEST_URI} !sitemap.xml
+RewriteCond %{REQUEST_URI} !robots.txt
+RewriteCond %{REQUEST_URI} !index.php
+#RewriteRule ^(.*?)/?$ index.php?p=$1.php [QSA,L]
+RewriteCond %{REQUEST_URI} !(.*)/$
+RewriteRule ^(.*)$ index.php?p=$1.php [QSA,L]
+RewriteRule ^(.*)/$ index.php?p=$1.php [QSA,L]
+
+
+ErrorDocument 404 /index.php?p=error.php

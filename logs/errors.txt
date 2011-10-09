@@ -1,0 +1,46 @@
+09/10/11 10:20:15 PM :: 107.3.151.150
+/new-framework/customer/home : customer does exist for user: 3
+09/10/11 10:20:53 PM :: 107.3.151.150
+/new-framework/customer/home : customer does exist for user: 3
+09/10/11 10:21:14 PM :: 107.3.151.150
+/new-framework/customer/home : customer does exist for user: 3
+09/11/11 09:37:45 PM :: 107.3.151.150
+/new-framework/action/customer/enrollment/select-a-season?camper-index=0&season_id=3&lv2-token=5fe9319c6679be97695b1ac89ab6af5b : /new-framework/action/customer/enrollment/select-a-season?camper-index=0&season_id=3&lv2-token=5fe9319c6679be97695b1ac89ab6af5b :: validate failed: index: 0, check: min, value: 
+09/14/11 02:26:19 PM :: 208.74.177.139
+/new-framework/action/customer/enrollment/select-a-season?camper-index=&season_id=3&lv2-token=e0ef82dcca23a6c34ad49cd1829577e20d029d62 : /new-framework/action/customer/enrollment/select-a-season?camper-index=&season_id=3&lv2-token=e0ef82dcca23a6c34ad49cd1829577e20d029d62 :: validate failed: index: 1, check: min, value: 
+09/14/11 03:39:22 PM :: 208.74.177.139
+/new-framework/action/customer/enrollment/select-a-season?camper-index=&season_id=3&lv2-token=e0ef82dcca23a6c34ad49cd1829577e20d029d62 : /new-framework/action/customer/enrollment/select-a-season?camper-index=&season_id=3&lv2-token=e0ef82dcca23a6c34ad49cd1829577e20d029d62 :: validate failed: index: 1, check: min, value: 
+09/14/11 03:39:53 PM :: 208.74.177.139
+/new-framework/action/customer/enrollment/select-a-season?camper-index=&season_id=3&lv2-token=e0ef82dcca23a6c34ad49cd1829577e20d029d62 : /new-framework/action/customer/enrollment/select-a-season?camper-index=&season_id=3&lv2-token=e0ef82dcca23a6c34ad49cd1829577e20d029d62 :: validate failed: index: 1, check: min, value: 
+09/15/11 03:37:28 PM :: 208.74.177.139
+/new-framework/customer/enrollment/session-information?camper-index=0 : /var/www/new-framework/data/customer/enrollment/session-information.php 14 : season has not been chosen
+09/16/11 01:58:41 PM :: 208.74.177.139
+/new-framework/action/customer/enrollment/session-information?camper-index=0&lv2-token=270364c93f6c7eb44c23551a7d6035dd : Please select at least one session and program.
+09/16/11 03:55:16 PM :: 208.74.177.139
+/new-framework/action/customer/enrollment/select-a-season?camper-index=0&season_id=3&lv2-token=58165fc626983b066295f7e32d21c8f4 : /var/www/new-framework/action/customer/enrollment/select-a-season.php 30 : unable to find season.
+09/16/11 03:56:15 PM :: 208.74.177.139
+/new-framework/customer/enrollment/camper-information?camper-index=0 : /var/www/new-framework/data/customer/enrollment/camper-information.php 14 : season has not been chosen
+09/16/11 03:59:57 PM :: 208.74.177.139
+/new-framework/customer/enrollment/camper-information?camper-index=0 : /var/www/new-framework/data/customer/enrollment/camper-information.php 14 : season has not been chosen
+09/17/11 09:02:14 PM :: 107.3.151.150
+/new-framework/customer/enrollment/billing-information : customer does not exist for user: 4
+09/17/11 09:02:18 PM :: 107.3.151.150
+/new-framework/customer/enrollment/billing-information : customer does not exist for user: 4
+09/18/11 04:05:45 PM :: 107.3.151.150
+/new-framework/customer/enrollment/camper-information?camper-index=0 : /new-framework/customer/enrollment/camper-information?camper-index=0 :: validate failed: index: 0, check: min, value: 
+09/18/11 04:09:29 PM :: 107.3.151.150
+/new-framework/customer/enrollment/select-a-season?camper-index=0 : /new-framework/customer/enrollment/select-a-season?camper-index=0 :: validate failed: index: 0, check: min, value: 
+09/18/11 04:10:11 PM :: 107.3.151.150
+/new-framework/customer/enrollment/select-a-season?camper-index=0 : /new-framework/customer/enrollment/select-a-season?camper-index=0 :: validate failed: index: 0, check: min, value: 
+09/18/11 04:10:13 PM :: 107.3.151.150
+/new-framework/customer/enrollment/select-a-season?camper-index=0 : /new-framework/customer/enrollment/select-a-season?camper-index=0 :: validate failed: index: 0, check: min, value: 
+09/18/11 04:12:45 PM :: 107.3.151.150
+/new-framework/customer/enrollment/camper-information?camper-index=0 : /new-framework/customer/enrollment/camper-information?camper-index=0 :: validate failed: index: 0, check: min, value: 
+09/18/11 04:13:09 PM :: 107.3.151.150
+/new-framework/customer/enrollment/camper-information?camper-index=0 : /new-framework/customer/enrollment/camper-information?camper-index=0 :: validate failed: index: 0, check: min, value: 
+09/18/11 04:13:14 PM :: 107.3.151.150
+/new-framework/customer/enrollment/camper-information?camper-index=0 : /new-framework/customer/enrollment/camper-information?camper-index=0 :: validate failed: index: 0, check: min, value: 
+09/18/11 04:13:59 PM :: 107.3.151.150
+/new-framework/customer/enrollment/camper-information?camper-index=0 : /new-framework/customer/enrollment/camper-information?camper-index=0 :: validate failed: index: 0, check: min, value: 
+09/18/11 06:15:45 PM :: 107.3.151.150
+/new-framework/action/customer/enrollment/session-information?camper_index=0&lv2-token=43c5880fb0dfcea573935007ee08b711 : /new-framework/action/customer/enrollment/session-information?camper_index=0&lv2-token=43c5880fb0dfcea573935007ee08b711 :: validate failed: index: 0, check: min, value: 
