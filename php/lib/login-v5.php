@@ -3,59 +3,66 @@
 class Login{
 	
 	//private
-	private $key = 'I like red pickled apples!';
 	private $ckiePassIndex = '-login-password'; //for the associative index, CR is used for multiple portals
 	private $ckieLoginIndex = '-login-login'; //for the associative index, CR is used for multiple portals
 	private $sessionTokenIndex = '-login-token';
-	private $status = NULL; //false: none,  1: no login, 2: timeout, 3: bad group
-	
-	private $maxFailedLogins = 100; //max number of failed logins before the login is locked
-	private	$failedLoginSec = 3600; // the interval used to check maxFailedLogins: ie, num failed logins in the last $failedLoginSec seconds
 
 	//constructors
-	public function __construct ($userInputedToken = NULL) {
+	public function __construct () {
 		//have to concat CR here because cant concat during declaration
-		$this->key = CR . $this->key; // CR is used for multiple portals
 		$this->ckiePassIndex = CR . $this->ckiePassIndex; // CR is used for multiple portals
 		$this->ckieLoginIndex = CR . $this->ckieLoginIndex; //  CR is used for multiple portals
 	}
 	
 	public function isLoggedIn () {
 		$token = $this->getToken();
-		if ($token != NULL) {
-			$query = 'SELECT user.*, user_session.user_session_id, user_session.token, user_session.expires
-					  FROM user
-					  	INNER JOIN user_session ON user_session.user_id = user.user_id
-					  WHERE user_session.token = :token
-						AND logged_out IS NULL
-						';
-			$values = array(':token' => $token);
-			$user = $GLOBALS['mysql']->getSingle($query, $values);
-			if (!empty($user)) {
-				return $user;
-			}
+		if (empty($token)) {
+			return false;
 		}
 		
-		return false;
+		$query = 'SELECT user.*, user_session.user_session_id, user_session.token, user_session.expires, GROUP_CONCAT(user_group.name) AS group_names
+				  FROM user
+					INNER JOIN user_session ON user_session.user_id = user.user_id
+					INNER JOIN user_group_link ON user_group_link.user_id = user.user_id
+					INNER JOIN user_group ON user_group.user_group_id = user_group_link.user_group_id
+				  WHERE user_session.token = :token
+					AND logged_out IS NULL
+				  GROUP BY user_group_link.user_id';
+		$values = array(':token' => $token);
+		$user = $GLOBALS['mysql']->getSingle($query, $values);
+		
+		return empty($user) ? false : $user;
 	}
 	
 	public function isTimeOut ($user) {
+		if (empty($user)) {
+			trigger_error('$user is empty', E_USER_ERROR);	
+		}
 		return TIME > strtotime($user['expires']) ? true : false;	
 	}
 	
 	public function isLockedOut ($user) {
-		if (strtotime($user['lockout_end']) > TIME) {
-			return true;
+		if (empty($user)) {
+			trigger_error('$user is empty', E_USER_ERROR);	
 		}
-		
-		return false;
+		return strtotime($user['lockout_end']) > TIME ? true : false;
 	}
 	
 	public function isActive ($user) {
+		if (empty($user)) {
+			trigger_error('$user is empty', E_USER_ERROR);	
+		}
 		return $user['active'] == '1' ? true : false;	
 	}
 	
-	public function newSession ($user, $expireTime, $authenMethod = 'Login') {
+	public function newSession ($user, $length, $authenMethod = 'Login') {
+		if (empty($user)) {
+			trigger_error('$user is empty', E_USER_ERROR);	
+		}
+		if (!is_numeric($length)) {
+			trigger_error('$length is not numeric', E_USER_ERROR);	
+		}
+		
 		session_regenerate_id(true); //reduce session hijacking dmg
 		
 		//determine if we should use current token
@@ -72,24 +79,32 @@ class Login{
 		}
 		
 		//client info
-		$clientInfo = http_build_query(array('http_host' => $_SERVER['HTTP_HOST']
-											, 'http_user_agent' => $_SERVER['HTTP_USER_AGENT']
-											)
-									   );
+		$clientInfo = http_build_query(array(
+			'http_host' => $_SERVER['HTTP_HOST']
+			, 'http_user_agent' => $_SERVER['HTTP_USER_AGENT']
+		));
 		
 		//insert new session
-		$values = array('token' => $token
-						, 'expires' => date('Y-m-d H:i:s', TIME + $expireTime)
-						, 'user_id' => $user['user_id']
-						, 'authentication_method' => $authenMethod
-						, 'client_information' => $clientInfo
-						);
+		$values = array(
+			'token' => $token
+			, 'expires' => date('Y-m-d H:i:s', TIME + $length)
+			, 'user_id' => $user['user_id']
+			, 'authentication_method' => $authenMethod
+			, 'client_information' => $clientInfo
+		);
 		$GLOBALS['mysql']->insert('user_session', $values);
 		
 		return $GLOBALS['mysql']->lastInsertId();
 	}
 	
 	public function renewSession ($user, $length) {
+		if (empty($user)) {
+			trigger_error('$user is empty', E_USER_ERROR);	
+		}
+		if (!is_numeric($length)) {
+			trigger_error('$length is not numeric', E_USER_ERROR);	
+		}
+		
 		$values = array('expires' => date('Y-m-d H:i:s', TIME + $length));
 		$wherestr = 'user_session_id = :user_session_id';
 		$wherevals = array(':user_session_id' => $user['user_session_id']);
@@ -97,22 +112,24 @@ class Login{
 		
 		return true;
 	}
-		
-	//$cookieType[0:none, 1:loginname, 2:password
-	//$errors: 0 - incorrect login, 1 - login deactivated, 2 - locked out
+
 	public function authenticate ($login, $password) {
 	
-		if (empty($login) || empty($password)) {
-			error('$login or $password is empty'); 
+		if (empty($login)) {
+			trigger_error('$login is empty', E_USER_ERROR);
+		}
+		if (empty($password)) {
+			trigger_error('$password is empty', E_USER_ERROR);
 		}
 		
 		$hashPassword = $this->hashPassword($login, $password);
 		$this->clean($login);
 		
 		$query = 'SELECT * FROM user WHERE login = :login AND password = :password';
-		$values = array(':login' => $login
-						, ':password' => $hashPassword
-						);
+		$values = array(
+			':login' => $login
+			, ':password' => $hashPassword
+		);
 		
 		$user = $GLOBALS['mysql']->getSingle($query, $values);
 		
@@ -133,17 +150,21 @@ class Login{
 	}
 	
 	public function create ($login, $password) {
-		
+		// clean before check if empty in case if empty after clean
 		$this->clean($login);
 
-		if (empty($login) || empty($password)) {
-			error('function $login->create() :: $login or $password is empty');
+		if (empty($login)) {
+			trigger_error('$login is empty', E_USER_ERROR);
+		}
+		if (empty($password)) {
+			trigger_error('$password is empty', E_USER_ERROR);
 		}
 		
 		$hashPassword = $this->hashPassword($login, $password);
-		$values = array('login' => $login
-						, 'password' => $hashPassword
-						);
+		$values = array(
+			'login' => $login
+			, 'password' => $hashPassword
+		);
 		
 		$GLOBALS['mysql']->insert('user', $values);
 		
@@ -162,11 +183,17 @@ class Login{
 	}
 	
 	private function setToken ($token) {
+		if (empty($token)) {
+			trigger_error('$token is empty', E_USER_ERROR);
+		}
 		$_SESSION[CR][$this->sessionTokenIndex] = $token;
 	}
 	
 	//generates a unique token based on a random hasing algorithm, user_id, time, rand(0, 1000000)
 	private function generateToken ($userid) {
+		if (!is_numeric($userid)) {
+			trigger_error('$userid is not numeric', E_USER_ERROR);
+		}
 		
 		$rand = rand(0, 1000000); //so token changes, reduce hijacking dmg
 
@@ -200,19 +227,44 @@ class Login{
 	}
 	
 	private function hashPassword ($login, $password) {
+		if (empty($login)) {
+			trigger_error('$login is empty', E_USER_ERROR);
+		}
+		if (empty($password)) {
+			trigger_error('$password is empty', E_USER_ERROR);
+		}
 		return md5($login . $password);
 	}
 	
 	private function saveCookieLogin ($login, $length) {
+		if (empty($login)) {
+			trigger_error('$login is empty', E_USER_ERROR);	
+		}
+		if (!is_numeric($length)) {
+			trigger_error('$length is not numeric', E_USER_ERROR);	
+		}
 		cookie($this->ckieLoginIndex, encrypt($login), $length);
 	}
 	
 	private function saveCookiePassword ($hashedPassword, $length) {
+		if (empty($hashedPassword)) {
+			trigger_error('$hashedPassword is empty', E_USER_ERROR);	
+		}
+		if (!is_numeric($length)) {
+			trigger_error('$length is not numeric', E_USER_ERROR);	
+		}
 		$encryptedPassword = encrypt($hashedPassword);
 		cookie($this->ckiePassIndex, $encryptedPassword, $length);
 	}
 	
 	public function updateFailedLogin ($login, $length) {
+		if (empty($login)) {
+			trigger_error('$login is empty', E_USER_ERROR);	
+		}
+		if (!is_numeric($length)) {
+			trigger_error('$length is not numeric', E_USER_ERROR);	
+		}
+		
 		$this->clean($login);
 		
 		//find user with $login
@@ -232,9 +284,10 @@ class Login{
 		}
 		
 		//update
-		$values = array('last_failed_login' => DATETIME
-						, 'num_failed_logins' => $user['num_failed_logins']
-						);
+		$values = array(
+			'last_failed_login' => DATETIME
+			, 'num_failed_logins' => $user['num_failed_logins']
+		);
 		$wherestr = 'user_id = :user_id';
 		$wherevals = array(':user_id' => $user['user_id']);
 		$GLOBALS['mysql']->update('user', $values, $wherestr, $wherevals);
@@ -243,8 +296,14 @@ class Login{
 	}
 	
 	public function lockout ($user, $length) {
-		$values = array('lockout_end' => date('Y-m-d H:i:s', TIME + $length)
-						);
+		if (empty($user)) {
+			trigger_error('$user is empty', E_USER_ERROR);	
+		}
+		if (!is_numeric($length)) {
+			trigger_error('$length is not numeric', E_USER_ERROR);	
+		}
+		
+		$values = array('lockout_end' => date('Y-m-d H:i:s', TIME + $length));
 		$wherestr = 'user_id = :user_id';
 		$wherevals = array(':user_id' => $user['user_id']);
 		$GLOBALS['mysql']->update('user', $values, $wherestr, $wherevals);
@@ -257,16 +316,24 @@ class Login{
 	}
 	
 	public function resetFails ($user) {
-		$values = array('last_failed_login' => NULL
-						, 'num_failed_logins' => NULL
-						, 'lockout_end' => NULL
-						);
+		if (empty($user)) {
+			trigger_error('$user is empty', E_USER_ERROR);	
+		}
+		$values = array(
+			'last_failed_login' => NULL
+			, 'num_failed_logins' => NULL
+			, 'lockout_end' => NULL
+		);
 		$wherestr = 'user_id = :user_id';
 		$wherevals = array(':user_id' => $user['user_id']);
 		$GLOBALS['mysql']->update('user', $values, $wherestr, $wherevals);	
 	}
 	
 	public function logout ($user) {
+		if (empty($user)) {
+			trigger_error('$user is empty', E_USER_ERROR);	
+		}
+		
 		$this->unsetToken(); //reduce damange from hijacking
 		session_regenerate_id(true); //reduce damange from hijacking
 		
@@ -298,6 +365,10 @@ class Login{
 	}
 	
 	public function resetPass ($user) {
+		if (empty($user)) {
+			trigger_error('$user is empty', E_USER_ERROR);	
+		}
+		
 		//create random password
 		$rand = md5(rand(100, 1000000) . TIME);
 		$tempPass = '';
@@ -314,6 +385,12 @@ class Login{
 	}
 	
 	public function updatePass ($userid, $newPass, $oldPass = NULL, $newLogin = NULL) {
+		if (empty($newPass)) {
+			trigger_error('$newPass is empty', E_USER_ERROR);	
+		}
+		if (!is_numeric($userid)) {
+			trigger_error('$userid is not numeric', E_USER_ERROR);	
+		}
 		
 		$query = 'SELECT login, password FROM user WHERE user_id = :user_id';
 		$values = array(':user_id' => $userid);
@@ -363,22 +440,25 @@ class Login{
 	
 	
 	public function verifyOldPass ($login, $oldPass) {
+		if (empty($login)) {
+			trigger_error('$login is empty', E_USER_ERROR);	
+		}
+		if (empty($oldPass)) {
+			trigger_error('$oldPass is empty', E_USER_ERROR);	
+		}
 		
 		$this->clean($login);
 		
 		$hashedPassword = $this->hashPassword($login, $oldPass);
 		
 		$query = 'SELECT user_id FROM user WHERE login = :login AND password = :password';
-		$values = array(':login' => $login
-						, ':password' => $hashedPassword
-						);
+		$values = array(
+			':login' => $login
+			, ':password' => $hashedPassword
+		);
 		$user = $GLOBALS['mysql']->getSingle($query, $values);
 		
-		if (empty($user)) {
-			return false;
-		}
-		
-		return true;
+		return empty($user) ? false : true;
 	}
 	
 	

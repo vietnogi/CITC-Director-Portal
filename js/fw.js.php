@@ -4,7 +4,7 @@ var FW = {
 	, TOKEN: null
 	
 	, init: function(){
-		// Trim
+		// add useful functions to native objects
 		if (typeof(String.prototype.trim) === "undefined") {
 			String.prototype.trim = function() {
 				return String(this).replace(/^\s+|\s+$/g, '');
@@ -34,17 +34,28 @@ var FW = {
 			document.body.appendChild(ie6Notice);
 		}
 	}
-	
-	//alert objects
-	, alert: function(obj, hideValues){
-		var output = '';
-		for (var prop in obj ) {
-			output += 'object.' + prop;
-			if(hideValues != true){
-				output += ' = ' + obj[prop] 
-			}
-			output += "\n";
+	, ajaxComplete: function(jqXHR, textStatus) {
+		// handle bad status
+		switch(1 * jqXHR.status){
+			case 301:
+			case 302:
+			case 0: //for ie
+				try {
+					var data = $.parseJSON(jqXHR.responseText);
+					window.location.href = data.location;
+				} catch (err) {
+					alert('Error trying to redirect.');
+					location.reload(1);
+				}
+			break;
+			case 404:
+				alert('Page Not Found');
+				location.reload(1);
+			break;
 		}
-		alert(output);
 	}
+	, error: function(jqXHR, textStatus, errorThrown){
+		alert('Unable to complete request becuase the following error occured: ' + errorThrown);	
+		location.reload(1);
+	 }
 };

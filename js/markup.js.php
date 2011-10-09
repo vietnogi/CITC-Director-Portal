@@ -1,29 +1,21 @@
 /*<script>*/
-var Markup = {
-	init: function(){
-		$('.hide').hide(); //hide all elements with class hide
-		
-		var bodyElement = $('body')[0]; // cant use document.body because error in IE7, no .select
-		this.externalLinks(bodyElement);
-		this.autoCompleteOff(bodyElement);
-		this.defaultClear(bodyElement);		
-	}
+var Markup = function (container) {
 	
-	, externalLinks: function(container){
+	function externalLinks (container) {
 		var anchors = $('a[rel~="external"]', container);
 		for (var i = 0; i < anchors.length; i++) {
 			anchors[i].target = "_blank";
 		}	
 	}
 	
-	, autoCompleteOff: function (container){
+	function autoCompleteOff (container) {
 		var inputs = $('input[class~="autocomplete-off"]', container);
 		for (var i=0; i<inputs.length; i++) {
 			inputs[i].setAttribute("autocomplete", "off");
 		}
 	}
 	
-	, defaultClear: function (container){	
+	function defaultClear (container) {	
 		var inputs = $('[class~="default-clear"]', container);
 		
 		var defaultClassName = 'default';
@@ -40,4 +32,12 @@ var Markup = {
 			}
 		});
 	}
-};
+	
+	// default container
+	container = container || $('body')[0]; 
+	
+	$('.hide').hide(); //hide all elements with class hide
+	externalLinks();
+	autoCompleteOff();
+	defaultClear();
+}

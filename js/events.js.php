@@ -1,38 +1,8 @@
 /*<script>*/
-var Events = {
-	init: function(){
-		var bodyElement = $('body')[0]; // cant use document.body because error in IE7, no .select
-		this.confirm(bodyElement);	
-		this.maxLenNext(bodyElement);
-		this.addressFields();
-		this.captchaRefresh(bodyElement);
-		
-		// Span nav parents
-		$("ul#nav li.parent > span").click(function() {
-			$(this).closest('li.parent').toggleClass('hover');
-		});
-	}
+var Events = function (container) {
 	
-	, confirm: function(container){
-		$('a[rel~="confirm"]', container).click(function() {
-			//event.preventDefault();
-			var url = $(this)[0].href;
-			var message = $(this)[0].title;
-			var target = $(this)[0].target;
-			if (target == '_blank') { // open link in new window
-				confirm2(null, message, 'window.open(\'' + url + '\')'); 
-			}
-			else {
-				confirm2(null, message, 'window.location = \'' + url + '\';'); 
-			}
-			return false;
-	
-		});	
-	}
-	
-	//focus specified field when max length has been entered, good for phone numbers
-	, maxLenNext: function(container){
-		$('input[type="text"].max-length-next', container).keyup(function(event){
+	function maxLenNext (container) {
+		$('input[type="text"].max-length-next', container).keyup( function (event) {
 			if(event.keyCode == 9){ //ignore tabs
 				return;	
 			}
@@ -43,7 +13,7 @@ var Events = {
 		});
 	}
 	
-	, captchaRefresh: function(container){
+	function captchaRefresh (container) {
 		$('p.new-image a.captcha-hint', container).click(function() {
 			var inputId = getHash(this.href);
 			var input = $('#' + inputId);
@@ -59,7 +29,7 @@ var Events = {
 		});	
 	}
 	
-	, addressFields: function() {
+	function addressFields() {
 		// Input names
 		var provinceName = 'province';
 		var stateName = 'stateid';
@@ -122,4 +92,19 @@ var Events = {
 		var countryField = $('[name="' + countryName + '"], [name^="' + countryName + '["]', ul);
 		countryField.trigger('change');
 	}
+	
+	// default container
+	container = container || $('body')[0]; 
+	
+	// Span nav parents
+	$("ul#nav li.parent > span").click(function() {
+		$(this).closest('li.parent').toggleClass('hover');
+	});
+	
+	//val form
+	$('form.val-form', container).valform({abc: 123, xyz: 'abc'});
+	
+	maxLenNext(container);
+	captchaRefresh(container);
+	addressFields();
 }

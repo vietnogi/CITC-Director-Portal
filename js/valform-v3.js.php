@@ -230,6 +230,11 @@
 			
 			return true;
 		});
+		
+		$(instance.form).bind('resetSubmit', function() {
+			resetSubmit(instance);
+		});
+		
 	}
 	
 	//have to be at the end because other functions have to declared
@@ -348,6 +353,88 @@
 				return 'does not match ' + field2Label + '.';
 			}
 			return false;
+		}
+		, 'val-phone': function (field) {
+			if (field.value == '') {
+				return false;	
+			}
+			var numbers = field.value.replace(/[^0-9]/g, ''); //remove all non numerics
+			if (numbers.length < 10) {
+				return 'needs to be 10 digits.';	
+			}
+			field.value = numbers.substr(0, 3) + '-' + numbers.substr(3, 3) + '-' + numbers.substr(6, 4);
+			// handle extensions
+			if (numbers.length > 10) {
+				field.value += ' x ' + numbers.substr(10);
+			}
+			return false;
+		}
+		, 'val-date': function (field) {
+			if (field.value == '') {
+				return false;	
+			}
+			else if (field.value.match(/^[0-9]{2}\/[0-9]{2}\/[0-9]{4}$/)) {
+				//make sure date is valid
+				var dateParts = field.value.split('/');
+				var day = dateParts[1];
+				var month = dateParts[0];
+				var year = dateParts[2];
+				var dteDate = new Date(year, month - 1, day);
+				if (day == dteDate.getDate() && (month == dteDate.getMonth() + 1) && year == dteDate.getFullYear()) {
+					return false;
+				}
+				return 'is an invalid date.';
+			} 
+			else {
+				return 'needs to be mm/dd/yyyy.';
+			}
+		}
+		, 'val-money': function (field) {
+			field.value = field.value.replace(/[^0-9\-\.]/g, '');
+			if (field.value == '') {
+				return;	
+			}
+			if (isNaN(field.value)) {
+				formated = '0.00';
+			}
+			else {
+				var formated = Math.round(field.value * 1000) / 1000; //1000 for partial cents
+				formated = formated.toString();
+				if (formated.indexOf('.') == -1) {
+					formated += '.00';
+				}
+				else {
+					var parts = formated.split('.');
+					if (parts[1].length == 1) {
+						formated += '0';	
+					}
+				}
+			}
+			field.value = formated;
+		}
+		, 'val-decimal': function(field, precision) {
+			var precision = classAfter(field, 'val-decimal');
+			field.value = field.value.replace(/[^0-9\-\.]/g, '');
+			if (field.value == '') {
+				return;	
+			}
+			if (isNaN(field.value)) {
+				formated = '0.00';
+			}
+			else {
+				var formated = Math.round(field.value * Math.pow(10, precision)) / Math.pow(10, precision);
+				formated = formated.toString();
+				if (formated.indexOf('.') == -1) {
+					formated += '.00';
+				}
+				else {
+					var parts = formated.split('.');
+					if (parts[1].length == 1) {
+						formated += '0';	
+					}
+				}
+			}
+			field.value = formated;
 		}
 	};
 })(jQuery); //pass jQuery object into function

@@ -124,7 +124,7 @@ function getCustomer ($userid) {
 	return $GLOBALS['mysql']->getSingle($query, $values);	
 }
 
-function getCustomerCredtCards($customerid){	
+function getCustomerCreditCards ($customerid){	
 	// get customer credit cards
 	$query = 'SELECT customer_credit_card.*
 			  FROM customer_credit_card 

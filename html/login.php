@@ -12,11 +12,11 @@ $prefix = 'create-account';
 				<ul class="fields">
 					<li>
 						<label for="<?= $prefix ?>-first-name">First Name <em>*</em></label>
-						<input type="text" id="<?= $prefix ?>-first-name" name="first-name" class="val-req" />
+						<input type="text" id="<?= $prefix ?>-first-name" name="first_name" class="val-req" />
 					</li>
 					<li>
 						<label for="<?= $prefix ?>-last-name">Last Name <em>*</em></label>
-						<input type="text" id="<?= $prefix ?>-last-name" name="last-name" class="val-req" />
+						<input type="text" id="<?= $prefix ?>-last-name" name="last_name" class="val-req" />
 					</li>
 				</ul>
 			</li>
@@ -57,16 +57,22 @@ $prefix = 'create-account';
 					</li>
 				</ul>
 			</li>
-			<li>
-				<ul class="fields">
-					<li>
-						<label for="<?= $prefix ?>-referrer">How did you hear about us? <em>*</em></label>
-						<?
-						htmlSel($this->data['referrers'], 'id="' . $prefix . '-referrer" name="referrer" class="val-req"', '', false, 'Please select&hellip;');
-						?>
-					</li>
-				</ul>
-			</li>
+			<?
+			if (notEmptyArray($this->ld['referrers'])) {
+				?>
+				<li>
+					<ul class="fields">
+						<li>
+							<label for="<?= $prefix ?>-referrer">How did you hear about us? <em>*</em></label>
+							<?
+							htmlSel($this->ld['referrers'], 'id="' . $prefix . '-referrer" name="referrer" class="val-req"', '', false, 'Please select&hellip;');
+							?>
+						</li>
+					</ul>
+				</li>
+				<?
+			}
+			?>
 		</ul>
 		<div class="info submit">
 			<div class="inner">
@@ -77,7 +83,7 @@ $prefix = 'create-account';
 			<input type="submit" value="Create Account" />
 		</fieldset>
 	</form>
-	<form id="login-form" action="<?= actionUrl($GLOBALS['bc']) ?>" class="emg-form val-form login-form" method="post">
+	<form id="login-form" action="<?= $this->actionUrl() ?>" class="emg-form val-form login-form" method="post">
 		<h3><span class="hint">or</span> Login with Your Account</h3>
 		<p class="hint"><em class="required">*</em> is required.</p>
 		<ul class="fields">

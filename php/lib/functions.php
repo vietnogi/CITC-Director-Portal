@@ -135,13 +135,6 @@ function feesSummary($fees = array(), $discounts = array(), $total) {
 	<?
 }
 
-function enrollNewCamperUrl(){
-	return '/action/customer/enrollment/enroll-a-new-camper?' . TOKEN;
-}
-
-function addAnotherCamperUrl(){
-	return '/action/customer/enrollment/add-camper?' . TOKEN;
-}
 
 function createInvoice($info, $invoiceItems){
 	global $_mysql;
@@ -286,71 +279,81 @@ function isSessionFull ($gender, $session) {
 }
 
 
-function creditCardForm ($creditCard, $formArgs) {
+function creditCardForm ($formArgs, $states, $countries, $months, $years, $cctypes, $creditCard = NULL) {
 	if (empty($creditCard)) {
-		$creditCard = array('first_name' => NULL
-							, 'last_name' => NULL
-							, 'phone' => NULL
-							, 'address' => NULL
-							, 'address2' => NULL
-							, 'city' => NULL
-							, 'state_id' => NULL
-							, 'country_id' => NULL
-							, 'zip' => NULL
-							);
+		// standard credit card "array object"
+		$creditCard = array(
+			'credit_card_id' => NULL
+			, 'first_name' => NULL
+			, 'last_name' => NULL
+			, 'phone' => NULL
+			, 'address' => NULL
+			, 'address2' => NULL
+			, 'city' => NULL
+			, 'province' => NULL
+			, 'state_id' => NULL
+			, 'country_id' => USID
+			, 'zip' => NULL
+			, 'credit_card_type' => NULL
+			, 'expiration_month' => NULL
+			, 'expiration_year' => NULL
+		);
 	}
 	
-	$ccForm = new emgForm($formArgs);
+	$ccForm = new EmgForm($formArgs);
 	
 	$ccForm->legend('Billing Address');
 	
 	$ccForm->ulStart();
 	
-	$ccForm->text(array('label' => 'First Name'
-					  , 'class' => 'val_req'
-					  , 'value' => $creditCard['first_name']
-					  )
-				 );
-	$ccForm->text(array('label' => 'Last Name'
-					  , 'class' => 'val_req'
-					  , 'value' => $creditCard['last_name']
-					  )
-				 );
-	$ccForm->phone(array('label' => 'Phone'
-						, 'name' => 'phone'
-						, 'value' => $creditCard['phone']
-						)
-				   );
-	$ccForm->address(array('label' => 'Street Address'
-						 , 'class' => 'val_req'
-						 , 'value' => array('address' => $creditCard['address']
-										  , 'address2' => $creditCard['address2']
-										  , 'city' => $creditCard['city']
-										  , 'state_id' => $creditCard['state_id']
-										  , 'province' => $creditCard['province']
-										  , 'country_id' => $creditCard['country_id']
-										  , 'zip' => $creditCard['zip']
-										  )				 	 
-						 , 'us' => $_us
-						 , 'states' => $_states
-						 , 'countries' => $_countries
-						 )
-					);
+	$ccForm->text(array(
+		'label' => 'First Name'
+		, 'class' => 'val_req'
+		, 'value' => $creditCard['first_name']
+	));
+	$ccForm->text(array(
+		'label' => 'Last Name'
+		, 'class' => 'val_req'
+		, 'value' => $creditCard['last_name']
+	));
+	$ccForm->phone(array(
+		'label' => 'Phone'
+		, 'name' => 'phone'
+		, 'value' => $creditCard['phone']
+	));
+	$ccForm->address(array(
+		'label' => 'Street Address'
+		, 'class' => 'val_req'
+		, 'value' => array(
+			'address' => $creditCard['address']
+			, 'address2' => $creditCard['address2']
+			, 'city' => $creditCard['city']
+			, 'state_id' => $creditCard['state_id']
+			, 'province' => $creditCard['province']
+			, 'country_id' => $creditCard['country_id']
+			, 'zip' => $creditCard['zip']
+		)				 	 
+		, 'us' => $creditCard['country_id']
+		, 'states' => $states
+		, 'countries' => $countries
+	));
 	$ccForm->ulEnd();
 	
 	$ccForm->legend('Credit Card');
 	
 	$ccForm->ulStart();
-	$ccForm->creditCard(array('value' => array('credit_card_type' => $creditCard['credit_card_type']
-											 , 'expiration_month' => $creditCard['expiration_month']
-											 , 'expiration_year' => $creditCard['expiration_year']
-											 )
-							, 'ccvc' => config('require-credit-card-verification-code') == 'Yes' ? true : false
-							, 'creditCardTypes' => $_creditCardTypes
-							, 'months' => $_months
-							, 'years' => $_years
-							)
-					);
+	
+	$ccForm->creditCard(array(
+		'value' => array(
+			'credit_card_type' => $creditCard['credit_card_type']
+			, 'expiration_month' => $creditCard['expiration_month']
+			, 'expiration_year' => $creditCard['expiration_year']
+		)
+		, 'ccvc' => true
+		, 'creditCardTypes' => $cctypes
+		, 'months' => $months
+		, 'years' => $years
+	));
 	$ccForm->ulEnd();
 }
 ?>

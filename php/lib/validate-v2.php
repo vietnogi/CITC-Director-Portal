@@ -11,24 +11,9 @@ class Validate{
 	public function __construct() {
 		//nothing
 	}
-
-	function single($value, $checks, &$msg, $parameters = array()){
-		foreach($checks as $check){
-			if(isset($parameters[$check])){
-				$parameter = $parameters[$check];
-			}
-			else{
-				$parameter = NULL;	
-			}
-			if(!$this->check($value, $check, $msg, $parameter)){
-				return false;	
-			}
-		}
-		return true;
-	}
 	
 	function check($val, $check, &$msg, $parameter = NULL){
-		switch($check){ 
+		switch(trim($check)){ 
 			case 'val_req':
 			case 'req':
 				$msg = 'is required';
@@ -119,18 +104,22 @@ class Validate{
 			die('validate: error, first argument must be an array');
 		}
 		foreach($values as $index => $value){
-			foreach($value as $key=>$val){
-				$checks = explode(' ', $key);
+			$keys = array_keys($value);
+			$checkstr = $keys[0];
+			$name = isset($value['name']) ? $value['name'] : NULL;
+			$val = $value[$checkstr];
+			//foreach($value as $key => $val){
+				$checks = explode(' ', $checkstr);
 				$len = count($checks);
 				for($i=0; $i<$len; $i++){
 					$parameter = isset($checks[$i + 1]) ? $checks[$i + 1] : NULL;
 					$check = $this->check($val, $checks[$i], $msg, $parameter);
-					if(!$check){
-						logError($_SERVER['REQUEST_URI'].' :: validate failed: index: ' . $index . ', check: ' . $checks[$i] . ', value: ' . $val, ($error ? true : false));
+					if (!$check) {
+						logError('Validate failed: index: ' . $index . ', check: ' . $checks[$i] . ', value: ' . $val . ', name: ' . (!empty($name) ? $name : ''), $error);
 						return false;
 					}
 				}
-			}
+			//}
 		}
 		return true;
 	}

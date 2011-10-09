@@ -1,50 +1,46 @@
 <?
-//validate
-$checks = array();
-$checks[]['min 1 email'] = $_POST['login'];
-$checks[]['min 1'] = $_POST['password'];
-$GLOBALS['validate']->many($checks);
+$inputs = array(
+	'login' => new Input('login', $_POST, 'min 1 email')
+	, 'password' => new Input('password', $_POST, 'min 1')
+	);
 
-$user = $GLOBALS['login']->authenticate($_POST['login'], $_POST['password']);
+$error = false;
+
+$user = $GLOBALS['login']->authenticate($inputs['login']->value, $inputs['password']->value);
 if (notEmptyArray($user)) {
 	//authenticate successful
 	if ($GLOBALS['login']->isLockedOut($user)) {
 		//user is locked out
-		$_SESSION[CR]['user-error'] = 'Due to the number of failed login attempts in a short period of time, your account is temporarily until ' . date('m/d/Y h:i:s a', strtotime($user['lockout_end']));
+		$error = 'Due to the number of failed login attempts in a short period of time, your account is temporarily until ' . date('m/d/Y h:i:s a', strtotime($user['lockout_end']));
 	}
 	else if (!$GLOBALS['login']->isActive($user)) {
 		//user is inactive
-		$_SESSION[CR]['user-error'] = 'The login account has been deactivated.';
+		$error = 'The login account has been deactivated.';
 	}
 	else {
 		//create login session
-		$GLOBALS['login']->newSession($user, SESSIONLENGTH);
+		$GLOBALS['login']->newSession($user, config('session length'));
 		$GLOBALS['login']->resetFails($user);
-		
-		if (isset($_SESSION[CR]['redirect-after-login'])) {
-			//user was trying to access a protected page, so it be nice if we send them back after logging in
-			$this->redirect = $_SESSION[CR]['redirect-after-login'];
-			unset($_SESSION[CR]['redirect-after-login']);
-		}
-		else {
-			$this->redirect = '/customer/home';
-		}
 	}
 }
 else {
 	//authenticate not successful
-	$user = $GLOBALS['login']->updateFailedLogin($_POST['login'], FAILEDATTEMPTLENGTH);
+	$user = $GLOBALS['login']->updateFailedLogin($inputs['login']->value, config('failed attempt length'));
 	if (notEmptyArray($user)) {
 		//login was valid
-		if ($user['num_failed_logins'] > MAXFAILEDATTEMPTS) {
+		if ($user['num_failed_logins'] > config('max failed attempts')) {
 			//lockout for a certain amount of time
-			$GLOBALS['login']->lockout($user, LOCKOUTLENGTH);
+			$GLOBALS['login']->lockout($user, config('lockout length'));
 		}
 	}
-	$_SESSION[CR]['user-error'] = 'The login information was incorrect.';
+	$error = 'The login information was incorrect.';
 }
 
-if (empty($this->redirect)) {
-	$this->redirect = $_SERVER['HTTP_REFERER'];
+if (!empty($error)) {
+	$_SESSION[CR]['user-error'] = $error;
+	$this->redirect = '/login';
+}
+else {
+	$this->redirect = '/customer/home?t=' . $GLOBALS['login']->getToken();	
 }
 ?>

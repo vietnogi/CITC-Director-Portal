@@ -7,7 +7,7 @@ $titlePrefix = !empty($this->meta['title']) ? strip_tags($this->meta['title']) .
 <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
 <link rel="icon" type="image/vnd.microsoft.icon" href="<?= CR ?>/favicon.ico" />
 <link rel="shortcut icon" type="image/x-icon" href="<?= CR ?>/favicon.ico" />
-<link rel="stylesheet" media="all" href="<?= CR ?>/css/minify.css" />
+<link rel="stylesheet" media="all" href="/css/minify.css" />
 <link rel="stylesheet" media="<?= !empty($_GET['print']) ? 'all' : 'print' ?>" href="<?= CR ?>/css/print.css" />
 <link href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.8/themes/base/jquery-ui.css" rel="stylesheet" type="text/css" />
 
@@ -20,28 +20,24 @@ $titlePrefix = !empty($this->meta['title']) ? strip_tags($this->meta['title']) .
 <!--[if lte IE 6]>
 <link rel="stylesheet" media="all" href="<?= CR ?>/css/ie6.css" />
 <![endif]-->
-<script type="text/javascript" src="https://www.google.com/jsapi"></script>
-<script type="text/javascript">
-<!--
+<script src="https://www.google.com/jsapi"></script>
+<script>
 	google.load("swfobject", "2.2");
 	google.load("jquery", "1");
 	google.load("jqueryui", "1");
-//-->
 </script>
-<script type="text/javascript" src="<?= CR ?>/js/minify.js"></script>
-<script type="text/javascript">
-<!--
+<script src="/js/minify.js"></script>
+<script>
 	<?
-	if(defined('CR')){
+	if (defined('CR')) {
 		?>
 		FW.CR = '<?= CR ?>';
 		<?
 	}
-	if(defined('TOKEN')){
+	if (!empty($this->systemVars['t'])) {
 		?>
-		FW.TOKEN = '<?= TOKEN ?>';
+		FW.TOKEN = '<?= $this->systemVars['t'] ?>';
 		<?
 	}
 	?>
-//-->
 </script>

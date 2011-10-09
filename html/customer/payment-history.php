@@ -1,0 +1,3 @@
+<?
+pr($this->ld['payments']);
+?>

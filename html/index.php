@@ -21,12 +21,7 @@ if($this->isAjax){
 require DR . '/html-parts/head.php';
 ?>
 </head>
-<body id="top" class="
-<?
-/* this scalability is unessary and will unlikely be useful in the future.
-//trim(urlToClassStr($GLOBALS['bc']->uri . '/' . $this->file) . (!empty($this->gd['body_classes']) ? ' ' . implode(' ', $this->gd['body_classes']) : '')) ?>
-*/
-?>">
+<body id="top" class="<?= trim(urlToClassStr($GLOBALS['bc']->uri . '/' . $this->p) . (!empty($this->gd['body_classes']) ? ' ' . implode(' ', $this->gd['body_classes']) : '')) ?>">
 <?
 require DR . '/html-parts/body.php';
 ?>

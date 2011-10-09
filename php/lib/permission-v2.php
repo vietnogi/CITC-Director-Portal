@@ -18,13 +18,14 @@ class Permission{
 				  	INNER JOIN user_group_link ON user_group_link.user_group_id = user_permission.user_group_id
 				  WHERE user_group_link.user_id = :user_id
 				  	AND user_permission.portal = :portal';
-		$values = array(':user_id' => $userid
-						, ':portal' => PORTAL
-						);
+		$values = array(
+			':user_id' => $userid
+			, ':portal' => PORTAL
+		);
 		return $GLOBALS['mysql']->get($query, $values);
 	}
 	
-	public function isPathProtected($uri, $protectedPaths){
+	public function isPathProtected($uri = '', $protectedPaths = array()){
 
 		do{
 			foreach ($protectedPaths as $path) {
@@ -48,7 +49,7 @@ class Permission{
 		return false;
 	}
 	
-	public function getPathPermission($uri, $permissions){
+	public function getPathPermission($uri = '', $permissions = array()){
 		foreach($permissions as $permission){
 			//check if current path starts with permission path
 			$strStartWith = strncmp($uri, $permission['path'], strlen($permission['path'])) == 0 ? true : false;
@@ -59,7 +60,11 @@ class Permission{
 		return array();
 	}
 	
-	private function can($case, $uri, $permissions){
+	private function can($case, $uri = '', $permissions = array()){
+		if (empty($case)) {
+			trigger_error('$case is empty', E_USER_ERROR);
+		}
+		
 		$permission = $this->getPathPermission($uri, $permissions);
 		if(empty($permission)){
 			return false;	

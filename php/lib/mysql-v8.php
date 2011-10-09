@@ -26,6 +26,10 @@ private $functions = array('NOW()');
 	
 	public function prepareExec($sql, $values, $function = 'Custom'){
 		 $sth = $this->pdo->prepare($sql, array(PDO::ATTR_CURSOR => PDO::CURSOR_FWDONLY));
+		 if (!$sth){
+			 $this->errorHandler($function, $sql, $this->pdo->errorInfo());
+		 	return false;
+		 }
 		 if(!$sth->execute($values)){
 			if($this->transaction){
 				$this->pdo->rollBack();
@@ -45,6 +49,7 @@ private $functions = array('NOW()');
 		$error = $_SERVER['REQUEST_URI'] . "\nMysql->" . $function . "() \n" . $errorInfo[2] . "\n" . $sql;
 		if(DEVELOPMENT == '1' || !function_exists('logError')){ //development
 			echo nl2br($error);
+			pr(debug_backtrace());
 		}
 		else{ //production
 			logError($error);
@@ -298,9 +303,9 @@ private $functions = array('NOW()');
 		}
 		$enum_array = array();
 		
-		$query = 'SHOW COLUMNS FROM `' . $table . '` LIKE :field';
-		$values = array(':field' => $field
-						);
+		//cant use pdo on godaddy server for unknown reason
+		$query = 'SHOW COLUMNS FROM `' . $table . '` LIKE "' . $field . '"';
+		$values = array();
 		
 		$result = $this->get($query, $values);
 		$row = array_values($result[0]);

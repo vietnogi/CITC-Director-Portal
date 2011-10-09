@@ -5,50 +5,197 @@ class FW {
 	public $isAjax = false;
 	public $isContent = false;
 	public $p = NULL;
-	public $file = NULL;
-	public $cleanFile = NULL;
-	public $cleanUri = NULL;
-	public $meta = array('title' => NULL
-						 , 'h2' => NULL
-						 , 'description' => NULL
-						 , 'keywords' => NULL
-						 );
+	public $meta = array(
+		'title' => NULL
+		, 'h2' => NULL
+		, 'description' => NULL
+		, 'keywords' => NULL
+		);
+	// global data (for multiple pages)
 	public $gd = array();
-	public $data = array();
-	public $cms = NULL;
+	// local data (for single page)
+	public $ld = array();
 	
-	private $queryNames = array('p', 'index', 'print');
+	private $systemVars = array(
+		'p' => NULL
+		, 'index' => NULL
+		, 'print' => NULL
+		, 'debug' => NULL
+		, 't' => NULL
+		);
 	private $redirect = NULL;
+	private $debug = false;
 	
 	public function __construct () {
-		$this->determinePageType(); //determine if request isAction, isAjax, or isContent
-		$this->handleClasses(); //declare common classes, ie. mysql, login, permission, bc, etc/
-		$this->rebuildQueryString(); //since .htaccess add variables like p, index, print, we rebuild $_SERVER['QUERY_STRING'] so we may use it as expected
-
-		if ((isset($GLOBALS['login']) && isset($GLOBALS['permission']))) {
-			$this->handleLogin(); //check if user is logged in, set defines
-			$this->handlePermission(); //check if user has permission to access current uri
+		// since .htaccess add variables like p, index, print
+		$this->handleSystemVars();
+		
+		// handle debug flag
+		if (DEVELOPMENT === true) {
+			if (!isset($_SESSION[CR]['debug'])) {
+				// set default value
+				$_SESSION[CR]['debug'] = false; 	
+			}
+			if ($this->systemVars['debug'] !== NULL) {
+				$_SESSION[CR]['debug'] = ($this->systemVars['debug'] === '1') ? true : false;
+			}
+			$this->debug = isset($_SESSION[CR]['debug']) ? $_SESSION[CR]['debug'] : $this->debug;
+		}
+		// determine if request isAction, isAjax, or isContent
+		$this->determinePageType();
+		// declare common classes, ie. mysql, login, permission, bc, etc/, they will be in the $GLOBALS scope
+		$this->handleClasses();
+		
+		// check if request is protected
+		$protected = $this->isProtected();
+		if ($protected) {
+			// check if user is logged in, set defines
+			$user = $this->handleLogin();
+			// check if user has permission to access current uri
+			$requiredPermission = $this->handlePermission();
+		}
+		else {
+			define('LOGGEDIN', false);	
 		}
 		
-		$this->handleFile(); //determine file to use
+		if (!$this->handleFile()) {
+			$this->handle404();
+		}
+		
+		$this->handleGlobalData();
+		
+		if ($this->debug) {
+			?>
+			<style type="text/css">
+				.debug-container {
+					background: #fff;
+					color: #333;
+					font: 11px/15px Arial, Helvetica, sans-serif;
+					overflow: hidden;
+					padding: 16px 0 0;
+				}
+				.debug-container > .inner {
+					width: 960px;
+					margin: 0 auto;
+				}
+				.debug-container h1 {
+					margin: 0 0 16px;
+					font: bold 24px/1em Arial, Helvetica, sans-serif;
+				}
+				.debug-container dl {
+					margin: 0;
+				}
+				.debug-container dt {
+					font: bold 14px/1em Arial, Helvetica, sans-serif;
+				}
+				.debug-container dd {
+					margin: 4px 0 16px;
+					padding: 4px 8px;
+					max-height: 200px;
+					overflow-y: scroll;
+					border: 1px solid #ddd;
+				}
+				.debug-container dd.textarea {
+					max-height: none;
+					overflow: auto;
+					padding: 0;
+					border: none;
+				}
+				.debug-container dd.textarea textarea {
+					width: 100%;
+					height: 640px;
+				}
+				.debug-container ul {
+					margin: 0;
+					padding: 0 0 0 16px;
+					list-style: disc;
+				}
+			</style>
+			<div class="debug-container">
+				<div class="inner">
+					<h1>Request: <?= $this->p ?>?<?= $_SERVER['QUERY_STRING'] ?> (<?= $protected ? 'protected' : 'unprotected' ?>)</h1>
+					<dl>
+						<?
+						$debugData = array(
+							'Login' => !LOGGEDIN ? array() : $user
+							, 'Global' => $this->gd
+							, 'POST' => $_POST
+							, 'GET' => $_GET
+							, 'SESSION' => $_SESSION
+							, 'COOKIE' => $_COOKIE
+							, 'SERVER' => $_SERVER
+							
+						);
+						foreach ($debugData as $type => $data) {
+							?>
+							<dt><?= $type ?> Data</dt>
+							<dd>
+								<?
+								pr($data);
+								?>
+							</dd>
+							<?
+						}
+						?>
+					</dl>
+				</div>
+			</div>
+			<?
+		}
 		
 		if (!$this->isAction) {
-			if (empty($this->p)) {
-				$this->handleCMS(); //needs to be before handle 404 because handle404 check if CMS is available
+			$this->handleLocalData();
+			
+			if ($this->debug) {
+				?>
+				<div class="debug-container">
+					<div class="inner">
+						<dl>
+							<dt>Local Data</dt>
+							<dd>
+								<?
+								pr($this->ld);
+								?>
+							</dd>
+						</dl>
+					</div>
+				</div>
+				<?
 			}
-			$this->handle404(); //should be before handle data so 404 data file can be handled
-			$this->handleData();
 		}
 		else {
 			$this->handleAction();
 		}
+		
 		if (isset($this->classes['mysql'])) {
 			$this->classes['mysql']->close();
 			unset($_mysql);	
 		}
+		
 		if (!$this->isAction) {
 			$this->automateMeta();
+			
+			if ($this->debug) {
+				ob_start();	
+			}
+			
 			$this->handleHTML();
+			
+			if ($this->debug) {
+				$markup = htmlentities(ob_get_flush());
+				?>
+				<div class="debug-container">
+					<div class="inner">
+						<dl>
+							<dt>Markup</dt>
+							<dd class="textarea">
+								<textarea rows="" cols=""><?= $markup ?></textarea>
+							</dd>
+						</dl>
+					</div>
+				</div>
+				<?
+			}
 		}
 	}
 	
@@ -82,22 +229,19 @@ class FW {
 	}							
 	
 	private function determinePageType () {
-		if (!empty($_GET['index'])) {
-			$this->isAjax = $_GET['index'] == 'ajax' ? true : false;
-			$this->isAction = $_GET['index'] == 'action' ? true : false;
+		if ($this->systemVars['index'] !== NULL) {
+			$this->isAjax = $this->systemVars['index'] == 'ajax' ? true : false;
+			$this->isAction = $this->systemVars['index'] == 'action' ? true : false;
 		}
 		$this->isContent = !$this->isAjax && !$this->isAction ? true : false;	
 	}
 	
 	private function generatePathTitle ($delimiter = '&rarr;') {
 		
-		if (!empty($_GET['crumb-tips'])) {
-			$tips = explode('::', $_GET['crumb-tips']);	
-		}
-		
-		$skipPages = array('main'
-						   , 'manage-links'
-						   );
+		$skipPages = array(
+			'main'
+			, 'manage-links'
+		);
 		$crumbCount = count($GLOBALS['bc']->crumbs);
 		$crumbs = array();
 		for ($i = 0; $i < $crumbCount; $i++) {
@@ -112,35 +256,35 @@ class FW {
 		return implode(' <span class="delimiter">' . $delimiter . '</span> ', $crumbs);
 	}
 	
-	//rebuild $_SERVER['QUERY_STRING'] to remove framework get variables
-	private function rebuildQueryString () {
-		//remove framework variables, variables are not for query, but rather flags for display, so it wouldnt make sense to be in the $_SERVER['QUERY_STRING']
+	//need to remove system variables from enviroment
+	private function handleSystemVars () {
+		
+		$names = array_keys($this->systemVars);
+		
+		//save values and remove from get
+		foreach ($names as $name) {
+			if (!isset($_GET[$name])) {
+				continue;	
+			}
+			$this->systemVars[$name] = $_GET[$name];
+			unset($_GET[$name]);
+		}
+		
+		//remove from $_SERVER['QUERY_STRING']
+		$queryVariables = array();
 		parse_str($_SERVER['QUERY_STRING'], $queryVariables);
-		$queryVariables = array_diff_key($queryVariables, array_flip($this->queryNames));
+		$queryVariables = array_diff_key($queryVariables, array_flip($names));
 		$_SERVER['QUERY_STRING'] = http_build_query($queryVariables); // Generates a URL-encoded query string from the associative array
-		unset($queryVariables);	
 	}
 	
 	//create global "singleton" objects, more then likly we only need one instance of each class throughout framework.
 	private function handleClasses () {
-		if (class_exists('mysql')) {
-			$GLOBALS['mysql'] = new mysql();
-			if (class_exists('login')) {
-				$GLOBALS['login'] = new login();
-				if (class_exists('permission')) {
-					$GLOBALS['permission'] = new Permission();
-				}
-			}
-		}
-		if (class_exists('Breadcrumbs')) {
-			$GLOBALS['bc'] = new Breadcrumbs();
-		}
-		if (class_exists('Dates')) {
-			$GLOBALS['dates'] = new Dates();
-		}
-		if (class_exists('Validate')) {
-			$GLOBALS['validate'] = new Validate();
-		}
+		$GLOBALS['mysql'] = new mysql();
+		$GLOBALS['login'] = new login();
+		$GLOBALS['permission'] = new Permission();
+		$GLOBALS['bc'] = new Breadcrumbs();
+		$GLOBALS['dates'] = new Dates();
+		$GLOBALS['validate'] = new Validate();
 	}
 	
 	private function handleFile () {
@@ -149,31 +293,46 @@ class FW {
 			$this->p .= '/action';
 		}
 		
-		if (empty($_GET['p'])) { //no targeted file, use default
-			$this->p .= DEFAULTPAGE;
+		if (empty($this->systemVars['p'])) { //no targeted file, use default
+			$this->p .= config('default page');
 		}
-		else{
-			$this->p .= '/' . $_GET['p'];
+		else {
+			$this->p .= '/' . $this->systemVars['p'] . '.php';
 		}
 		
-		$parts = explode('.php', $this->p);
-		$this->file = preg_replace('/\//', '', $parts[0], 1); //php filename
-		$this->cleanFile = cleanUrl($this->file);
-		$this->cleanUri = cleanUrl(preg_replace('/\//', '', $GLOBALS['bc']->uri, 1));	
+		// check if nessary files exist
+		if ($this->isAction) {
+			if (!file_exists(DR . $this->p)) {
+				// missing action file
+				return false;
+			}
+		}
+		else {
+			if (!file_exists(DR . '/html' . $this->p)) {
+				// missing html file for content
+				return false;
+			}
+		}
+		
+		return true;
 	}
 	
 	private function handleLogin () {
 		$user = $GLOBALS['login']->isLoggedIn();
 		if (notEmptyArray($user)) { //session is available
+			//handle passive cross site fradulent request hack
+			if ($this->systemVars['t'] != $user['token']) {
+				logError('Session token does not match query token (t)');
+			}
 			if ($GLOBALS['login']->isActive($user)) { //account is active
 				if ($GLOBALS['login']->isTimeOut($user)) { //session has timed out
 					$GLOBALS['login']->logout($user);
 					$_SESSION[CR]['user-error'] = 'You have been logged out because your session has expired.';
 				}
 				else{ //session has not timed out yet
-					$GLOBALS['login']->renewSession($user, SESSIONLENGTH);
-					$this->setUserDefines($user);
+					$GLOBALS['login']->renewSession($user, config('session length'));
 					define('LOGGEDIN', true);
+					define('USERID', $user['user_id']);
 				}
 			}
 			else{ //account is not active
@@ -183,28 +342,23 @@ class FW {
 		}
 		
 		if (!defined('LOGGEDIN')) {
-			define('LOGGEDIN', false);	
+			define('LOGGEDIN', false);
 		}
+		
+		return $user;
 	}
 	
-	private function setUserDefines ($user) {
-		define('LOGIN', $user['login']);
-		define('USERID', $user['user_id']);
-		define('SESSIONEXPIRES', $user['expires']);
-		define('TOKEN', 'lv2-token=' . $user['token']); // attach to action urls
-	}
-	
-	private function handlePermission () {
+	private function isProtected () {
 		if (!defined('PROTECTEDPATHS')) {
 			error('PROTECTEDPATHS is not defined');
 		}
 		
 		//determine if current path is proteced
 		$protectedPaths = explode(', ', PROTECTEDPATHS);
-		$isPathProtected = $GLOBALS['permission']->isPathProtected($GLOBALS['bc']->uri, $protectedPaths);
-		if (!$isPathProtected) {
-			return;	
-		}
+		return $GLOBALS['permission']->isPathProtected($GLOBALS['bc']->uri, $protectedPaths);
+	}
+	
+	private function handlePermission () {
 		
 		//get permissions
 		$permissions = array();	
@@ -216,64 +370,67 @@ class FW {
 		$canAccess = $GLOBALS['permission']->canAccess($GLOBALS['bc']->uri, $permissions);
 		
 		if (!$canAccess) {
-			/*
-			disable feature for now, not sure if its needed plus it causes many problems.
-			if ($this->isContent) {
-				$_SESSION[CR]['redirect-after-login'] = $_SERVER['REQUEST_URI'];
-			}
-			*/
 			$_SESSION[CR]['user-error'] = 'Please login to continue.';
 			died('/login', $this->isAjax);
 		}
+		
+		return true;
 	}
 	
-	private function handleData () {
-		//include globals
+	private function handleGlobalData () {
 		$globalFile = '/data/global.php';
 		if (file_exists(DR . $globalFile)) {
 			require DR . $globalFile;
-		}
-		
+		}	
+	}
+	
+	private function handleLocalData () {
 		$file = '/data' . $this->p;
 		if (file_exists(DR . $file)) {
 			require DR . $file;
 		}
 	}
 	
-	private function handleCMS () {
-		$file = '/data/cms.php';
-		if (file_exists(DR . $file)) {
-			require DR . $file;
-		}
-	}
-	
 	private function handleAction () {
-
-		$this->redirect = false; // redirect url
+		 // redirect url
+		$this->redirect = false;
 		
-		//handle passive cross site fradulent request
-		/*if (LOGGEDIN && isset($GLOBALS['login'])) {
-			if ($_GET['lv2-token'] != $GLOBALS['login']->getToken()) {
-				logError(__FILE__ . ' ' . __LINE__ . ': Invalid token', false);
-				died('/login');
-			}
-		}*/
+		if (!file_exists(DR . $this->p)) {
+			logError('Page can not be found');
+		}
 		
-		require DR . $this->p; // include action file
+		// include action file
+		require DR . $this->p;
 		
 		if ($this->redirect) {
-			$useCR = true;
-			if (CR != '') { //prevent warning from strpos
-				$useCR = strpos($this->redirect, CR) === false ? true : false;
+			$redirectUrl = $this->url($this->redirect);
+			if ($this->debug) {
+				?>
+				<a href="<?= $redirectUrl ?>"><?= $redirectUrl ?></a>
+				<?
 			}
-			died($this->redirect, isset($_POST['useiframe']) ? true : false, $useCR, $this->isAjax);
+			else {
+				died($redirectUrl, false, false, $this->isAjax);
+			}
 		}
 	}
 	
 	private function handle404 () {
-		if (!file_exists(DR . '/html' . $this->p) && $this->cms == NULL) {
-			$this->p = '/404.php';
-		}	
+		logError('page not found', false, '/404.txt');
+		$this->p = '/404.php';
+	}
+	
+	private function url ($url) {
+		// handle token/t
+		if (!empty($this->systemVars['t'])) {
+			$url .= (strpos($url, '?') === false) ? '?' : '&';
+			$url .= 't=' . $this->systemVars['t'];
+		}
+		return CR . $url; 
+	}
+	
+	private function actionUrl () {
+        return $this->url('/action' . $GLOBALS['bc']->path . '/' . $GLOBALS['bc']->page);	
 	}
 }
 
