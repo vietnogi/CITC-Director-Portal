@@ -39,7 +39,7 @@ function l ($key) {
 function config ($key) {
 	switch ($key) {
 		case 'default page':
-			return '/home.php';
+			return '/login.php';
 		case 'session length':
 			return 6000;
 		case 'lockout length':

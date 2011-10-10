@@ -51,13 +51,6 @@ require DR . '/css/calendar-v2.css.php';
 
 echo "
 
-/* calendar.css.php */
-"; 
-
-require DR . '/css/calendar.css.php';
-
-echo "
-
 /* checkbox-fields.css.php */
 "; 
 

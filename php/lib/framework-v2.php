@@ -1,20 +1,20 @@
 <?
 //2:15 PM 7/15/2011
 class FW {
-	public $isAction = false;
-	public $isAjax = false;
-	public $isContent = false;
-	public $p = NULL;
-	public $meta = array(
+	private $isAction = false;
+	private $isAjax = false;
+	private $isContent = false;
+	private $p = NULL;
+	private $meta = array(
 		'title' => NULL
 		, 'h2' => NULL
 		, 'description' => NULL
 		, 'keywords' => NULL
-		);
+	);
 	// global data (for multiple pages)
-	public $gd = array();
+	private $gd = array();
 	// local data (for single page)
-	public $ld = array();
+	private $ld = array();
 	
 	private $systemVars = array(
 		'p' => NULL
@@ -22,9 +22,10 @@ class FW {
 		, 'print' => NULL
 		, 'debug' => NULL
 		, 't' => NULL
-		);
+	);
 	private $redirect = NULL;
 	private $debug = false;
+	private $user = array();
 	
 	public function __construct () {
 		// since .htaccess add variables like p, index, print
@@ -50,7 +51,7 @@ class FW {
 		$protected = $this->isProtected();
 		if ($protected) {
 			// check if user is logged in, set defines
-			$user = $this->handleLogin();
+			$this->handleLogin();
 			// check if user has permission to access current uri
 			$requiredPermission = $this->handlePermission();
 		}
@@ -117,7 +118,7 @@ class FW {
 					<dl>
 						<?
 						$debugData = array(
-							'Login' => !LOGGEDIN ? array() : $user
+							'Login' => $this->user
 							, 'Global' => $this->gd
 							, 'POST' => $_POST
 							, 'GET' => $_GET
@@ -318,25 +319,25 @@ class FW {
 	}
 	
 	private function handleLogin () {
-		$user = $GLOBALS['login']->isLoggedIn();
-		if (notEmptyArray($user)) { //session is available
+		$this->user = $GLOBALS['login']->isLoggedIn();
+		if (notEmptyArray($this->user)) { //session is available
 			//handle passive cross site fradulent request hack
-			if ($this->systemVars['t'] != $user['token']) {
+			if ($this->systemVars['t'] != $this->user['token']) {
 				logError('Session token does not match query token (t)');
 			}
-			if ($GLOBALS['login']->isActive($user)) { //account is active
-				if ($GLOBALS['login']->isTimeOut($user)) { //session has timed out
-					$GLOBALS['login']->logout($user);
+			if ($GLOBALS['login']->isActive($this->user)) { //account is active
+				if ($GLOBALS['login']->isTimeOut($this->user)) { //session has timed out
+					$GLOBALS['login']->logout($this->user);
 					$_SESSION[CR]['user-error'] = 'You have been logged out because your session has expired.';
 				}
 				else{ //session has not timed out yet
-					$GLOBALS['login']->renewSession($user, config('session length'));
+					$GLOBALS['login']->renewSession($this->user, config('session length'));
 					define('LOGGEDIN', true);
-					define('USERID', $user['user_id']);
+					define('USERID', $this->user['user_id']);
 				}
 			}
 			else{ //account is not active
-				$GLOBALS['login']->logout($user);
+				$GLOBALS['login']->logout($this->user);
 				$_SESSION[CR]['user-error'] = 'You have been logged out because your account has been deactivated.';	
 			}
 		}
@@ -344,8 +345,6 @@ class FW {
 		if (!defined('LOGGEDIN')) {
 			define('LOGGEDIN', false);
 		}
-		
-		return $user;
 	}
 	
 	private function isProtected () {
