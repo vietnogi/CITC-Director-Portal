@@ -1,22 +1,33 @@
 <?
-$this->gd['navs'] = array();
+$this->gd['navs'] = array(
+	'Overview' => array(
+		'Dashboard' => '/dashboard/overview'
+		, 'Reports' => '/reports/menu'
+	)
+	, 'Projects' => array(
+		'Projects' => '/projects/main' 
+		, 'Hours' => '/hours/main'
+	)
+	, 'Contacts' => array(
+		'Leads' => '/leads/main'
+		, 'Clients' => '/clients/main'
+	)
+	, 'Settings' => array(
+		'Users' => '/users/main'
+		, 'User Groups' => '/user-groups/main'
+		, 'User Log' => '/user-log/main'
+		, 'Permissions' => '/permissions/main'
+		, 'Configuration' => '/configuration/menu'
+	)
+);
 
-//globals for customer section
-if ($GLOBALS['bc']->section == 'customer') {
-	if (!is_numeric(USERID)) {
-		logError('USERID is not numeric');	
+if (LOGGEDIN === true) {
+	// get staff info
+	$query = 'SELECT * FROM staff WHERE user_id = :user_id';
+	$values = array(':user_id' => USERID);
+	$this->gd['staff'] = $GLOBALS['mysql']->getSingle($query, $values);
+	if (empty($this->gd['staff'])) {
+		logError('Staff is empty.');
 	}
-	$customer = getCustomer(USERID);
-	if (empty($customer)) {
-		logError('$customer is empty');	
-	}
-	$this->gd['customer'] = $customer;
 }
-
-//dosnt feel like this is the ideal place to put this
-$this->gd['emg_form_args'] = array('legendTag' => 'h3'
-					 			, 'labelColon' => false
-					 			, 'labelAsteriskPrepend' => false
-					 			, 'groupedFieldSets' => array('address')
-								);
 ?>

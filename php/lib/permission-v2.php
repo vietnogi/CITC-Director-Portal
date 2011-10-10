@@ -1,16 +1,16 @@
 <?
-class Permission{
+class Permission {
 	private $permissions = array();
 	private $pagePerm = '';
 	private $groupPerm = array();
 	private $portal = NULL;
 	
-	public function __construct(){
+	public function __construct() {
 	}
 	
-	public function getPermissions($userid){
+	public function getPermissions ($userid) {
 		if(!is_numeric($userid)){
-			trigger_error('$userid is not numeric', E_USER_ERROR);	
+			trigger_error('$userid is not numeric', E_USER_ERROR);
 		}
 		
 		$query = 'SELECT user_permission.*
@@ -25,31 +25,17 @@ class Permission{
 		return $GLOBALS['mysql']->get($query, $values);
 	}
 	
-	public function isPathProtected($uri = '', $protectedPaths = array()){
-
-		do{
-			foreach ($protectedPaths as $path) {
-				if ($uri == $path) {
-					return true;
-				}
+	public function isPathProtected ($uri = '', $unprotectedPaths = array('/nologin')) {
+		// check if uri starts with any paths in $unprotectedPaths
+		foreach ($unprotectedPaths as $path) {
+			if (preg_match('/^' . str_replace('/', '\/', $path) . '/', $uri)) {
+				return false;
 			}
-			
-			if($uri == '/'){ //prevent infinite loop
-				break;
-			}
-			
-			//go up a level
-			$lastSlashPos = strrpos($uri, '/');
-			$uri = substr($uri, 0, $lastSlashPos);
-			if($uri == ''){ //handle root dir
-				$uri = '/';
-			}
-		} while($lastSlashPos !== false);
-		
-		return false;
+		}
+		return true;
 	}
 	
-	public function getPathPermission($uri = '', $permissions = array()){
+	public function getPathPermission ($uri = '', $permissions = array()) {
 		foreach($permissions as $permission){
 			//check if current path starts with permission path
 			$strStartWith = strncmp($uri, $permission['path'], strlen($permission['path'])) == 0 ? true : false;
@@ -60,7 +46,7 @@ class Permission{
 		return array();
 	}
 	
-	private function can($case, $uri = '', $permissions = array()){
+	private function can ($case, $uri = '', $permissions = array()) {
 		if (empty($case)) {
 			trigger_error('$case is empty', E_USER_ERROR);
 		}
@@ -75,19 +61,19 @@ class Permission{
 		return true;
 	}
 	
-	public function canAccess($uri, $permissions){
+	public function canAccess ($uri, $permissions) {
 		return $this->can('access', $uri, $permissions);
 	}
 	
-	public function canAdd($uri, $permissions){
+	public function canAdd ($uri, $permissions) {
 		return $this->can('add', $uri, $permissions);
 	}
 	
-	public function canEdit($uri, $permissions){
+	public function canEdit ($uri, $permissions) {
 		return $this->can('edit', $uri, $permissions);
 	}
 	
-	public function canDelete($uri, $permissions){
+	public function canDelete ($uri, $permissions) {
 		return $this->can('delete', $uri, $permissions);
 	}
 }

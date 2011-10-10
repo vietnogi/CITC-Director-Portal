@@ -44,3 +44,5 @@
 /new-framework/customer/enrollment/camper-information?camper-index=0 : /new-framework/customer/enrollment/camper-information?camper-index=0 :: validate failed: index: 0, check: min, value: 
 09/18/11 06:15:45 PM :: 107.3.151.150
 /new-framework/action/customer/enrollment/session-information?camper_index=0&lv2-token=43c5880fb0dfcea573935007ee08b711 : /new-framework/action/customer/enrollment/session-information?camper_index=0&lv2-token=43c5880fb0dfcea573935007ee08b711 :: validate failed: index: 0, check: min, value: 
+2011-10-10 16:34:32 :: 204.11.231.186
+/emg/dashboard/main?t=9e4682abee4b46e43c209efb6ed9978f : Staff is empty.

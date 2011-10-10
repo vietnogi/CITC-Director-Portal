@@ -29,7 +29,7 @@ function isAssociativeArray ($array) {
 	return array_keys($array) !== range(0, count($array) - 1);
 }
 
-function logError ($error, $redirect = '/error', $errorLogPath = '/errors.txt') {
+function logError ($error, $redirect = '/nologin/error', $errorLogPath = '/errors.txt') {
 	$fh = fopen(DR . '/logs' . $errorLogPath, 'a') or die('Cannot open error file.');
 	fwrite($fh, DATETIME . ' :: ' . $_SERVER['REMOTE_ADDR'] . "\n" . $_SERVER['REQUEST_URI'] . ' : ' . $error . "\n");
 	fclose($fh);

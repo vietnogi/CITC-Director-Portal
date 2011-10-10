@@ -1,5 +1,4 @@
 <?
-//2:15 PM 7/15/2011
 class FW {
 	private $isAction = false;
 	private $isAjax = false;
@@ -348,13 +347,8 @@ class FW {
 	}
 	
 	private function isProtected () {
-		if (!defined('PROTECTEDPATHS')) {
-			error('PROTECTEDPATHS is not defined');
-		}
-		
 		//determine if current path is proteced
-		$protectedPaths = explode(', ', PROTECTEDPATHS);
-		return $GLOBALS['permission']->isPathProtected($GLOBALS['bc']->uri, $protectedPaths);
+		return $GLOBALS['permission']->isPathProtected($GLOBALS['bc']->uri);
 	}
 	
 	private function handlePermission () {
@@ -370,7 +364,7 @@ class FW {
 		
 		if (!$canAccess) {
 			$_SESSION[CR]['user-error'] = 'Please login to continue.';
-			died('/login', $this->isAjax);
+			died('/nologin/login', $this->isAjax);
 		}
 		
 		return true;
@@ -416,7 +410,7 @@ class FW {
 	
 	private function handle404 () {
 		logError('page not found', false, '/404.txt');
-		$this->p = '/404.php';
+		$this->p = '/nologin/404.php';
 	}
 	
 	private function url ($url) {

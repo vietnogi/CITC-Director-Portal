@@ -99,7 +99,7 @@ class Validate{
 	$validate[]['num'] = $_POST['weight'];
 	*/
 	
-	function many($values, $error = true){
+	function many($values){
 		if(!is_array($values)){
 			die('validate: error, first argument must be an array');
 		}
@@ -115,7 +115,7 @@ class Validate{
 					$parameter = isset($checks[$i + 1]) ? $checks[$i + 1] : NULL;
 					$check = $this->check($val, $checks[$i], $msg, $parameter);
 					if (!$check) {
-						logError('Validate failed: index: ' . $index . ', check: ' . $checks[$i] . ', value: ' . $val . ', name: ' . (!empty($name) ? $name : ''), $error);
+						logError('Validate failed: index: ' . $index . ', check: ' . $checks[$i] . ', value: ' . $val . ', name: ' . (!empty($name) ? $name : ''));
 						return false;
 					}
 				}

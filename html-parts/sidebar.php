@@ -2,7 +2,7 @@
 	<div class="inner">
 		<ul class="nav">
 			<?
-			foreach ($__navs as $cat => $navs) {
+			foreach ($this->gd['navs'] as $cat => $navs) {
 				if (!is_numeric($cat)) {
 					listNavs($cat, $navs);
 				}
@@ -31,7 +31,6 @@
 </div>
 <?
 function listNavs($cat, $navs) {
-	global $_bc;
 	$cleanCat = cleanUrl($cat);
 	?>
 	<li class="<?= $cleanCat ?>">
@@ -41,7 +40,7 @@ function listNavs($cat, $navs) {
 			foreach ($navs as $nav => $url) {
 				$dirname = dirname($url);
 				?>
-				<li<?= $_bc->path == $dirname ? ' class="current"' : '' ?>>
+				<li<?= $GLOBALS['bc']->path == $dirname ? ' class="current"' : '' ?>>
 					<a href="<?= CR . $url ?>"><?= $nav ?></a>
 				</li>
 				<?

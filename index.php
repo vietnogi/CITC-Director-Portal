@@ -3,8 +3,7 @@
 define('DR', rtrim($_SERVER['DOCUMENT_ROOT'], '/'));
 define('DEVELOPMENT', true);
 define('LIBPATH', '/php/lib');
-define('PORTAL', 'Public');
-define('PROTECTEDPATHS', '/customer, /camper');
+define('PORTAL', 'Administration');
 define('USID', '1');
 
 // handle getting client define file, added the '.' to prevent hacks
