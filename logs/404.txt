@@ -20,3 +20,7 @@
 /emg/dashboard?debug=1 : page not found
 2011-10-10 10:30:59 :: 204.11.231.186
 /emg/dashboard?debug=1 : page not found
+2011-10-12 09:42:02 :: 204.11.231.186
+/emg/emg/customer/main?t=d793e12c284d7f110a9427964386880c : page not found
+2011-10-12 09:42:15 :: 204.11.231.186
+/emg/emg/customer/main?t=d793e12c284d7f110a9427964386880c : page not found

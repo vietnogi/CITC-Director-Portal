@@ -46,3 +46,9 @@
 /new-framework/action/customer/enrollment/session-information?camper_index=0&lv2-token=43c5880fb0dfcea573935007ee08b711 : /new-framework/action/customer/enrollment/session-information?camper_index=0&lv2-token=43c5880fb0dfcea573935007ee08b711 :: validate failed: index: 0, check: min, value: 
 2011-10-10 16:34:32 :: 204.11.231.186
 /emg/dashboard/main?t=9e4682abee4b46e43c209efb6ed9978f : Staff is empty.
+2011-10-11 13:59:37 :: 204.11.231.186
+/emg/dashboard/main?debug=1 : Session token does not match query token (t)
+2011-10-11 21:17:24 :: 107.3.151.150
+/emg/customer/main : Session token does not match query token (t)
+2011-10-12 09:30:16 :: 204.11.231.186
+/emg/customer/main : Session token does not match query token (t)

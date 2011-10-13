@@ -4,9 +4,9 @@ $this->gd['navs'] = array(
 		'Dashboard' => '/dashboard/overview'
 		, 'Reports' => '/reports/menu'
 	)
-	, 'Projects' => array(
-		'Projects' => '/projects/main' 
-		, 'Hours' => '/hours/main'
+	, 'Accounts' => array(
+		'Staff' => '/staff/main' 
+		, 'Customer' => '/customer/main'
 	)
 	, 'Contacts' => array(
 		'Leads' => '/leads/main'
@@ -20,6 +20,11 @@ $this->gd['navs'] = array(
 		, 'Configuration' => '/configuration/menu'
 	)
 );
+foreach ($this->gd['navs'] as $category => &$links) {
+	foreach ($links as &$link) {
+		$link = $this->url($link);	
+	}
+}
 
 if (LOGGEDIN === true) {
 	// get staff info

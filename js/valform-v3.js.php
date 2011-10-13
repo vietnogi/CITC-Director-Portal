@@ -74,8 +74,8 @@
 			var labelFor = $('[name="' + field.name + '"]', instance.form)[0].id;
 		}
 		else{
-			// check for val_combo
-			var idAsClass = classAfter(field, 'val-combo');
+			// check for combo
+			var idAsClass = classAfter(field, 'combo');
 			if (idAsClass) {
 				var labelFor = idAsClass;
 			}
@@ -156,7 +156,7 @@
 		if (!instance.hideErrors) {
 			var html = '<' + instance.errorContainerTag + ' id="' + field.id + '-error" class="' + instance.errorContainerClass + '">' + errorMsg + '</' + instance.errorContainerTag + '>';
 			//check to place error after a diferent element
-			var idAsClass = classAfter(field, 'val-error-after');
+			var idAsClass = classAfter(field, 'error-after');
 			if (idAsClass) {
 				var targetElement = $('#' + idAsClass);
 			}
@@ -247,7 +247,7 @@
 	};
 	
 	var validators = {
-		'val-num': function (field) {
+		'numeric': function (field) {
 			if (field.value.match(/(^-?\d\d*\.\d*$)|(^-?\d\d*$)|(^-?\.\d\d*$)/) || field.value == '') {
 				return false;
 			} 
@@ -256,7 +256,7 @@
 			}
 		}
 		
-		, 'val-req': function (field) {
+		, 'req': function (field) {
 			var fieldType = field.type.toLowerCase();
 			if (fieldType == 'checkbox' || fieldType == 'radio') {
 				var values = $('[name="' + field.name + '"]', this.form);
@@ -274,15 +274,15 @@
 		}
 		
 		// Compare with default value (ex. fields without labels)
-		, 'val-default': function (field) {
+		, 'default': function (field) {
 			if (field.value == field.defaultValue) {
 				return 'is required.';	
 			}
 			return false;
 		}
 		
-		, 'val-min-len': function (field) {
-			var minLen = classAfter(field, 'val-min-len');
+		, 'min-len': function (field) {
+			var minLen = classAfter(field, 'min-len');
 			if (field.value.length < parseFloat(minLen) && field.value != '') {
 				return 'must be at least ' + minLen + ' characters long.';
 			}
@@ -291,8 +291,8 @@
 			}
 		}
 		
-		, 'val-max-len': function (field) {
-			var maxLen = classAfter(field, 'val-max-len');
+		, 'max-len': function (field) {
+			var maxLen = classAfter(field, 'max-len');
 			if (field.value.length > parseFloat(maxLen) && field.value != '') {
 				return 'must be at most ' + maxLen + ' characters long.';
 			}
@@ -301,8 +301,8 @@
 			}
 		}
 		
-		, 'val-max-num': function (field) {
-			var maxNum = classAfter(field, 'val-max-num');
+		, 'max-num': function (field) {
+			var maxNum = classAfter(field, 'max-num');
 			if (!isNaN(field.value) && field.value > parseFloat(maxNum)) { 
 				return 'must be ' + maxNum + ' or less.';
 			}
@@ -311,8 +311,8 @@
 			}
 		}
 		
-		, 'val-min-num': function (field) {
-			var minNum = classAfter(field, 'val-min-num');
+		, 'min-num': function (field) {
+			var minNum = classAfter(field, 'min-num');
 			if (!isNaN(field.value) && (field.value < parseFloat(minNum)) && field.value != '') {
 				return 'must be ' + minNum + ' or greater.';
 			}
@@ -321,8 +321,8 @@
 			}
 		}
 		
-		, 'val-len': function (field) {
-			var len = classAfter(field, 'val-len');
+		, 'len': function (field) {
+			var len = classAfter(field, 'len');
 			if (field.value.length != parseFloat(len) && field.value != '') {
 				return 'must be ' + len + ' characters long.';
 			}
@@ -330,7 +330,7 @@
 				return false;	
 			}
 		}
-		, 'val-email': function (field) {
+		, 'email': function (field) {
 			if (field.value.match(/^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})$/) || field.value == '') {
 				return false;
 			} 
@@ -338,8 +338,8 @@
 				return 'is not a valid email address.';
 			}
 		}
-		, 'val-same': function (field, field2) {
-			var field2 = classAfter(field, 'val-same');
+		, 'same': function (field, field2) {
+			var field2 = classAfter(field, 'same');
 			var field2Obj = $('#' + field2)[0];
 			if (!field2Obj) {
 				alert('val_same: ' + field2 + ' is not defined');
@@ -354,7 +354,7 @@
 			}
 			return false;
 		}
-		, 'val-phone': function (field) {
+		, 'phone': function (field) {
 			if (field.value == '') {
 				return false;	
 			}
@@ -369,7 +369,7 @@
 			}
 			return false;
 		}
-		, 'val-date': function (field) {
+		, 'date': function (field) {
 			if (field.value == '') {
 				return false;	
 			}
@@ -389,7 +389,7 @@
 				return 'needs to be mm/dd/yyyy.';
 			}
 		}
-		, 'val-money': function (field) {
+		, 'money': function (field) {
 			field.value = field.value.replace(/[^0-9\-\.]/g, '');
 			if (field.value == '') {
 				return;	
@@ -412,8 +412,8 @@
 			}
 			field.value = formated;
 		}
-		, 'val-decimal': function(field, precision) {
-			var precision = classAfter(field, 'val-decimal');
+		, 'decimal': function(field, precision) {
+			var precision = classAfter(field, 'decimal');
 			field.value = field.value.replace(/[^0-9\-\.]/g, '');
 			if (field.value == '') {
 				return;	

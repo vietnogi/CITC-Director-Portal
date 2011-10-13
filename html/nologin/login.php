@@ -15,14 +15,14 @@ $form->text(array(
 	, 'name' => 'login'
 	, 'id' => 'login'
 	, 'class' => 'val-req val-email'
-	, 'value' => 'cookie login pending'
+	, 'value' => NULL
 ));
 $form->password(array(
 	'label' => 'Password'
 	, 'name' => 'password'
 	, 'id' => 'password'
 	, 'class' => 'val_req'
-	, 'value' => ''
+	, 'value' => NULL
 ));
 
 $form->checkboxes(array(array(

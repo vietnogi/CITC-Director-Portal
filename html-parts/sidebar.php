@@ -41,7 +41,7 @@ function listNavs($cat, $navs) {
 				$dirname = dirname($url);
 				?>
 				<li<?= $GLOBALS['bc']->path == $dirname ? ' class="current"' : '' ?>>
-					<a href="<?= CR . $url ?>"><?= $nav ?></a>
+					<a href="<?= $url ?>"><?= $nav ?></a>
 				</li>
 				<?
 			}
