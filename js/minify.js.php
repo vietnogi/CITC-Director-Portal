@@ -9,6 +9,20 @@ require DR . '/js/index.js.php';
 
 echo "
 
+/* ajax-fill.js.php */
+"; 
+
+require DR . '/js/ajax-fill.js.php';
+
+echo "
+
+/* ajax-submit.js.php */
+"; 
+
+require DR . '/js/ajax-submit.js.php';
+
+echo "
+
 /* browser-detect.js.php */
 "; 
 
@@ -16,10 +30,10 @@ require DR . '/js/browser-detect.js.php';
 
 echo "
 
-/* enrollment.js.php */
+/* customer.js.php */
 "; 
 
-require DR . '/js/enrollment.js.php';
+require DR . '/js/customer.js.php';
 
 echo "
 
@@ -44,24 +58,17 @@ require DR . '/js/fw.js.php';
 
 echo "
 
+/* jquery.metadata.js.php */
+"; 
+
+require DR . '/js/jquery.metadata.js.php';
+
+echo "
+
 /* markup.js.php */
 "; 
 
 require DR . '/js/markup.js.php';
-
-echo "
-
-/* parent-pack.js.php */
-"; 
-
-require DR . '/js/parent-pack.js.php';
-
-echo "
-
-/* registation.js.php */
-"; 
-
-require DR . '/js/registation.js.php';
 
 echo "
 

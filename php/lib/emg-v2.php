@@ -34,7 +34,7 @@ function logError ($error, $redirect = '/nologin/error', $errorLogPath = '/error
 	fwrite($fh, DATETIME . ' :: ' . $_SERVER['REMOTE_ADDR'] . "\n" . $_SERVER['REQUEST_URI'] . ' : ' . $error . "\n");
 	fclose($fh);
 	
-	if (DEVELOPMENT && $redirect == '/error') {
+	if (DEVELOPMENT && $redirect == '/nologin/error') {
 		if ($_SESSION[CR]['debug']) {
 			?>
 			<h3 style="color:#FF0000">System Error: <?= $error ?></h3>

@@ -27,8 +27,13 @@ class Filter {
 		}
 		$this->queryParts = array_merge($this->queryParts, $queryParts);
 		
-		$this->queryParts['select'] = empty($this->queryParts['select']) ? $this->selectstr($fieldList) : $this->queryParts['select'];
-		$this->queryParts['from'] = empty($this->queryParts['from']) ? $this->keytable : $this->queryParts['from'];
+		if (empty($this->queryParts['select'])) {
+			trigger_error("queryParts['select'] is empty", E_USER_ERROR);
+		}
+		if (empty($this->queryParts['from'])) {
+			trigger_error("queryParts['from'] is empty", E_USER_ERROR);
+		}
+		
 		// build where string
 		$values = $this->getValues($from, $fieldList);
 		$andstr = $this->andstr($values);
@@ -206,17 +211,6 @@ class Filter {
 		}
 		return $filters;
 	}*/
-	
-	private function selectstr ($fieldList) {
-		$selects = array();
-		foreach ($fieldList as $table => $fields) {
-			foreach ($fields as $field => $type) {
-				array_push($selects, (empty($table) ? '' : "`$table.`") . "`$field`");
-			}
-		}
-		
-		return implode(', ', $selects);
-	}
 	
 	private function wherestr ($andstr = '', $orstr = '', $wherestr = '') {
 		if ($andstr != '') {

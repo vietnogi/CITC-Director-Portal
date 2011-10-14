@@ -24,3 +24,43 @@
 /emg/emg/customer/main?t=d793e12c284d7f110a9427964386880c : page not found
 2011-10-12 09:42:15 :: 204.11.231.186
 /emg/emg/customer/main?t=d793e12c284d7f110a9427964386880c : page not found
+2011-10-13 10:11:45 :: 204.11.231.186
+/emg/customer/detail?t=1243a4fdd289cea77795055adc1639b432e3a56c&customer_id=1 : page not found
+2011-10-13 18:11:06 :: 99.91.247.233
+/emg/customer/add?t=3a5f900603793012941ea74ed6683e94 : page not found
+2011-10-13 18:11:23 :: 99.91.247.233
+/emg/customer/add?t=3a5f900603793012941ea74ed6683e94 : page not found
+2011-10-13 18:20:17 :: 99.91.247.233
+/emg/configuration/menu?t=3a5f900603793012941ea74ed6683e94 : page not found
+2011-10-13 22:23:21 :: 107.3.151.150
+/emg/ajax/customer?t=89722dcb2a2941d5e0e758fb69768aa9&customer_id=1 : page not found
+2011-10-13 22:25:02 :: 107.3.151.150
+/emg/ajax/customer/notes/main?t=89722dcb2a2941d5e0e758fb69768aa9&customer_id=1 : page not found
+2011-10-13 22:30:37 :: 107.3.151.150
+/emg/ajax/customer/notes/main?t=89722dcb2a2941d5e0e758fb69768aa9&customer_id=1 : page not found
+2011-10-13 22:32:48 :: 107.3.151.150
+/emg/ajax/customer/notes/main?t=89722dcb2a2941d5e0e758fb69768aa9&customer_id=1 : page not found
+2011-10-13 22:34:06 :: 107.3.151.150
+/emg/ajax/customer/notes/main?t=89722dcb2a2941d5e0e758fb69768aa9&customer_id=1 : page not found
+2011-10-13 22:38:51 :: 107.3.151.150
+/emg/nologin/l : page not found
+2011-10-13 22:56:25 :: 107.3.151.150
+/emg/ajax/customer/commentsee/main?t=db0c55d030c1bc4d25d471e3079778c9&customer_id=1&_=1318571784847 : page not found
+2011-10-13 22:58:25 :: 107.3.151.150
+/emg/ajax/customer/commentsee/main?t=db0c55d030c1bc4d25d471e3079778c9&customer_id=1&_=1318571904994 : page not found
+2011-10-13 22:58:55 :: 107.3.151.150
+/emg/ajax/customer/commentsee/main?t=db0c55d030c1bc4d25d471e3079778c9&customer_id=1&_=1318571935061 : page not found
+2011-10-13 22:59:33 :: 107.3.151.150
+/emg/ajax/customer/commentsee/main?t=db0c55d030c1bc4d25d471e3079778c9&customer_id=1&_=1318571973145 : page not found
+2011-10-13 23:00:29 :: 107.3.151.150
+/emg/ajax/customer/commentsee/main?t=db0c55d030c1bc4d25d471e3079778c9&customer_id=1&_=1318572029742 : page not found
+2011-10-13 23:01:44 :: 107.3.151.150
+/emg/ajax/customer/commentsee/main?t=db0c55d030c1bc4d25d471e3079778c9&customer_id=1&_=1318572104338 : page not found
+2011-10-13 23:03:52 :: 107.3.151.150
+/emg/ajax/customer/commentsee/main?t=db0c55d030c1bc4d25d471e3079778c9&customer_id=1&_=1318572232390 : page not found
+2011-10-14 09:23:15 :: 204.11.231.186
+/emg/customer/main?t=c5f0d445bc76f52cb67f31ddecfcb2c8 : page not found
+2011-10-14 10:00:14 :: 204.11.231.186
+/emg/action/customers/comments/main?t=c5f0d445bc76f52cb67f31ddecfcb2c8&customer_id=1 : page not found
+2011-10-14 11:14:39 :: 204.11.231.186
+/emg/action/customers/comments/main?t=c5f0d445bc76f52cb67f31ddecfcb2c8&customer_id=1 : page not found

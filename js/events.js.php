@@ -1,33 +1,6 @@
 /*<script>*/
 var Events = function (container) {
-	
-	function maxLenNext (container) {
-		$('input[type="text"].max-length-next', container).keyup( function (event) {
-			if(event.keyCode == 9){ //ignore tabs
-				return;	
-			}
-			if(this.value.length == this.maxLength){
-				var focusid = classAfter('max-length-next', this.className);
-				$('#' + focusid).focus();
-			}
-		});
-	}
-	
-	function captchaRefresh (container) {
-		$('p.new-image a.captcha-hint', container).click(function() {
-			var inputId = getHash(this.href);
-			var input = $('#' + inputId);
-			
-			if (input) {
-				var form = input.closest('form');
-				var formId = $(form).attr('id');
-				
-				refreshCaptcha(formId);
-			}
-			
-			return false;
-		});	
-	}
+
 	
 	function addressFields() {
 		// Input names
@@ -104,7 +77,34 @@ var Events = function (container) {
 	//val form
 	$('form.val-form', container).valform({abc: 123, xyz: 'abc'});
 	
-	maxLenNext(container);
-	captchaRefresh(container);
+	// row clicks
+	$('tr[href]', container).click(function () {
+		window.location = $(this).attr('href');
+	});
+	
+	// toggles
+	$('.toggle', container).click(function () {
+		var options = $(this).metadata();
+		$(options.selector).toggleClass(options.class);
+	});
+	
+	
+	// max length next
+	$('input[type="text"].max-length-next', container).keyup( function (event) {
+		if (event.keyCode == 9) { //ignore tabs
+			return;	
+		}
+		if (this.value.length == this.maxLength) {
+			var focusid = classAfter('max-length-next', this.className);
+			$('#' + focusid).focus();
+		}
+	});
+	
+	// address fill
+	$('.ajax-fill', container).ajaxFill();
+	
+	// ajax submit
+	$('.ajax-submit', container).ajaxSubmit();
+	
 	addressFields();
 }

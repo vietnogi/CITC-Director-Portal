@@ -45,17 +45,14 @@ var FW = {
 					window.location.href = data.location;
 				} catch (err) {
 					alert('Error trying to redirect.');
-					location.reload(1);
 				}
 			break;
 			case 404:
 				alert('Page Not Found');
-				location.reload(1);
 			break;
 		}
 	}
 	, error: function(jqXHR, textStatus, errorThrown){
 		alert('Unable to complete request becuase the following error occured: ' + errorThrown);	
-		location.reload(1);
 	 }
 };

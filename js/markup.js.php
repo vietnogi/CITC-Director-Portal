@@ -36,7 +36,8 @@ var Markup = function (container) {
 	// default container
 	container = container || $('body')[0]; 
 	
-	$('.hide').hide(); //hide all elements with class hide
+	// hide all elements with class hide, dont use hide because we need class to toggle
+	$('.hide').addClass('hidden');
 	externalLinks();
 	autoCompleteOff();
 	defaultClear();

@@ -70,7 +70,8 @@
 	//determine label for error
 	function getLabel (instance, field) {		
 		var fieldType = field.type.toLowerCase();
-		if (fieldType == 'checkbox' && field.name.indexOf('[') != -1 ) { //for checkboxes, name is an array, get label base on first index id 
+		if (fieldType == 'checkbox' && field.name.indexOf('[') != -1 ) {
+			//for checkboxes, name is an array, get label base on first index id 
 			var labelFor = $('[name="' + field.name + '"]', instance.form)[0].id;
 		}
 		else{
@@ -91,19 +92,21 @@
 		
 		var label = $('label[for=' + labelFor  + ']', instance.form);
 		if (label.length > 0) {
-			return {element: label
-					, labelFor: labelFor
-					, msg: label[0].innerHTML
-					}; 	
+			return {
+				element: label
+				, labelFor: labelFor
+				, msg: label[0].innerHTML
+			}; 	
 		}
 		
 		//no label, try to use default value
 		var labelForField = $('#' + labelFor);
 		if (labelForField.length > 0) {
-			return {element: null
-					, labelFor: labelFor
-					, msg: labelForField[0].defaultValue
-					};
+			return {
+				element: null
+				, labelFor: labelFor
+				, msg: labelForField[0].defaultValue
+			};
 		}
 		
 		alert('unable to locate label');
@@ -225,8 +228,11 @@
 			if (focused) {
 				//an error occured, reset submit button so form can be submited again
 				resetSubmit(instance);
+				$(this).trigger('valform-failed');
 				return false;
 			}
+			
+			$(this).trigger('valform-success');
 			
 			return true;
 		});

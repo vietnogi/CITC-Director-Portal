@@ -6,7 +6,7 @@ $this->gd['navs'] = array(
 	)
 	, 'Accounts' => array(
 		'Staff' => '/staff/main' 
-		, 'Customer' => '/customer/main'
+		, 'Customers' => '/customers/main'
 	)
 	, 'Contacts' => array(
 		'Leads' => '/leads/main'
