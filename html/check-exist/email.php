@@ -1,3 +1,3 @@
 <?
-echo !empty($this->data['exists']) ? '1' : '0';
+echo !empty($this->ld['exists']) ? '1' : '0';
 ?>

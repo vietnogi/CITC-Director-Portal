@@ -5,6 +5,7 @@ define('DEVELOPMENT', true);
 define('LIBPATH', '/php/lib');
 define('PORTAL', 'Administration');
 define('USID', '1');
+define('CUSTOMERGROUP', '2');
 
 // handle getting client define file, added the '.' to prevent hacks
 $clientDefined = false;

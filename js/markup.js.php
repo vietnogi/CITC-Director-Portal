@@ -41,4 +41,4 @@ var Markup = function (container) {
 	externalLinks();
 	autoCompleteOff();
 	defaultClear();
-}
+};

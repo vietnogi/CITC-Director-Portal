@@ -4,6 +4,18 @@
 	border: 2px solid #111;
 	padding: 0;
 	background: #fff;
+  /*
+	.modal-window {
+  position: absolute;
+  z-index: 2;
+  background: #fff;
+  width: 400px;
+  height: 200px;
+  top: 50%;
+  left: 50%;
+  margin: -100px 0 0 -200px;
+  */
+
 }
 /*.modal-popUp.add .modal-body,
 .modal-popUp.edit .modal-body,
@@ -13,27 +25,9 @@
 
 .modal-content{
 	clear: both;
-	overflow: auto;
-	overflow-x: auto;
-	overflow-y: auto;
+	margin: 5px;
 }
 
-.modal-body {
-	float: left;
-	padding: 0 16px 16px;
-}
-.no-padding .modal-body {
-	padding: 0;
-}
-
-.modal-load{
-	width: 200px;
-	height: 50px;
-	position: absolute;
-	color: #fff;
-	font-weight: bold;
-	font-size: 14px;
-}
 
 .modal-close {
 	float: right;
@@ -74,8 +68,7 @@
 */
 ?>
 
-#modal-blinds {
-	display: none;
+.modal-blinds {
 	position: absolute;
 	top: 0;
 	bottom: 0;

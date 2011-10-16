@@ -46,3 +46,4 @@
 	</div>
 </div>
 <div class="ajax-fill" metadata="{url: '<?= $this->url('/ajax' . $GLOBALS['bc']->path . '/comments/main') ?>&customer_id=<?= $this->ld['customer']['customer_id'] ?>'}"></div>
+<div class="ajax-fill" metadata="{url: '<?= $this->url('/ajax' . $GLOBALS['bc']->path . '/campers/main') ?>&customer_id=<?= $this->ld['customer']['customer_id'] ?>'}"></div>

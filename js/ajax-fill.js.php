@@ -6,14 +6,15 @@
 		$container.empty();
 		// show loading graphic
 		$('<p><img src="' + FW.CR + '/images/library/loading.gif" /></p>').appendTo(container);
-		var options = $container.metadata();
+		var option = $container.metadata();
 		$.ajax({
-			url: options.url
+			url: option.url
 			, type: 'get'
 			, dataType: 'text'
 			, cache: false
 			, success: function (data, textStatus, jqXHR) {
-				$(container).empty();
+				var $container = $(container);
+				$container.empty();
 				$(data).appendTo(container);
 				
 				// set universal stuff
@@ -23,7 +24,10 @@
 				// handle ajax submit refresh
 				$('form', container).bind('ajaxSubmitSuccess', function () {
 					fill(container)
-				}); 
+				});
+				
+				// trigger fill complete
+				$container.trigger('fillSuccess');
 			} 
 			, complete: FW.ajaxComplete
 			, error: FW.error

@@ -72,6 +72,13 @@ require DR . '/js/markup.js.php';
 
 echo "
 
+/* modal.js.php */
+"; 
+
+require DR . '/js/modal.js.php';
+
+echo "
+
 /* tabbed-v2.js.php */
 "; 
 

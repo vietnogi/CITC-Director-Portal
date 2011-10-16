@@ -106,5 +106,8 @@ var Events = function (container) {
 	// ajax submit
 	$('.ajax-submit', container).ajaxSubmit();
 	
+	// modal
+	$('.modal', container).modal();
+	
 	addressFields();
-}
+};

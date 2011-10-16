@@ -1,6 +1,6 @@
 <h2>Customers List</h2>
 <div class="table-actions">
-	<p class="go add"><a href="<?= $this->url('/customer/add') ?>" title="Add a new row">+ Add a new customer</a></p>
+	<p class="go add"><a href="<?= $this->url($GLOBALS['bc']->path . '/add') ?>" title="Add a new row">+ Add a new customer</a></p>
 </div>
 <style>
 	tr:hover {
