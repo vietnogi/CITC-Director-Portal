@@ -1,3 +1,4 @@
+/*<script>*/
 /*
  * Metadata - jQuery plugin for parsing metadata from elements
  *
@@ -146,3 +147,5 @@ $.fn.metadata = function( opts ){
 };
 
 })(jQuery);
+
+$.metadata.setType('attr', 'data-json');

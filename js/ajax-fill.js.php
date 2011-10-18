@@ -2,13 +2,17 @@
 
 (function ($) { //anonymous function to prevent global scope, "$" is a prototype reference	
 	function fill (container) {
-		$container = $(container);
-		$container.empty();
-		// show loading graphic
-		$('<p><img src="' + FW.CR + '/images/library/loading.gif" /></p>').appendTo(container);
+		var $container = $(container);
 		var option = $container.metadata();
+		
+		// show loading graphic
+		// maintain container height before empty
+		$container.height($container.height());
+		$container.empty();
+		$('<p><img src="' + FW.CR + '/images/library/loading.gif" /></p>').appendTo(container);
+		
 		$.ajax({
-			url: option.url
+			url: option.href
 			, type: 'get'
 			, dataType: 'text'
 			, cache: false
@@ -16,13 +20,15 @@
 				var $container = $(container);
 				$container.empty();
 				$(data).appendTo(container);
+				// prevent overflow for new html in container
+				$container.height('100%');
 				
 				// set universal stuff
 				Markup(container);
 				Events(container);
 				
 				// handle ajax submit refresh
-				$('form', container).bind('ajaxSubmitSuccess', function () {
+				$('[class*="ajax-submit"]', container).bind('ajaxSubmitSuccess', function () {
 					fill(container)
 				});
 				
@@ -34,17 +40,20 @@
 		});
 	}
 	
+	// not sure if this is needed
+	/*
 	function setEvents (container) {
 		$container = $(container);
 		$container.bind('refresh', function() {
 			fill(this);
 		});
 	}
+	*/
 	
 	//have to be at the end because other functions have to declared
 	$.fn.ajaxFill = function () { //protyping object to have valform method
 		this.each(function () {
-			setEvents(this);
+			//setEvents(this);
 			fill(this);
 		});
 	};

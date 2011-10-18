@@ -7,6 +7,7 @@ $this->gd['navs'] = array(
 	, 'Accounts' => array(
 		'Staff' => '/staff/main' 
 		, 'Customers' => '/customers/main'
+		, 'Campers' => '/campers/main'
 	)
 	, 'Contacts' => array(
 		'Leads' => '/leads/main'
@@ -23,6 +24,15 @@ $this->gd['navs'] = array(
 foreach ($this->gd['navs'] as $category => &$links) {
 	foreach ($links as &$link) {
 		$link = $this->url($link);	
+	}
+}
+
+// comment
+if ($GLOBALS['bc']->path == '/comments') {
+	$this->gd['comment_for'] = newInput('for', $_GET, 'min 1');
+	$sections = array('customer', 'camper');
+	if (!in_array($this->gd['comment_for'], $sections)) {
+		logError('comment feature is not available for: ' . $inputs['for']);	
 	}
 }
 

@@ -5,7 +5,7 @@
 		<?
 		pr($this->ld['customer']);
 		?>
-		<a href="javascript: void(1)" class="toggle" metadata="{class: 'hidden', selector: '#detail, #edit-detail'}">Edit</a>
+		<a href="javascript: void(1)" class="toggle" data-json="{class: 'hidden', selector: '#detail, #edit-detail'}">Edit</a>
 	</div>
 	
 	<div id="edit-detail" class="hide">
@@ -42,8 +42,8 @@
 			'value' => 'Save'
 		));
 		?>
-		<a href="javascript: void(1)" class="toggle" metadata="{class: 'hidden', selector: '#detail, #edit-detail'}">Cancel Edit</a>
+		<a href="javascript: void(1)" class="toggle" data-json="{class: 'hidden', selector: '#detail, #edit-detail'}">Cancel Edit</a>
 	</div>
 </div>
-<div class="ajax-fill" metadata="{url: '<?= $this->url('/ajax' . $GLOBALS['bc']->path . '/comments/main') ?>&customer_id=<?= $this->ld['customer']['customer_id'] ?>'}"></div>
-<div class="ajax-fill" metadata="{url: '<?= $this->url('/ajax' . $GLOBALS['bc']->path . '/campers/main') ?>&customer_id=<?= $this->ld['customer']['customer_id'] ?>'}"></div>
+<div class="ajax-fill" data-json="{href: '<?= $this->url('/ajax/comments/main') ?>&amp;customer_id=<?= $this->ld['customer']['customer_id'] ?>&amp;for=customer'}"></div>
+<div class="ajax-fill" data-json="{href: '<?= $this->url('/ajax' . $GLOBALS['bc']->path . '/campers/main') ?>&amp;customer_id=<?= $this->ld['customer']['customer_id'] ?>'}"></div>

@@ -8,13 +8,10 @@ $this->ld['inputs'] = array(
 );
 
 $filterFields = array(
-	'customer' => array(
+	'camper' => array(
 		'first_name' => 'string'
 		, 'last_name' => 'string'
 		, 'email' => 'string'
-	)
-	, NULL => array(
-		'camper_count' => 'int'
 	)
 );
 foreach ($filterFields as $table => $fields) {
@@ -24,10 +21,9 @@ foreach ($filterFields as $table => $fields) {
 	}
 }
 
-
-$filter = new Filter('customer', $filterFields, $this->ld['inputs'], array(
-	'select' => 'customer.customer_id, customer.first_name, customer.last_name, customer.email, IFNULL(COUNT(camper.camper_id), 0) AS camper_count'
-	, 'from' => 'customer LEFT JOIN camper ON camper.customer_id = customer.customer_id'
+$filter = new Filter('camper', $filterFields, $this->ld['inputs'], array(
+	'select' => 'camper.camper_id, camper.first_name, camper.last_name, camper.email'
+	, 'from' => 'camper'
 	, 'groupby' => 'camper.camper_id'
 ));
 
@@ -35,9 +31,9 @@ $pagination = new Pagination(10, $filter->rowCount());
 $this->ld['rows'] = $filter->getRows($pagination->offset, $pagination->limit);
 $this->ld['row_headers'] = array(
 	'#' => NULL
-	, 'First Name' => 'customer-first_name'
-	, 'Last Name' => 'customer-last_name'
-	, 'Email' => 'customer-email'
-	, '# of Camper' => 'camper_count'
+	, 'First Name' => 'camper-first_name'
+	, 'Last Name' => 'camper-last_name'
+	, 'Email' => 'camper-email'
 );
+
 ?>

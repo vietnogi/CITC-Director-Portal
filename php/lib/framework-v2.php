@@ -37,7 +37,7 @@ class FW {
 				$_SESSION[CR]['debug'] = false; 	
 			}
 			if ($this->systemVars['debug'] !== NULL) {
-				$_SESSION[CR]['debug'] = ($this->systemVars['debug'] === '1') ? true : false;
+				$_SESSION[CR]['debug'] = $this->systemVars['debug'];
 			}
 			$this->debug = isset($_SESSION[CR]['debug']) ? $_SESSION[CR]['debug'] : $this->debug;
 		}
@@ -117,15 +117,18 @@ class FW {
 					<dl>
 						<?
 						$debugData = array(
-							'Login' => $this->user
-							, 'Global' => $this->gd
+							'Global' => $this->gd
 							, 'POST' => $_POST
 							, 'GET' => $_GET
-							, 'SESSION' => $_SESSION
-							, 'COOKIE' => $_COOKIE
-							, 'SERVER' => $_SERVER
-							
 						);
+						if ($this->debug == '2') {
+							$debugData = array_merge($debugData, array(
+								'Login' => $this->user
+								, 'SESSION' => $_SESSION
+								, 'COOKIE' => $_COOKIE
+								, 'SERVER' => $_SERVER
+							));
+						}
 						foreach ($debugData as $type => $data) {
 							?>
 							<dt><?= $type ?> Data</dt>

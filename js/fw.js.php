@@ -48,12 +48,12 @@ var FW = {
 				}
 			break;
 			case 404:
-				alert('Page Not Found');
+				alert('404 Error: Page not found, please verify url and try again');
 			break;
 		}
 	}
 	, error: function(jqXHR, textStatus, errorThrown){
-		alert('Unable to complete request becuase the following error occured: ' + errorThrown);	
+		console.error('Unable to complete request becuase the following error occured: ' + errorThrown);
 	}
 	, getScrollBarWidth: function () {  
 		var inner = document.createElement('p');
