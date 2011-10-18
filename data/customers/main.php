@@ -37,7 +37,11 @@ $this->ld['row_headers'] = array(
 	, 'First Name' => 'customer-first_name'
 	, 'Last Name' => 'customer-last_name'
 	, 'Email' => 'customer-email'
-	, '# of Camper' => 'camper_count'
+	, '# of Campers' => 'camper_count'
 );
 
+// Table Actions
+$this->ld['table_actions'] = array(
+	'Add New Customer' => $this->url($GLOBALS['bc']->path . '/add')
+);
 ?>
