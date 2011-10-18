@@ -1,170 +1,96 @@
 /*<style>*/
-table {
-	width: 100%;
-	border: 1px solid #ccc;
-	border-collapse: separate;
+#sidebar {
+	position: absolute;
+	z-index: 0;
+	margin: 0;
+	width: 160px;
+	overflow: hidden;
+	top: 0;
+	bottom: 0;
 }
-th,
-td {
-	padding: 4px;
+#sidebar .shadow {
+	position: absolute;
+	top: 0;
+	right: -1px;
+	bottom: 0;
+	width: 1px;
+	-moz-box-shadow: 0 0 6px #000;
+	-webkit-box-shadow: 0 0 6px #000;
+	box-shadow: 0 0 6px #000;
 }
-th:first-child,
-td:first-child {
-	padding-left: 8px;
+
+ul.nav,
+ul.nav ul {
+	margin: 0;
+	padding: 0;
+	list-style: none;
 }
-th {
+
+.sidebar {
+	background: #d9d9d9;
+}
+
+.sidebar ul.nav > li > span,
+.sidebar ul.nav a {
+	display: block;
+	padding: 8px 12px;
+	
+	font-size: 11px;
+	line-height: 16px;
 	font-weight: bold;
 }
-th span.hint {
-	font-weight: normal;
-}
-th[scope="col"] {
-	font-size: 13px;
-	/*background: #369 url("../images/bg-header.gif") repeat-x center -52px;*/
+.sidebar ul.nav > li > span {
+	font-size: 14px;
+	font-weight: bold;
+	border-top: 1px solid #fff;
+	text-shadow: 0 1px 0 #fff;
+	
 	background: -moz-linear-gradient(top, #f2f2f2, #e5e5e5);
 	background: -webkit-gradient(linear, left top, left bottom, from(#f2f2f2), to(#e5e5e5));
 	filter: progid:DXImageTransform.Microsoft.gradient(startColorstr="#f2f2f2", endColorstr="#e5e5e5");
-	border-top: 1px solid #fff;
-	padding-top: 6px;
-	padding-bottom: 6px;
-	vertical-align: middle;
+	border-bottom: 1px solid #ccc;
+	
 	white-space: nowrap;
 }
-thead th[scope="col"] {
-	border-bottom: 1px solid #ccc;
+.sidebar ul.nav ul {
+	background: #fff;
 }
-th[scope="col"].sort {
-	padding-right: 0;
+.sidebar ul.nav a {
+	padding-top: 4px;
+	padding-bottom: 4px;
 }
-th[scope="col"],
-th a,
-th a:hover {
-	color: #333;
-	text-shadow: 0 1px 0 #fff;
-}
-th.permissions {
-	background: #247;
-	vertical-align: middle;
+.sidebar ul.nav li.current a {
+	background: #3a8ccf;
 	color: #fff;
-	vertical-align:top;
+	text-shadow: 0 1px 0 #0b2d47;
+	
+	/*position: relative;
+	z-index: 1;*/
 }
-td ,
-th[scope="row"] {
-	vertical-align: middle;
-	border-bottom: 1px solid #ddd;
+.sidebar ul.nav > li {
+	border: 1px solid #ccc;
+	border-width: 1px 0;
+	margin-bottom: 4px;
 }
-tbody tr:nth-child(even) td {
-	/*background-color: #fafafa;*/
-	background: url("../images/layout/row-even.png") repeat 0 0;
+.sidebar ul.nav > li:first-child {
+	border-top: none;
 }
 
-/* Search Results */
-/*table.search-results td.row-count + td {
-	font-weight: bold;
-}*/
-table.search-results tbody tr:last-child td {
-	border-color: #ccc;
-}
-td.checkbox,
-td.row-count {
-	width: 1px;
-}
-th.checkbox input[type="checkbox"],
-td.checkbox input[type="checkbox"] {
-	float: left;
-	margin: 2px 0;
-}
-th.checkbox input[type="checkbox"] + label {
+.sidebar ul.nav span.count {
 	position: absolute;
-	margin: -1px 0 0 18px;
-}
-td.position input[type="text"] {
-	margin: 0;
-}
-tbody tr.updated td {
-	/*background-color: #efd;*/
-	background: url("../images/layout/row-updated.png") repeat 0 0;
-}
-tbody tr.active td {
-	/*background-color: #ffc;*/
-	background: url("../images/layout/row-active.png") repeat 0 0;
-}
-/*tbody tr:hover td,
-tbody tr.even:hover td,
-tfoot tr:hover td,
-tfoot tr.even:hover td {
-	background-image: url("../images/layout/bg-tr-hover.png");
-	background-repeat: repeat-x;
-	background-position: left bottom;
-	border-color: #aaa;
-}*/
-tr.footer th {
-	text-align: right;
-}
-
-/* User Log Details */
-table.user-log th[scope="row"] { 
-	vertical-align: top;
-}
-
-/* Dashboard */
-table.dashboard {
-	float: left;
-	width: 50%;
-	margin: 0 0 32px;
-}
-table.dashboard:nth-child(odd) {
-	clear: left;
-}
-table.dashboard:nth-child(even) {
-	margin-left: -1px;
-}
-table.dashboard th.count,
-table.dashboard th[scope="row"].count {
-	padding-left: 16px;
-	padding-right: 8px;
-}
-table.dashboard th.count {
-	text-align: right;
-	width: 1px;
-}
-table.dashboard th[scope="row"].count {
-	font: bold 2.5em Arial, Helvetica, sans-serif;
-}
-table.dashboard tbody td.amount {
-	width: 120px;
-}
-
-/* Order Details */
-table.shipping.billing, table.order.details {
-	width: 640px;
-}
-
-table.shipping.billing td {
-	vertical-align: top;
-}
-
-table.order.details tfoot th[scope="row"] {
-	text-align: right;
-}
-table.order.details th.quantity, table.order.details td.quantity {
-	text-align: center;
-}
-table.order.details tr.subtotal th, table.order.details tr.subtotal td {
-	border-top: 1px solid #aaa;
-}
-table.order.details tr.total th, table.order.details tr.total td {
-	background: #369 url("../images/bg-header.gif") repeat-x center -52px;
-	color: #fff;
-}
-table.order.details tr.total td {
-	font-weight: bold;
-}
-
-table.order.details dl.item-options dt, table.order.details dl.item-options dd {
-	float: left;
-}
-table.order.details dl.item-options dt {
-	clear: both;
-	margin-right: 4px;
+	right: 6px;
+	font-weight: normal;
+	background: #fff9b9;
+	color: #0b2d47;
+	text-shadow: 0 1px 0 #fff;
+	border: 1px solid #cdcdcd;
+	padding: 0 4px;
+	-webkit-border-radius: 4px;
+	-moz-border-radius: 4px;
+	border-radius: 4px;
+	margin: -2px 0 0 4px;
+	
+	background: -moz-linear-gradient(top, #fffbd1, #fff7a3);
+	background: -webkit-gradient(linear, left top, left bottom, from(#fffbd1), to(#fff7a3));
+	filter: progid:DXImageTransform.Microsoft.gradient(startColorstr="#fffbd1", endColorstr="#fff7a3");
 }

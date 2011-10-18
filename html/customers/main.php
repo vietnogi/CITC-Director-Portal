@@ -1,23 +1,34 @@
 <h2>Customers List</h2>
-<div class="table-actions">
-	<p class="go add"><a href="<?= $this->url($GLOBALS['bc']->path . '/add') ?>" title="Add a new row">+ Add a new customer</a></p>
-</div>
-<style>
-	tr:hover {
-		cursor: pointer;
-		background-color: #eee;
-	}
-</style>
-<table class="search-results">
+
+<?
+require DR . '/html-parts/table-actions.php';
+?>
+
+<table class="search-results customers">
 	<?
 	require DR . '/html-parts/row-headers.php';
+	
 	foreach ($this->ld['rows'] as $i => $row) {
+		// Customer details page
+		$detailsUrl = $this->url($GLOBALS['bc']->path . '/details') . '&amp;customer_id=' . $row['customer_id'];
+		$customerFullName = $row['first_name'] . ' ' . $row['last_name'];
 		?>
-		<tr class="js-link <?= $i % 2 == 1 ? 'even' : 'odd' ?>" data-json="{href: '<?= $this->url($GLOBALS['bc']->path . '/detail') ?>&amp;customer_id=<?= $row['customer_id'] ?>'}" title="View <?= $row['first_name'] ?>">
+		<tr>
 			<td class="row-count"><?= $i + 1 ?></td>
-			<td class="first-name"><?= $row['first_name'] ?></td>
-			<td class="last-name"><?= $row['last_name'] ?></td>
-			<td class="email"><?= $row['email'] ?></td>
+			<td class="first-name">
+				<a href="<?= $detailsUrl ?>" title="View Details for <?= $customerFullName ?>">
+					<?= $row['first_name'] ?>
+				</a>
+			</td>
+			<td class="last-name">
+				<a href="<?= $detailsUrl ?>" title="View Details for <?= $customerFullName ?>">
+					<?= $row['last_name'] ?>
+				</a>
+			</td>
+			<td class="email">
+				<a href="mailto:<?= $row['email'] ?>" title="Email <?= $customerFullName ?>">
+					<?= $row['email'] ?>
+				</td>
 			<td class="camper-count"><?= $row['camper_count'] ?></td>
 		</tr>
 		<?
