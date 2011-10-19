@@ -21,6 +21,7 @@ class FW {
 		, 'print' => NULL
 		, 'debug' => NULL
 		, 't' => NULL
+		, 'client' => NULL
 	);
 	private $redirect = NULL;
 	private $debug = false;
@@ -29,6 +30,10 @@ class FW {
 	public function __construct () {
 		// since .htaccess add variables like p, index, print
 		$this->handleSystemVars();
+		
+		$this->handleClient();
+		
+		session_start();
 		
 		// handle debug flag
 		if (DEVELOPMENT === true) {
@@ -199,6 +204,24 @@ class FW {
 				</div>
 				<?
 			}
+		}
+	}
+	
+	private function handleClient () {
+		// handle getting client define file, added the '.' to prevent hacks
+		$clientDefined = false;
+		if (!empty($this->systemVars['client']) && strpos($this->systemVars['client'], '.') === false) {
+			$path = '/config/' . $this->systemVars['client'] . '.php';
+			if (file_exists(DR . $path)) {
+				require DR . $path;
+				$clientDefined  = true;
+				define('CR', '/' . $this->systemVars['client']);
+			}
+			unset($this->systemVars['client']);
+		}
+		if (!$clientDefined) {
+			header('HTTP/1.1 404 Not Found');
+			exit;
 		}
 	}
 	
