@@ -363,7 +363,7 @@ class FW {
 		}
 		
 		//check if uri is accessible
-		$canAccess = $GLOBALS['permission']->canAccess($GLOBALS['bc']->uri, $permissions);
+		$canAccess = $GLOBALS['permission']->canRead($GLOBALS['bc']->uri, $permissions);
 		
 		if (!$canAccess) {
 			$_SESSION[CR]['user-error'] = 'Please login to continue.';

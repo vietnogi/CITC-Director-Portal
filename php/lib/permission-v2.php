@@ -46,36 +46,28 @@ class Permission {
 		return array();
 	}
 	
-	private function can ($case, $uri = '', $permissions = array()) {
-		if (empty($case)) {
-			trigger_error('$case is empty', E_USER_ERROR);
-		}
-		
+	public function canRead ($uri, $permissions) {
 		$permission = $this->getPathPermission($uri, $permissions);
-		if(empty($permission)){
+		if (empty($permission)) {
 			return false;	
 		}
-		if($permission[$case] != '1'){
+		if ($permission['level'] == 'No Access') {
 			return false;	
 		}
 		return true;
 	}
 	
-	public function canAccess ($uri, $permissions) {
-		return $this->can('access', $uri, $permissions);
+	public function canWrite ($uri, $permissions) {
+		$permission = $this->getPathPermission($uri, $permissions);
+		if (empty($permission)) {
+			return false;	
+		}
+		if ($permission['level'] == 'Read/Write') {
+			return true;
+		}
+		return false;
 	}
 	
-	public function canAdd ($uri, $permissions) {
-		return $this->can('add', $uri, $permissions);
-	}
-	
-	public function canEdit ($uri, $permissions) {
-		return $this->can('edit', $uri, $permissions);
-	}
-	
-	public function canDelete ($uri, $permissions) {
-		return $this->can('delete', $uri, $permissions);
-	}
 }
 
 ?>

@@ -28,8 +28,10 @@ require DR . '/html-parts/table-actions.php';
 			<td class="email">
 				<a href="mailto:<?= $row['email'] ?>" title="Email <?= $customerFullName ?>">
 					<?= $row['email'] ?>
-				</td>
-			<td class="camper-count"><?= $row['camper_count'] ?></td>
+				</a>
+			</td>
+			<td class="balance">$123.45</td>
+			<td class="camper-count">{Undecided Session, Undecided Specialty, Balance Due, Parent Pack Due, Comments}</td>
 		</tr>
 		<?
 	}

@@ -47,3 +47,10 @@
 </div>
 <div class="ajax-fill" data-json="{href: '<?= $this->url('/ajax/comments/main') ?>&amp;customer_id=<?= $this->ld['customer']['customer_id'] ?>&amp;for=customer'}"></div>
 <div class="ajax-fill" data-json="{href: '<?= $this->url('/ajax' . $GLOBALS['bc']->path . '/campers/main') ?>&amp;customer_id=<?= $this->ld['customer']['customer_id'] ?>'}"></div>
+
+<h3>Outstanding Balance</h3>
+
+<h3>Invoice History</h3>
+
+<h3>Payment History</h3>
+<a href="">Make a payment</a>
