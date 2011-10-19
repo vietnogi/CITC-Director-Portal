@@ -439,7 +439,13 @@ class FW {
 		$this->p = '/nologin/404.php';
 	}
 	
-	private function url ($url) {
+	private function url ($url, $prependPath = false) {
+		
+		// prependPath for convinience
+		if ($prependPath) {
+			$url = $GLOBALS['bc']->path . $url;	
+		}
+		
 		// handle token/t
 		if (!empty($this->systemVars['t'])) {
 			$url .= (strpos($url, '?') === false) ? '?' : '&';
