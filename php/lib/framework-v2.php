@@ -423,9 +423,7 @@ class FW {
 		
 		if ($this->redirect) {
 			// assume http is not part of framework
-			if (!preg_match('/^http/', $this->redirect)) {
-				$redirectUrl = $this->url($this->redirect);
-			}
+			$redirectUrl = preg_match('/^http/', $this->redirect) ? $this->redirect : $this->url($this->redirect);
 			if ($this->debug) {
 				?>
 				<a href="<?= $redirectUrl ?>"><?= $redirectUrl ?></a>
