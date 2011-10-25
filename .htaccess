@@ -38,6 +38,9 @@ RewriteRule ^css/(.+)\.css$ css/$1.css.php [QSA,L]
 RewriteRule ^(action)/(.*)$ $2?index=$1 [QSA]
 RewriteRule ^(ajax)/(.*)$ ?index=$1 [QSA]
 
+# Print
+RewriteRule ^(.*)?/print/?$ /$1?print=1 [QSA]
+
 # Sub-directories
 RewriteCond %{REQUEST_FILENAME} -d
 RewriteRule ^([a-z0-9-]+)$ index.php [QSA,L]
