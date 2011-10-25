@@ -1,4 +1,21 @@
 /*<style>*/
+.modal-container {
+	position: fixed;
+	width: 100%;
+	height: 100%;
+	top: 0;
+	left: 0;	
+}
+
+.modal-popUp {
+	margin: 50px auto 0;
+	position: relative;
+	border: 2px solid #111;
+	padding: 0;
+	background: #fff;
+}
+
+/*
 .modal-popUp{
 	position: absolute;
 	border: 2px solid #111;
@@ -16,7 +33,7 @@
   margin: -100px 0 0 -200px;
   */
 
-}
+/*}*/
 /*.modal-popUp.add .modal-body,
 .modal-popUp.edit .modal-body,
 .modal-popUp.configuration .modal-body {
@@ -69,11 +86,9 @@
 ?>
 
 .modal-blinds {
-	position: absolute;
+	position: fixed;
 	top: 0;
-	bottom: 0;
 	left: 0;
-	right: 0;
 	width: 100%;
 	height: 100%;
 	background: #000;
