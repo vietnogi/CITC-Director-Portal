@@ -10,16 +10,16 @@
 		var previousBlind = $('.modal-blinds').last();
 		var zIndex = previousBlind.length > 0 ? parseInt(previousBlind.css( 'zIndex' ), 10) * 2 : 100;
 		
+		// invisible container to center popup
+		var outerContainer = $('<div class="modal-container"></div>');
+		outerContainer.appendTo($('body'));
+		
 		// handle blinds/overlay
 		var blind = $('<div class="modal-blinds"></div>');
 		blind.appendTo($('body'));
 		blind.css({
 			'z-index': zIndex  
 		});
-		
-		// invisible container to center popup
-		var outerContainer = $('<div class="modal-container"></div>');
-		outerContainer.appendTo($('body'));
 		
 		// handle popup
 		var popUp = $('<div class="modal-popUp"></div>');
@@ -29,21 +29,20 @@
 		popUp.appendTo(outerContainer);
 		
 		var closeModal = function () {
-			blind.remove();
 			popUp.remove();
+			blind.remove();
 			$(window).unbind('scroll.modal-namespace-' + zIndex);
 			$(window).unbind('resize.modal-namespace-' + zIndex);
 		};
 		
 		// handle close
-		var closeContainer = $('<div class="modal-close"></div>');
-		var closeAnchor = $('<a class="close" title="Close"></a>').click(closeModal);
-		closeAnchor.appendTo(closeContainer);
+		var closeAnchor = $('<a class="modal-close" title="Close">x</a>').click(closeModal);
+		closeAnchor.appendTo(popUp);
 		blind.click(closeModal);
 		
 		// handle content
 		var contentContainer = $('<div class="modal-content">Loading...</div>');
-		popUp.append(closeContainer, contentContainer);
+		popUp.append(contentContainer);
 		//popUp.appendTo($('body'));
 		
 		// centering, need to use namespace to separate our bind because window is a global dom
@@ -62,7 +61,8 @@
 			contentContainer.bind('fillSuccess', function() {
 				//FW.center(popUp[0]);
 				var wwww = contentContainer.width();
-				popUp.width(contentContainer.width());
+				//alert(wwww);
+				//popUp.width(contentContainer.width());
 			});
 		}
 		

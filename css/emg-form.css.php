@@ -25,6 +25,13 @@ $margins = array('top'			=> 4
 				);
 ?>
 /*<style>*/
+form ul.fields,
+form ul.field-combo {
+	margin: 0;
+	padding: 0;
+	list-style: none;
+}
+
 .emg-form {
 	margin: 0 0 1em;
 }
