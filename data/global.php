@@ -2,33 +2,23 @@
 $this->gd['navs'] = array(
 	'Overview' => array(
 		'Dashboard' => '/dashboard/overview'
-		, 'Reports' => '/reports/menu'
-	)
-	, 'Camp Sessions' => array(
-		'Sessions' => '/sessions/main'
-		, 'Session Categories' => '/session-categories/main'
-		, 'Specialties' => '/specialties/main'
-		, 'Specialty Categories' => '/specialty-categories/main'
-	)
-	, 'Campers' => array(
-		'Campers' => '/campers/main'
-		, 'Enrollments' => '/enrollments/main'
 	)
 	, 'Customers' => array(
 		'Customers' => '/customers/main'
 		, 'Invoices' => '/invoices/main'
 		, 'Payments' => '/payments/main'
 	)
-	, 'Staff' => array(
-		'Staff' => '/staff/main'
-		, 'Staff Applications <span class="count">99</span>' => '/staff-applications/main'
+	, 'Campers' => array(
+		'Campers' => '/campers/main'
+		, 'Enrollments' => '/enrollments/main'
+		, 'Cabins' => '/cabins/main'
 	)
 	, 'Parent Pack' => array(
 		'Parent Packs' => '/parent-packs/main'
 		, 'Forms' => '/parent-pack-forms/main'
 		, 'Transportation Locations' => '/transportation-locations/main'
 	)
-	, 'Promotion Codes' => array(
+	, 'Promotions' => array(
 		'Early Bird Discounts' => '/early-bird-discounts/main'
 		, 'Mult. Session Discounts' => '/multiple-session-discounts/main'
 		, 'Sibling Discounts' => '/sibling-discounts/main'
@@ -43,6 +33,20 @@ $this->gd['navs'] = array(
 		'Leads' => '/leads/main'
 		, 'Clients' => '/clients/main'
 	)*/
+	, 'Staff' => array(
+		'Staff' => '/staff/main'
+		, 'Staff Applications <span class="count">99</span>' => '/staff-applications/main'
+	)
+	, 'Reports' => array(
+		'Enrollment Report' => ''
+		, 'Sales Report' => ''
+	)
+	, 'Camp Sessions' => array(
+		'Sessions' => '/sessions/main'
+		, 'Session Categories' => '/session-categories/main'
+		, 'Specialties' => '/specialties/main'
+		, 'Specialty Categories' => '/specialty-categories/main'
+	)
 	, 'Settings' => array(
 		'Users' => '/users/main'
 		, 'User Groups' => '/user-groups/main'

@@ -46,6 +46,12 @@ function uniqueClassStr($str, $delimiter = ' ') {
 	return implode(' ', $classes);
 }
 
+// Convert css selector to html markup string
+// Input:	ul#nav.nav.nav-2
+// Output:	array('tag' => 'ul'
+//				, 'id' => 'nav'
+//				, 'class' => 'nav nav-2'
+//				)
 function css2Html($selector) {
 	// class1/class2 since it can come before or after id
 	preg_match('/(?P<tag>\w+)?(?P<class1>[.\w-]+)?(?P<id>#[\w-]+)?(?P<class2>[.\w-]+)?/', $selector, $matches);
@@ -53,9 +59,9 @@ function css2Html($selector) {
 	// Clean up matches return values
 	return array('tag' => $matches['tag']
 			   // Remove #
-			   , 'id' => isset($matches['id']) ? str_replace('#', '', $matches['id']) : NULL
+			   , 'id' => str_replace('#', '', $matches['id'])
 			   // Remove leading . and replace remaining with spaces
-			   , 'class' => isset($matches['class2']) ? str_replace('.', ' ', ltrim($matches['class1'] . $matches['class2'], '.')) : NULL
+			   , 'class' => str_replace('.', ' ', ltrim($matches['class1'] . $matches['class2'], '.'))
 			   );
 }
 
@@ -204,5 +210,19 @@ function defaultArrays ($names, &$src) {
 // remove all non numbers except decimal
 function toNumber($str){
 	return preg_replace('/[^0-9\.]/', '', $str);
+}
+// Remove all non digit characters
+function toInt($str) {
+	return preg_replace('/[^0-9]/', '', $str);
+}
+
+// Takes US formatted date array [mm, dd, yyyy]
+// Returns ISO 8601 formatted string (yyyy-mm-dd)
+function implodeDate($parts) {
+	$parts[0] = empty($parts[0]) ? '' : $parts[0];
+	$parts[1] = empty($parts[1]) ? '' : $parts[1];
+	$parts[2] = empty($parts[2]) ? '' : $parts[2];
+	
+	return $parts[2] . '-' . $parts[0] . '-' . $parts[1];
 }
 ?>
