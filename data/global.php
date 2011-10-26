@@ -4,7 +4,37 @@ $this->gd['navs'] = array(
 		'Dashboard' => '/dashboard/overview'
 		, 'Reports' => '/reports/menu'
 	)
-	, 'Accounts' => array(
+	, 'Camp Sessions' => array(
+		'Sessions' => '/sessions/main'
+		, 'Session Categories' => '/session-categories/main'
+		, 'Specialties' => '/specialties/main'
+		, 'Specialty Categories' => '/specialty-categories/main'
+	)
+	, 'Campers' => array(
+		'Campers' => '/campers/main'
+		, 'Enrollments' => '/enrollments/main'
+	)
+	, 'Customers' => array(
+		'Customers' => '/customers/main'
+		, 'Invoices' => '/invoices/main'
+		, 'Payments' => '/payments/main'
+	)
+	, 'Staff' => array(
+		'Staff' => '/staff/main'
+		, 'Staff Applications <span class="count">99</span>' => '/staff-applications/main'
+	)
+	, 'Parent Pack' => array(
+		'Parent Packs' => '/parent-packs/main'
+		, 'Forms' => '/parent-pack-forms/main'
+		, 'Transportation Locations' => '/transportation-locations/main'
+	)
+	, 'Promotion Codes' => array(
+		'Early Bird Discounts' => '/early-bird-discounts/main'
+		, 'Mult. Session Discounts' => '/multiple-session-discounts/main'
+		, 'Sibling Discounts' => '/sibling-discounts/main'
+		, 'Coupon Codes' => '/coupon-codes/main'
+	)
+	/*, 'Accounts' => array(
 		'Staff' => '/staff/main' 
 		, 'Customers' => '/customers/main'
 		, 'Campers' => '/campers/main'
@@ -12,7 +42,7 @@ $this->gd['navs'] = array(
 	, 'Contacts' => array(
 		'Leads' => '/leads/main'
 		, 'Clients' => '/clients/main'
-	)
+	)*/
 	, 'Settings' => array(
 		'Users' => '/users/main'
 		, 'User Groups' => '/user-groups/main'
@@ -26,6 +56,8 @@ foreach ($this->gd['navs'] as $category => &$links) {
 		$link = $this->url($link);	
 	}
 }
+$this->gd['num_nav_parents'] = count($this->gd['navs']);
+$this->gd['num_nav_children'] = count($this->gd['navs'], COUNT_RECURSIVE) - $this->gd['num_nav_parents'];
 
 // comment
 if ($GLOBALS['bc']->path == '/comments') {

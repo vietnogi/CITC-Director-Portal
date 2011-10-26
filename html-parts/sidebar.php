@@ -1,4 +1,4 @@
-<div id="sidebar" class="sidebar">
+<div id="sidebar" class="sidebar" style="min-height: <?= ($this->gd['num_nav_parents'] * 42) + ($this->gd['num_nav_children'] * 24) + 64 ?>px">
 	<div class="inner">
 		<ul class="nav">
 			<?
