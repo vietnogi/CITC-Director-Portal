@@ -2,7 +2,6 @@
 var FW = {
 	CR: null
 	, TOKEN: null
-	, scrollBarWidth: null
 	, IEVerNum: null
 	, init: function(){
 		// add useful functions to native objects
@@ -16,7 +15,6 @@ var FW = {
 			return results[1] || 0;
 		}
 
-		this.scrollBarWidth = this.getScrollBarWidth();
 	}
 	, ie6Check: function () {
 		if (BrowserDetect.browser == 'Explorer' && BrowserDetect.version < 7) {
@@ -54,67 +52,5 @@ var FW = {
 	}
 	, error: function(jqXHR, textStatus, errorThrown){
 		console.error('Unable to complete request becuase the following error occured: ' + errorThrown);
-	}
-	, getScrollBarWidth: function () {  
-		var inner = document.createElement('p');
-		inner.style.width = "100%";
-		inner.style.height = "200px";
-		
-		var outer = document.createElement('div');
-		outer.style.position = "absolute";
-		outer.style.top = "0px";
-		outer.style.left = "0px";
-		outer.style.visibility = "hidden";
-		outer.style.width = "200px";
-		outer.style.height = "150px";
-		outer.style.overflow = "hidden";
-		outer.appendChild (inner);
-		
-		document.body.appendChild (outer);
-		var w1 = inner.offsetWidth;
-		outer.style.overflow = 'scroll';
-		var w2 = inner.offsetWidth;
-		if (w1 == w2) w2 = outer.clientWidth;
-		
-		document.body.removeChild (outer);
-		
-		return (w1 - w2);
-	}
-	,  getTopLeft: function (width, height){
-		var windowWidth = $(window).width();
-		var windowHeight = $(window).height();
-		
-		//compensate for scroll
-		var xy = this.getScrollXY();
-		
-		//get %
-		var top = (windowHeight/2 + xy[1] - (height/2));
-		var left = (windowWidth/2 + xy[0] - (width/2));
-		
-		
-		return [Math.round(top), Math.round(left)];
-	}
-	, getScrollXY: function () {
-		var scrOfX = 0, scrOfY = 0;
-		if( typeof( window.pageYOffset ) == 'number' ) {
-			//Netscape compliant
-			scrOfY = window.pageYOffset;
-			scrOfX = window.pageXOffset;
-		} else if( document.body && ( document.body.scrollLeft || document.body.scrollTop ) ) {
-			//DOM compliant
-			scrOfY = document.body.scrollTop;
-			scrOfX = document.body.scrollLeft;
-		} else if( document.documentElement && ( document.documentElement.scrollLeft || document.documentElement.scrollTop ) ) {
-			//IE6 standards compliant mode
-			scrOfY = document.documentElement.scrollTop;
-			scrOfX = document.documentElement.scrollLeft;
-		}
-		return [ scrOfX, scrOfY ];
-	}
-	, center: function (container) {
-		$container = $(container);
-		var topLeft = this.getTopLeft($container.width(), $container.height());
-		$container.css('top', topLeft[0] + 'px');
-		$container.css('left', topLeft[1] + 'px');
 	}
 };

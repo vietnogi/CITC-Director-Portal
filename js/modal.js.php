@@ -29,10 +29,8 @@
 		popUp.appendTo(outerContainer);
 		
 		var closeModal = function () {
-			popUp.remove();
+			outerContainer.remove();
 			blind.remove();
-			$(window).unbind('scroll.modal-namespace-' + zIndex);
-			$(window).unbind('resize.modal-namespace-' + zIndex);
 		};
 		
 		// handle close
@@ -43,27 +41,11 @@
 		// handle content
 		var contentContainer = $('<div class="modal-content">Loading...</div>');
 		popUp.append(contentContainer);
-		//popUp.appendTo($('body'));
-		
-		// centering, need to use namespace to separate our bind because window is a global dom
-		/*FW.center(popUp[0]);
-		$(window).bind('scroll.modal-namespace-' + zIndex, function () {
-			FW.center(popUp[0]);
-		});
-		$(window).bind('resize.modal-namespace-' + zIndex, function () {
-			FW.center(popUp[0]);
-		});*/
 		
 		// ajax fill
 		if (option.href !== undefined) {
 			contentContainer.attr('data-json', '{href:\'' + option.href + '\'}');
 			contentContainer.ajaxFill();
-			contentContainer.bind('fillSuccess', function() {
-				//FW.center(popUp[0]);
-				var wwww = contentContainer.width();
-				//alert(wwww);
-				//popUp.width(contentContainer.width());
-			});
 		}
 		
 	}
