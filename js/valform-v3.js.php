@@ -68,11 +68,12 @@
 	}
 	
 	//determine label for error
-	function getLabel (instance, field) {		
+	function getLabel (field) {
 		var fieldType = field.type.toLowerCase();
+		var form = $(field).parents('form');
 		if (fieldType == 'checkbox' && field.name.indexOf('[') != -1 ) {
 			//for checkboxes, name is an array, get label base on first index id 
-			var labelFor = $('[name="' + field.name + '"]', instance.form)[0].id;
+			var labelFor = $('[name="' + field.name + '"]', form)[0].id;
 		}
 		else{
 			// check for combo
@@ -90,12 +91,20 @@
 			return;
 		}
 		
-		var label = $('label[for=' + labelFor  + ']', instance.form);
+		var label = $('label[for=' + labelFor  + ']', form);
 		if (label.length > 0) {
+			var msg = label[0].innerHTML;
+			// Remove <em>*</em>, tooltip
+			msg = msg.replace(/<em>\*<\/em>|<span class="hint">.+<\/span>|<span class="tip">.+<\/span>/gi, '');
+			// Strip tags
+			msg = $('<tag>' + msg + '</tag>').text(); // .text() will only work when string starts with html ta
+			// Trim whitespace and ending colon
+			msg = $.trim(msg);
+			msg = msg.replace(/:$/gi, '');
 			return {
 				element: label
 				, labelFor: labelFor
-				, msg: label[0].innerHTML
+				, msg: msg
 			}; 	
 		}
 		
@@ -116,24 +125,19 @@
 	function validate (instance, field) {
 		var classStr = $(field).attr('class');
 		
-		if (classStr == null) { //ignore classless fields
+		if (classStr == null) { // ignore classless fields
 			return true;
 		}
 		
-		if (!$(field).is(':visible')) { //ignore invisible fields
+		if (!$(field).is(':visible')) { // ignore invisible fields
 			return true;	
 		}
 		
-		//handle keywords
 		var classes = classStr.split(/\s+/);
-		var index = $.inArray('val_combo', classes);
-		if (index != -1) { // found key word
-			//handle keyword code needed
-		}
 		
-		//value manipulation
-		if (field.value && field.type.toLowerCase() != 'file') { //security error for file inputs
-			field.value = $.trim(field.value); //auto strip whitespaces
+		// value manipulation
+		if (field.value && field.type.toLowerCase() != 'file') { // security error for file inputs
+			field.value = $.trim(field.value); // auto strip whitespaces
 		}
 		
 		clearError(instance, field);
@@ -153,20 +157,28 @@
 	}
 	
 	function handleError (instance, field, error) {
-		var label = getLabel(instance, field);
-		var errorMsg = createErrorMsg(label.msg, error);
+		var label = getLabel(field);
+		var errorMsg = label.msg + ' ' + error;
+		var classes = $(field).attr('class').split(/\s+/);
+		var errorid = label.element == null ? field.id : label.element.attr('for');
+		errorid += '-error';
+		
+		// combo
+		var index = $.inArray('combo', classes);
+		if (index != -1) {
+			// make sure related field has not error yet
+			var relatedFields = $(instance.errorContainerTag + '[id="' + errorid + '"]');
+			if (relatedFields.length != 0) {
+				return true;	
+			}
+		}
 		
 		if (!instance.hideErrors) {
-			var html = '<' + instance.errorContainerTag + ' id="' + field.id + '-error" class="' + instance.errorContainerClass + '">' + errorMsg + '</' + instance.errorContainerTag + '>';
-			//check to place error after a diferent element
+			var html = '<' + instance.errorContainerTag + ' id="' + errorid + '" class="' + instance.errorContainerClass + '">' + errorMsg + '</' + instance.errorContainerTag + '>';
+			// check to place error after a diferent element
 			var idAsClass = classAfter(field, 'error-after');
-			if (idAsClass) {
-				var targetElement = $('#' + idAsClass);
-			}
-			else { //place error after field element
-				var targetElement = field;
-			}
-			$(html).insertAfter(field);
+			var targetElement = idAsClass ? $('#' + idAsClass) : field;
+			$(html).insertAfter(targetElement);
 		}
 		
 		$(field).addClass(instance.errorClass);
@@ -178,25 +190,15 @@
 		return true;
 	}
 	
-	function createErrorMsg (msg, error) {
-		// Remove <em>*</em>, tooltip
-		msg = msg.replace(/<em>\*<\/em>|<span class="hint">.+<\/span>|<span class="tip">.+<\/span>/gi, '');
-		
-		// Strip tags
-		msg = $('<tag>' + msg + '</tag>').text(); // .text() will only work when string starts with html tag
-		
-		// Trim whitespace and ending colon
-		msg = $.trim(msg);
-		msg = msg.replace(/:$/gi, '') + ' ' + error;
-		
-		return msg;
-	}
-	
 	function clearError (instance, field) {
-		var label = getLabel(instance, field);
+		var label = getLabel(field);
 		
-		if ($('#' + field.id + '-error').length > 0) {
-			$('#' + field.id + '-error').remove();
+		var errorid = label.element == null ? field.id : label.element.attr('for');
+		errorid += '-error';
+		var $error = $('#' + errorid);
+		
+		if ($error.length > 0) {
+			$error.remove();
 		}
 		$(field).removeClass(instance.errorClass);
 		$(label.element).removeClass(instance.errorClass);
@@ -352,11 +354,9 @@
 				return true;
 			}
 			if (field.value != field2Obj.value && field2Obj.value != '') {
-				var field2Label = $('label[for=' + field2Obj.id + ']', this.form)[0].innerHTML;
-				field2Label = field2Label.replace(/^<em>\*<\/em>|<span class="tip">.+<\/span>/gi, '');
-				field2Label = $.trim($('<tag>' + field2Label + '</tag>').text()); // .text() will only work when string starts with html tag
-				field2Label = field2Label.replace(/:$/gi, ''); // remove ending colon
-				return 'does not match ' + field2Label + '.';
+				var field2Label = getLabel(field2Obj);
+				return 'does not match ' + field2Label.msg + '.';
+				
 			}
 			return false;
 		}
