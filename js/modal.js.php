@@ -16,10 +16,12 @@
 		
 		// handle blinds/overlay
 		var blind = $('<div class="modal-blinds"></div>');
+		blind.hide();
 		blind.appendTo($('body'));
 		blind.css({
 			'z-index': zIndex  
 		});
+		blind.show('fade', 100);
 		
 		// handle popup
 		var popUp = $('<div class="modal-popUp"></div>');
@@ -30,7 +32,9 @@
 		
 		var closeModal = function () {
 			outerContainer.remove();
-			blind.remove();
+			blind.hide('fade', 150, function() {
+				$(this).remove;
+			});
 		};
 		
 		// handle close
@@ -44,7 +48,7 @@
 		
 		// ajax fill
 		if (option.href !== undefined) {
-			contentContainer.attr('data-json', '{href:\'' + option.href + '\'}');
+			contentContainer.attr('data-json', '{href: \'' + option.href + '\'}');
 			contentContainer.ajaxFill();
 		}
 		
