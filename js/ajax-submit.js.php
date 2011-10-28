@@ -48,10 +48,13 @@
 				$.ajax({
 					url: url
 					, type: method
-					, dataType: 'text'
+					, dataType: 'json'
 					, data: data
 					, cache: true
 					, success: function (data, textStatus, jqXHR) {
+						if (data !== null && data.msg !== undefined) {
+							alert(data.msg);
+						}
 						$self.trigger('ajaxSubmitSuccess');
 					} 
 					, complete: FW.ajaxComplete
