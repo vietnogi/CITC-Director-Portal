@@ -5,9 +5,9 @@ define('SITENAME', 'EMG Adventures');
 define('FROM', html_entity_decode(SITENAME)); // ie DizzyStop&reg;
 define('FROMEMAIL', 'no-reply@no-reply.com');
 
-define('MYSQLDB', 'staging');
-define('MYSQLUSER', 'staging');
-define('MYSQLPASS', 'emgeckxemg');
+define('MYSQLDB', 'emg');
+define('MYSQLUSER', 'emg');
+define('MYSQLPASS', 'ap$i#2i');
 define('MYSQLHOST', 'localhost');
 
 putenv('TZ=America/Los_Angeles');
