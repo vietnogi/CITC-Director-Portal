@@ -1,0 +1,784 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+  <html xmlns="http://www.w3.org/1999/xhtml">
+		<head>
+			<!-- template designed by Marco Von Ballmoos -->
+			<title>Docs For Class Login</title>
+			<link rel="stylesheet" href="../media/stylesheet.css" />
+			<meta http-equiv='Content-Type' content='text/html; charset=iso-8859-1'/>
+		</head>
+		<body>
+			<div class="page-body">			
+<h2 class="class-name"><img src="../media/images/Class_logo.png"
+														alt=" Class"
+														title=" Class"
+														style="vertical-align: middle"> Login</h2>
+
+<a name="sec-description"></a>
+<div class="info-box">
+	<div class="info-box-title">Description</div>
+	<div class="nav-bar">
+					<span class="disabled">Description</span> |
+															<a href="#sec-method-summary">Methods</a> (<a href="#sec-methods">details</a>)
+						
+					</div>
+	<div class="info-box-body">
+        		<!-- ========== Info from phpDoc block ========= -->
+		<p class="notes">
+			Located in <a class="field" href="_php---lib---login-v5.php.html">/php/lib/login-v5.php</a> (line <span class="field">3</span>)
+		</p>
+		
+				
+		<pre></pre>
+	
+			</div>
+</div>
+
+
+
+
+	<a name="sec-method-summary"></a>
+	<div class="info-box">
+		<div class="info-box-title">Method Summary</span></div>
+		<div class="nav-bar">
+			<a href="#sec-description">Description</a> |
+												<span class="disabled">Methods</span> (<a href="#sec-methods">details</a>)
+		</div>
+		<div class="info-box-body">			
+			<div class="method-summary">
+																																																																																																																																																																																<div class="method-definition">
+					<img src="../media/images/Constructor.png" alt=" "/>
+											<span class="method-result">Login</span>
+										<a href="#__construct" title="details" class="method-name">__construct</a>
+										()
+									</div>
+																<div class="method-definition">
+					<img src="../media/images/Method.png" alt=" "/>
+											<span class="method-result">void</span>
+										<a href="#authenticate" title="details" class="method-name">authenticate</a>
+											(<span class="var-type"></span>&nbsp;<span class="var-name">$login</span>, <span class="var-type"></span>&nbsp;<span class="var-name">$password</span>)
+									</div>
+																<div class="method-definition">
+					<img src="../media/images/Method.png" alt=" "/>
+											<span class="method-result">void</span>
+										<a href="#authenticateWithCookie" title="details" class="method-name">authenticateWithCookie</a>
+										()
+									</div>
+																<div class="method-definition">
+					<img src="../media/images/Method.png" alt=" "/>
+											<span class="method-result">void</span>
+										<a href="#create" title="details" class="method-name">create</a>
+											(<span class="var-type"></span>&nbsp;<span class="var-name">$login</span>, <span class="var-type"></span>&nbsp;<span class="var-name">$password</span>)
+									</div>
+																<div class="method-definition">
+					<img src="../media/images/Method.png" alt=" "/>
+											<span class="method-result">void</span>
+										<a href="#exists" title="details" class="method-name">exists</a>
+											(<span class="var-type"></span>&nbsp;<span class="var-name">$needle</span>, [<span class="var-type"></span>&nbsp;<span class="var-name">$clean</span> = <span class="var-default">false</span>])
+									</div>
+																<div class="method-definition">
+					<img src="../media/images/Method.png" alt=" "/>
+											<span class="method-result">void</span>
+										<a href="#getCookieLogin" title="details" class="method-name">getCookieLogin</a>
+										()
+									</div>
+																<div class="method-definition">
+					<img src="../media/images/Method.png" alt=" "/>
+											<span class="method-result">void</span>
+										<a href="#getToken" title="details" class="method-name">getToken</a>
+										()
+									</div>
+																<div class="method-definition">
+					<img src="../media/images/Method.png" alt=" "/>
+											<span class="method-result">void</span>
+										<a href="#isActive" title="details" class="method-name">isActive</a>
+											(<span class="var-type"></span>&nbsp;<span class="var-name">$user</span>)
+									</div>
+																<div class="method-definition">
+					<img src="../media/images/Method.png" alt=" "/>
+											<span class="method-result">void</span>
+										<a href="#isLockedOut" title="details" class="method-name">isLockedOut</a>
+											(<span class="var-type"></span>&nbsp;<span class="var-name">$user</span>)
+									</div>
+																<div class="method-definition">
+					<img src="../media/images/Method.png" alt=" "/>
+											<span class="method-result">void</span>
+										<a href="#isLoggedIn" title="details" class="method-name">isLoggedIn</a>
+										()
+									</div>
+																<div class="method-definition">
+					<img src="../media/images/Method.png" alt=" "/>
+											<span class="method-result">void</span>
+										<a href="#isTimeOut" title="details" class="method-name">isTimeOut</a>
+											(<span class="var-type"></span>&nbsp;<span class="var-name">$user</span>)
+									</div>
+																<div class="method-definition">
+					<img src="../media/images/Method.png" alt=" "/>
+											<span class="method-result">void</span>
+										<a href="#lockout" title="details" class="method-name">lockout</a>
+											(<span class="var-type"></span>&nbsp;<span class="var-name">$user</span>, <span class="var-type"></span>&nbsp;<span class="var-name">$length</span>)
+									</div>
+																<div class="method-definition">
+					<img src="../media/images/Method.png" alt=" "/>
+											<span class="method-result">void</span>
+										<a href="#logout" title="details" class="method-name">logout</a>
+											(<span class="var-type"></span>&nbsp;<span class="var-name">$user</span>)
+									</div>
+																<div class="method-definition">
+					<img src="../media/images/Method.png" alt=" "/>
+											<span class="method-result">void</span>
+										<a href="#newSession" title="details" class="method-name">newSession</a>
+											(<span class="var-type"></span>&nbsp;<span class="var-name">$user</span>, <span class="var-type"></span>&nbsp;<span class="var-name">$length</span>, [<span class="var-type"></span>&nbsp;<span class="var-name">$authenMethod</span> = <span class="var-default">'Login'</span>])
+									</div>
+																<div class="method-definition">
+					<img src="../media/images/Method.png" alt=" "/>
+											<span class="method-result">void</span>
+										<a href="#renewSession" title="details" class="method-name">renewSession</a>
+											(<span class="var-type"></span>&nbsp;<span class="var-name">$user</span>, <span class="var-type"></span>&nbsp;<span class="var-name">$length</span>)
+									</div>
+																<div class="method-definition">
+					<img src="../media/images/Method.png" alt=" "/>
+											<span class="method-result">void</span>
+										<a href="#resetFails" title="details" class="method-name">resetFails</a>
+											(<span class="var-type"></span>&nbsp;<span class="var-name">$user</span>)
+									</div>
+																<div class="method-definition">
+					<img src="../media/images/Method.png" alt=" "/>
+											<span class="method-result">void</span>
+										<a href="#resetPass" title="details" class="method-name">resetPass</a>
+											(<span class="var-type"></span>&nbsp;<span class="var-name">$user</span>)
+									</div>
+																<div class="method-definition">
+					<img src="../media/images/Method.png" alt=" "/>
+											<span class="method-result">void</span>
+										<a href="#updateFailedLogin" title="details" class="method-name">updateFailedLogin</a>
+											(<span class="var-type"></span>&nbsp;<span class="var-name">$login</span>, <span class="var-type"></span>&nbsp;<span class="var-name">$length</span>)
+									</div>
+																<div class="method-definition">
+					<img src="../media/images/Method.png" alt=" "/>
+											<span class="method-result">void</span>
+										<a href="#updatePass" title="details" class="method-name">updatePass</a>
+											(<span class="var-type"></span>&nbsp;<span class="var-name">$userid</span>, <span class="var-type"></span>&nbsp;<span class="var-name">$newPass</span>, [<span class="var-type"></span>&nbsp;<span class="var-name">$oldPass</span> = <span class="var-default">NULL</span>], [<span class="var-type"></span>&nbsp;<span class="var-name">$newLogin</span> = <span class="var-default">NULL</span>])
+									</div>
+																<div class="method-definition">
+					<img src="../media/images/Method.png" alt=" "/>
+											<span class="method-result">void</span>
+										<a href="#verifyOldPass" title="details" class="method-name">verifyOldPass</a>
+											(<span class="var-type"></span>&nbsp;<span class="var-name">$login</span>, <span class="var-type"></span>&nbsp;<span class="var-name">$oldPass</span>)
+									</div>
+											</div>
+		</div>
+	</div>		
+
+	
+	<a name="sec-methods"></a>
+	<div class="info-box">
+		<div class="info-box-title">Methods</div>
+		<div class="nav-bar">
+			<a href="#sec-description">Description</a> |
+													<a href="#sec-method-summary">Methods</a> (<span class="disabled">details</span>)
+						
+		</div>
+		<div class="info-box-body">
+			<A NAME='method_detail'></A>
+<a name="method__construct" id="__construct"><!-- --></a>
+<div class="evenrow">
+	
+	<div class="method-header">
+		<img src="../media/images/Constructor.png" />
+		<span class="method-title">Constructor __construct</span> (line <span class="line-number">11</span>)
+	</div> 
+	
+	<!-- ========== Info from phpDoc block ========= -->
+	<ul class="tags">
+				<li><span class="field">access:</span> public</li>
+			</ul>
+	
+	<div class="method-signature">
+		<span class="method-result">Login</span>
+		<span class="method-name">
+			__construct
+		</span>
+				()
+			</div>
+	
+		
+			
+	</div>
+<a name="methodauthenticate" id="authenticate"><!-- --></a>
+<div class="oddrow">
+	
+	<div class="method-header">
+		<img src="../media/images/Method.png" />
+		<span class="method-title">authenticate</span> (line <span class="line-number">116</span>)
+	</div> 
+	
+	<!-- ========== Info from phpDoc block ========= -->
+	<ul class="tags">
+				<li><span class="field">access:</span> public</li>
+			</ul>
+	
+	<div class="method-signature">
+		<span class="method-result">void</span>
+		<span class="method-name">
+			authenticate
+		</span>
+					(<span class="var-type"></span>&nbsp;<span class="var-name">$login</span>, <span class="var-type"></span>&nbsp;<span class="var-name">$password</span>)
+			</div>
+	
+			<ul class="parameters">
+					<li>
+				<span class="var-type"></span>
+				<span class="var-name">$login</span>			</li>
+					<li>
+				<span class="var-type"></span>
+				<span class="var-name">$password</span>			</li>
+				</ul>
+		
+			
+	</div>
+<a name="methodauthenticateWithCookie" id="authenticateWithCookie"><!-- --></a>
+<div class="evenrow">
+	
+	<div class="method-header">
+		<img src="../media/images/Method.png" />
+		<span class="method-title">authenticateWithCookie</span> (line <span class="line-number">143</span>)
+	</div> 
+	
+	<!-- ========== Info from phpDoc block ========= -->
+	<ul class="tags">
+				<li><span class="field">access:</span> public</li>
+			</ul>
+	
+	<div class="method-signature">
+		<span class="method-result">void</span>
+		<span class="method-name">
+			authenticateWithCookie
+		</span>
+				()
+			</div>
+	
+		
+			
+	</div>
+<a name="methodcreate" id="create"><!-- --></a>
+<div class="oddrow">
+	
+	<div class="method-header">
+		<img src="../media/images/Method.png" />
+		<span class="method-title">create</span> (line <span class="line-number">152</span>)
+	</div> 
+	
+	<!-- ========== Info from phpDoc block ========= -->
+	<ul class="tags">
+				<li><span class="field">access:</span> public</li>
+			</ul>
+	
+	<div class="method-signature">
+		<span class="method-result">void</span>
+		<span class="method-name">
+			create
+		</span>
+					(<span class="var-type"></span>&nbsp;<span class="var-name">$login</span>, <span class="var-type"></span>&nbsp;<span class="var-name">$password</span>)
+			</div>
+	
+			<ul class="parameters">
+					<li>
+				<span class="var-type"></span>
+				<span class="var-name">$login</span>			</li>
+					<li>
+				<span class="var-type"></span>
+				<span class="var-name">$password</span>			</li>
+				</ul>
+		
+			
+	</div>
+<a name="methodexists" id="exists"><!-- --></a>
+<div class="evenrow">
+	
+	<div class="method-header">
+		<img src="../media/images/Method.png" />
+		<span class="method-title">exists</span> (line <span class="line-number">349</span>)
+	</div> 
+	
+	<!-- ========== Info from phpDoc block ========= -->
+	<ul class="tags">
+				<li><span class="field">access:</span> public</li>
+			</ul>
+	
+	<div class="method-signature">
+		<span class="method-result">void</span>
+		<span class="method-name">
+			exists
+		</span>
+					(<span class="var-type"></span>&nbsp;<span class="var-name">$needle</span>, [<span class="var-type"></span>&nbsp;<span class="var-name">$clean</span> = <span class="var-default">false</span>])
+			</div>
+	
+			<ul class="parameters">
+					<li>
+				<span class="var-type"></span>
+				<span class="var-name">$needle</span>			</li>
+					<li>
+				<span class="var-type"></span>
+				<span class="var-name">$clean</span>			</li>
+				</ul>
+		
+			
+	</div>
+<a name="methodgetCookieLogin" id="getCookieLogin"><!-- --></a>
+<div class="oddrow">
+	
+	<div class="method-header">
+		<img src="../media/images/Method.png" />
+		<span class="method-title">getCookieLogin</span> (line <span class="line-number">215</span>)
+	</div> 
+	
+	<!-- ========== Info from phpDoc block ========= -->
+	<ul class="tags">
+				<li><span class="field">access:</span> public</li>
+			</ul>
+	
+	<div class="method-signature">
+		<span class="method-result">void</span>
+		<span class="method-name">
+			getCookieLogin
+		</span>
+				()
+			</div>
+	
+		
+			
+	</div>
+<a name="methodgetToken" id="getToken"><!-- --></a>
+<div class="evenrow">
+	
+	<div class="method-header">
+		<img src="../media/images/Method.png" />
+		<span class="method-title">getToken</span> (line <span class="line-number">174</span>)
+	</div> 
+	
+	<!-- ========== Info from phpDoc block ========= -->
+	<ul class="tags">
+				<li><span class="field">access:</span> public</li>
+			</ul>
+	
+	<div class="method-signature">
+		<span class="method-result">void</span>
+		<span class="method-name">
+			getToken
+		</span>
+				()
+			</div>
+	
+		
+			
+	</div>
+<a name="methodisActive" id="isActive"><!-- --></a>
+<div class="oddrow">
+	
+	<div class="method-header">
+		<img src="../media/images/Method.png" />
+		<span class="method-title">isActive</span> (line <span class="line-number">51</span>)
+	</div> 
+	
+	<!-- ========== Info from phpDoc block ========= -->
+	<ul class="tags">
+				<li><span class="field">access:</span> public</li>
+			</ul>
+	
+	<div class="method-signature">
+		<span class="method-result">void</span>
+		<span class="method-name">
+			isActive
+		</span>
+					(<span class="var-type"></span>&nbsp;<span class="var-name">$user</span>)
+			</div>
+	
+			<ul class="parameters">
+					<li>
+				<span class="var-type"></span>
+				<span class="var-name">$user</span>			</li>
+				</ul>
+		
+			
+	</div>
+<a name="methodisLockedOut" id="isLockedOut"><!-- --></a>
+<div class="evenrow">
+	
+	<div class="method-header">
+		<img src="../media/images/Method.png" />
+		<span class="method-title">isLockedOut</span> (line <span class="line-number">44</span>)
+	</div> 
+	
+	<!-- ========== Info from phpDoc block ========= -->
+	<ul class="tags">
+				<li><span class="field">access:</span> public</li>
+			</ul>
+	
+	<div class="method-signature">
+		<span class="method-result">void</span>
+		<span class="method-name">
+			isLockedOut
+		</span>
+					(<span class="var-type"></span>&nbsp;<span class="var-name">$user</span>)
+			</div>
+	
+			<ul class="parameters">
+					<li>
+				<span class="var-type"></span>
+				<span class="var-name">$user</span>			</li>
+				</ul>
+		
+			
+	</div>
+<a name="methodisLoggedIn" id="isLoggedIn"><!-- --></a>
+<div class="oddrow">
+	
+	<div class="method-header">
+		<img src="../media/images/Method.png" />
+		<span class="method-title">isLoggedIn</span> (line <span class="line-number">17</span>)
+	</div> 
+	
+	<!-- ========== Info from phpDoc block ========= -->
+	<ul class="tags">
+				<li><span class="field">access:</span> public</li>
+			</ul>
+	
+	<div class="method-signature">
+		<span class="method-result">void</span>
+		<span class="method-name">
+			isLoggedIn
+		</span>
+				()
+			</div>
+	
+		
+			
+	</div>
+<a name="methodisTimeOut" id="isTimeOut"><!-- --></a>
+<div class="evenrow">
+	
+	<div class="method-header">
+		<img src="../media/images/Method.png" />
+		<span class="method-title">isTimeOut</span> (line <span class="line-number">37</span>)
+	</div> 
+	
+	<!-- ========== Info from phpDoc block ========= -->
+	<ul class="tags">
+				<li><span class="field">access:</span> public</li>
+			</ul>
+	
+	<div class="method-signature">
+		<span class="method-result">void</span>
+		<span class="method-name">
+			isTimeOut
+		</span>
+					(<span class="var-type"></span>&nbsp;<span class="var-name">$user</span>)
+			</div>
+	
+			<ul class="parameters">
+					<li>
+				<span class="var-type"></span>
+				<span class="var-name">$user</span>			</li>
+				</ul>
+		
+			
+	</div>
+<a name="methodlockout" id="lockout"><!-- --></a>
+<div class="oddrow">
+	
+	<div class="method-header">
+		<img src="../media/images/Method.png" />
+		<span class="method-title">lockout</span> (line <span class="line-number">298</span>)
+	</div> 
+	
+	<!-- ========== Info from phpDoc block ========= -->
+	<ul class="tags">
+				<li><span class="field">access:</span> public</li>
+			</ul>
+	
+	<div class="method-signature">
+		<span class="method-result">void</span>
+		<span class="method-name">
+			lockout
+		</span>
+					(<span class="var-type"></span>&nbsp;<span class="var-name">$user</span>, <span class="var-type"></span>&nbsp;<span class="var-name">$length</span>)
+			</div>
+	
+			<ul class="parameters">
+					<li>
+				<span class="var-type"></span>
+				<span class="var-name">$user</span>			</li>
+					<li>
+				<span class="var-type"></span>
+				<span class="var-name">$length</span>			</li>
+				</ul>
+		
+			
+	</div>
+<a name="methodlogout" id="logout"><!-- --></a>
+<div class="evenrow">
+	
+	<div class="method-header">
+		<img src="../media/images/Method.png" />
+		<span class="method-title">logout</span> (line <span class="line-number">332</span>)
+	</div> 
+	
+	<!-- ========== Info from phpDoc block ========= -->
+	<ul class="tags">
+				<li><span class="field">access:</span> public</li>
+			</ul>
+	
+	<div class="method-signature">
+		<span class="method-result">void</span>
+		<span class="method-name">
+			logout
+		</span>
+					(<span class="var-type"></span>&nbsp;<span class="var-name">$user</span>)
+			</div>
+	
+			<ul class="parameters">
+					<li>
+				<span class="var-type"></span>
+				<span class="var-name">$user</span>			</li>
+				</ul>
+		
+			
+	</div>
+<a name="methodnewSession" id="newSession"><!-- --></a>
+<div class="oddrow">
+	
+	<div class="method-header">
+		<img src="../media/images/Method.png" />
+		<span class="method-title">newSession</span> (line <span class="line-number">58</span>)
+	</div> 
+	
+	<!-- ========== Info from phpDoc block ========= -->
+	<ul class="tags">
+				<li><span class="field">access:</span> public</li>
+			</ul>
+	
+	<div class="method-signature">
+		<span class="method-result">void</span>
+		<span class="method-name">
+			newSession
+		</span>
+					(<span class="var-type"></span>&nbsp;<span class="var-name">$user</span>, <span class="var-type"></span>&nbsp;<span class="var-name">$length</span>, [<span class="var-type"></span>&nbsp;<span class="var-name">$authenMethod</span> = <span class="var-default">'Login'</span>])
+			</div>
+	
+			<ul class="parameters">
+					<li>
+				<span class="var-type"></span>
+				<span class="var-name">$user</span>			</li>
+					<li>
+				<span class="var-type"></span>
+				<span class="var-name">$length</span>			</li>
+					<li>
+				<span class="var-type"></span>
+				<span class="var-name">$authenMethod</span>			</li>
+				</ul>
+		
+			
+	</div>
+<a name="methodrenewSession" id="renewSession"><!-- --></a>
+<div class="evenrow">
+	
+	<div class="method-header">
+		<img src="../media/images/Method.png" />
+		<span class="method-title">renewSession</span> (line <span class="line-number">100</span>)
+	</div> 
+	
+	<!-- ========== Info from phpDoc block ========= -->
+	<ul class="tags">
+				<li><span class="field">access:</span> public</li>
+			</ul>
+	
+	<div class="method-signature">
+		<span class="method-result">void</span>
+		<span class="method-name">
+			renewSession
+		</span>
+					(<span class="var-type"></span>&nbsp;<span class="var-name">$user</span>, <span class="var-type"></span>&nbsp;<span class="var-name">$length</span>)
+			</div>
+	
+			<ul class="parameters">
+					<li>
+				<span class="var-type"></span>
+				<span class="var-name">$user</span>			</li>
+					<li>
+				<span class="var-type"></span>
+				<span class="var-name">$length</span>			</li>
+				</ul>
+		
+			
+	</div>
+<a name="methodresetFails" id="resetFails"><!-- --></a>
+<div class="oddrow">
+	
+	<div class="method-header">
+		<img src="../media/images/Method.png" />
+		<span class="method-title">resetFails</span> (line <span class="line-number">318</span>)
+	</div> 
+	
+	<!-- ========== Info from phpDoc block ========= -->
+	<ul class="tags">
+				<li><span class="field">access:</span> public</li>
+			</ul>
+	
+	<div class="method-signature">
+		<span class="method-result">void</span>
+		<span class="method-name">
+			resetFails
+		</span>
+					(<span class="var-type"></span>&nbsp;<span class="var-name">$user</span>)
+			</div>
+	
+			<ul class="parameters">
+					<li>
+				<span class="var-type"></span>
+				<span class="var-name">$user</span>			</li>
+				</ul>
+		
+			
+	</div>
+<a name="methodresetPass" id="resetPass"><!-- --></a>
+<div class="evenrow">
+	
+	<div class="method-header">
+		<img src="../media/images/Method.png" />
+		<span class="method-title">resetPass</span> (line <span class="line-number">367</span>)
+	</div> 
+	
+	<!-- ========== Info from phpDoc block ========= -->
+	<ul class="tags">
+				<li><span class="field">access:</span> public</li>
+			</ul>
+	
+	<div class="method-signature">
+		<span class="method-result">void</span>
+		<span class="method-name">
+			resetPass
+		</span>
+					(<span class="var-type"></span>&nbsp;<span class="var-name">$user</span>)
+			</div>
+	
+			<ul class="parameters">
+					<li>
+				<span class="var-type"></span>
+				<span class="var-name">$user</span>			</li>
+				</ul>
+		
+			
+	</div>
+<a name="methodupdateFailedLogin" id="updateFailedLogin"><!-- --></a>
+<div class="oddrow">
+	
+	<div class="method-header">
+		<img src="../media/images/Method.png" />
+		<span class="method-title">updateFailedLogin</span> (line <span class="line-number">260</span>)
+	</div> 
+	
+	<!-- ========== Info from phpDoc block ========= -->
+	<ul class="tags">
+				<li><span class="field">access:</span> public</li>
+			</ul>
+	
+	<div class="method-signature">
+		<span class="method-result">void</span>
+		<span class="method-name">
+			updateFailedLogin
+		</span>
+					(<span class="var-type"></span>&nbsp;<span class="var-name">$login</span>, <span class="var-type"></span>&nbsp;<span class="var-name">$length</span>)
+			</div>
+	
+			<ul class="parameters">
+					<li>
+				<span class="var-type"></span>
+				<span class="var-name">$login</span>			</li>
+					<li>
+				<span class="var-type"></span>
+				<span class="var-name">$length</span>			</li>
+				</ul>
+		
+			
+	</div>
+<a name="methodupdatePass" id="updatePass"><!-- --></a>
+<div class="evenrow">
+	
+	<div class="method-header">
+		<img src="../media/images/Method.png" />
+		<span class="method-title">updatePass</span> (line <span class="line-number">387</span>)
+	</div> 
+	
+	<!-- ========== Info from phpDoc block ========= -->
+	<ul class="tags">
+				<li><span class="field">access:</span> public</li>
+			</ul>
+	
+	<div class="method-signature">
+		<span class="method-result">void</span>
+		<span class="method-name">
+			updatePass
+		</span>
+					(<span class="var-type"></span>&nbsp;<span class="var-name">$userid</span>, <span class="var-type"></span>&nbsp;<span class="var-name">$newPass</span>, [<span class="var-type"></span>&nbsp;<span class="var-name">$oldPass</span> = <span class="var-default">NULL</span>], [<span class="var-type"></span>&nbsp;<span class="var-name">$newLogin</span> = <span class="var-default">NULL</span>])
+			</div>
+	
+			<ul class="parameters">
+					<li>
+				<span class="var-type"></span>
+				<span class="var-name">$userid</span>			</li>
+					<li>
+				<span class="var-type"></span>
+				<span class="var-name">$newPass</span>			</li>
+					<li>
+				<span class="var-type"></span>
+				<span class="var-name">$oldPass</span>			</li>
+					<li>
+				<span class="var-type"></span>
+				<span class="var-name">$newLogin</span>			</li>
+				</ul>
+		
+			
+	</div>
+<a name="methodverifyOldPass" id="verifyOldPass"><!-- --></a>
+<div class="oddrow">
+	
+	<div class="method-header">
+		<img src="../media/images/Method.png" />
+		<span class="method-title">verifyOldPass</span> (line <span class="line-number">442</span>)
+	</div> 
+	
+	<!-- ========== Info from phpDoc block ========= -->
+	<ul class="tags">
+				<li><span class="field">access:</span> public</li>
+			</ul>
+	
+	<div class="method-signature">
+		<span class="method-result">void</span>
+		<span class="method-name">
+			verifyOldPass
+		</span>
+					(<span class="var-type"></span>&nbsp;<span class="var-name">$login</span>, <span class="var-type"></span>&nbsp;<span class="var-name">$oldPass</span>)
+			</div>
+	
+			<ul class="parameters">
+					<li>
+				<span class="var-type"></span>
+				<span class="var-name">$login</span>			</li>
+					<li>
+				<span class="var-type"></span>
+				<span class="var-name">$oldPass</span>			</li>
+				</ul>
+		
+			
+	</div>
+						
+		</div>
+	</div>
+
+	
+	<p class="notes" id="credit">
+		Documentation generated on Sun, 30 Oct 2011 18:47:45 -0600 by <a href="http://www.phpdoc.org" target="_blank">phpDocumentor 1.4.3</a>
+	</p>
+	</div></body>
+</html>
