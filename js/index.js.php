@@ -5,5 +5,5 @@ $(document).ready(function () {
 	FW.init();
 	Events();
 	Markup();
-	Customer();
+	Parent();
 });
