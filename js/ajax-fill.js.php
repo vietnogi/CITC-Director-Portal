@@ -49,6 +49,7 @@
 		});
 	}
 	*/
+	//testin git config core.autocrlf true
 	
 	//have to be at the end because other functions have to declared
 	$.fn.ajaxFill = function () { //protyping object to have valform method
