@@ -3,8 +3,8 @@ $this->gd['navs'] = array(
 	'Overview' => array(
 		'Dashboard' => '/dashboard/overview'
 	)
-	, 'Customers' => array(
-		'Customers' => '/customers/main'
+	, 'Parents' => array(
+		'Parents' => '/parents/main'
 		, 'Invoices' => '/invoices/main'
 		, 'Payments' => '/payments/main'
 	)
@@ -26,7 +26,7 @@ $this->gd['navs'] = array(
 	)
 	/*, 'Accounts' => array(
 		'Staff' => '/staff/main' 
-		, 'Customers' => '/customers/main'
+		, 'Parents' => '/parents/main'
 		, 'Campers' => '/campers/main'
 	)
 	, 'Contacts' => array(
@@ -66,7 +66,7 @@ $this->gd['num_nav_children'] = count($this->gd['navs'], COUNT_RECURSIVE) - $thi
 // comment
 if ($GLOBALS['bc']->path == '/comments') {
 	$this->gd['comment_for'] = newInput('for', $_GET, 'min 1');
-	$sections = array('customer', 'camper');
+	$sections = array('parent', 'camper');
 	if (!in_array($this->gd['comment_for'], $sections)) {
 		logError('comment feature is not available for: ' . $inputs['for']);	
 	}

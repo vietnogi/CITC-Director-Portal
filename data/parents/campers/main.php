@@ -1,10 +1,10 @@
 <?
 $this->ld['inputs'] = array(
-	'customer_id' => newInput('customer_id', $_GET, 'int min 1')
+	'parent_id' => newInput('parent_id', $_GET, 'int min 1')
 );
 
-$query = 'SELECT * FROM camper WHERE customer_id = :customer_id';
-$values = array(':customer_id' => $this->ld['inputs']['customer_id']);
+$query = 'SELECT * FROM camper WHERE parent_id = :parent_id';
+$values = array(':parent_id' => $this->ld['inputs']['parent_id']);
 $this->ld['campers'] = $GLOBALS['mysql']->get($query, $values);
 
 ?>

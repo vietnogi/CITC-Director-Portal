@@ -7,7 +7,7 @@ $this->ld['inputs'] = array(
 );
 
 $filterFields = array(
-	'customer' => array(
+	'parent' => array(
 		'first_name' => 'string'
 		, 'last_name' => 'string'
 		, 'email' => 'string'
@@ -20,13 +20,13 @@ foreach ($filterFields as $table => $fields) {
 	}
 }
 
-$filter = new Filter('customer', $filterFields, $this->ld['inputs'], array(
-	'select' => 'customer.customer_id, customer.first_name, customer.last_name, customer.email'
-	, 'from' => 'customer'
+$filter = new Filter('parent', $filterFields, $this->ld['inputs'], array(
+	'select' => 'parent.parent_id, parent.first_name, parent.last_name, parent.email'
+	, 'from' => 'parent'
 ));
 
 header('Content-type: text/csv');
-header('Content-Disposition: attachment; filename="' . date('y-m-d') . '-customers.csv"');
+header('Content-Disposition: attachment; filename="' . date('y-m-d') . '-parents.csv"');
 header("Pragma: public");// need for IE
 
 $interval = 100;
@@ -36,7 +36,7 @@ $rowCount = $filter->rowCount();
 $outstream = fopen("php://output", 'w');
 // headers
 fputcsv($outstream, array(
-	'Customer ID'
+	'Parent ID'
 	, 'First Name'
 	, 'Last Name'
 	, 'Email'
