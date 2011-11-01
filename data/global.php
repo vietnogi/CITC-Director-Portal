@@ -3,14 +3,15 @@ $this->gd['navs'] = array(
 	'Overview' => array(
 		'Dashboard' => '/dashboard/overview'
 	)
-	, 'Customers' => array(
-		'Customers' => '/customers/main'
+	, 'Parents' => array(
+		'Parents' => '/customers/main'
 		, 'Invoices' => '/invoices/main'
 		, 'Payments' => '/payments/main'
 	)
 	, 'Campers' => array(
 		'Campers' => '/campers/main'
-		, 'Enrollments' => '/enrollments/main'
+		, 'Current Enrollments' => '/campers/current-enrollments/main'
+		, 'Enrollment History' => '/campers/main'
 		, 'Cabins' => '/cabins/main'
 	)
 	, 'Parent Pack' => array(
@@ -53,6 +54,11 @@ $this->gd['navs'] = array(
 		, 'User Log' => '/user-log/main'
 		, 'Permissions' => '/permissions/main'
 		, 'Configuration' => '/configuration/menu'
+	)
+	, 'Help' => array(
+		'Camper' => '/help/camper'
+		, 'Parent' => '/help/parent'
+		, 'Parent Pack' => '/help/parent-pack'
 	)
 );
 foreach ($this->gd['navs'] as $category => &$links) {
