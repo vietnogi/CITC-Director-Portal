@@ -118,19 +118,19 @@ function getCountries ($fullName = true) {
 	return rowsToArray($countries, 'country_id', $valueField);
 }
 
-function getCustomer ($userid) {
-	$query = 'SELECT customer.* FROM customer WHERE customer.user_id = :user_id';
+function getParent ($userid) {
+	$query = 'SELECT parent.* FROM parent WHERE parent.user_id = :user_id';
 	$values = array(':user_id' => $userid);
 	return $GLOBALS['mysql']->getSingle($query, $values);	
 }
 
-function getCustomerCreditCards ($customerid){	
-	// get customer credit cards
-	$query = 'SELECT customer_credit_card.*
-			  FROM customer_credit_card 
-			  WHERE customer_credit_card.customer_id = :customer_id
-			  ORDER BY customer_credit_card.primary DESC';
-	$values = array(':customer_id' => $customerid);
+function getParentCreditCards ($parentid){	
+	// get parent credit cards
+	$query = 'SELECT parent_credit_card.*
+			  FROM parent_credit_card 
+			  WHERE parent_credit_card.parent_id = :parent_id
+			  ORDER BY parent_credit_card.primary DESC';
+	$values = array(':parent_id' => $parentid);
 	$creditCards = $GLOBALS['mysql']->get($query, $values);
 	
 	foreach ($creditCards as $i => $creditCard) {
