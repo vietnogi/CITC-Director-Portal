@@ -1,10 +1,10 @@
-<?
+n<?
 $this->gd['navs'] = array(
 	'Overview' => array(
 		'Dashboard' => '/dashboard/overview'
 	)
 	, 'Parents' => array(
-		'Parents' => '/customers/main'
+		'Parents' => '/parents/main'
 		, 'Invoices' => '/invoices/main'
 		, 'Payments' => '/payments/main'
 	)

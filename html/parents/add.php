@@ -1,13 +1,13 @@
-<h2>Add a new customer</h2>
+<h2>Add a new parent</h2>
 <?
 $form = new emgForm(array_merge(array(
-	'id' => 'customer-add-form'
+	'id' => 'parent-add-form'
 	, 'action' =>  $this->actionUrl()
 	, 'method' => 'post'
 	, 'class' => 'emg-form val-form columns'
 ) , array()));
 
-$form->legend('Customer Information');
+$form->legend('Parent Information');
 
 $form->text(array(
 	'label' => 'First Name'
@@ -23,7 +23,7 @@ $form->text(array(
 ));
 $form->text(array(
 	'label' => 'Retype Email'
-	, 'class' => 'req email same customer-add-form'
+	, 'class' => 'req email same parent-add-form'
 ));
 $form->password(array(
 	'label' => 'Password'

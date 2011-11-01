@@ -21,21 +21,21 @@ if (!is_numeric($newUserid)) {
 //assign new user to group
 $values = array(
 	'user_id' => $newUserid
-	, 'user_group_id' => CUSTOMERGROUP
+	, 'user_group_id' => PARENTGROUP
 );
 $GLOBALS['mysql']->insert('user_group_link', $values);
 
 
-//create new customer
+//create new parent
 $values = array('user_id' => $newUserid
 	, 'first_name' => $inputs['first_name']
 	, 'last_name' => $inputs['last_name']
 	, 'email' => $inputs['email']
 	/*, 'receive_information_and_offers' => $inputs['offers']
-	, 'customer_referrer_id' => $inputs['referrer']*/
+	, 'parent_referrer_id' => $inputs['referrer']*/
 );
-$GLOBALS['mysql']->insert('customer', $values);
-$customerid = $GLOBALS['mysql']->lastInsertId();
+$GLOBALS['mysql']->insert('parent', $values);
+$parentid = $GLOBALS['mysql']->lastInsertId();
 
-$this->redirect = $GLOBALS['bc']->path . '/detail?customer_id=' . $customerid;
+$this->redirect = $GLOBALS['bc']->path . '/detail?parent_id=' . $parentid;
 ?>
