@@ -5,7 +5,7 @@ define('DEVELOPMENT', true);
 define('LIBPATH', '/php/lib');
 define('PORTAL', 'Administration');
 define('USID', '1');
-define('CUSTOMERGROUP', '2');
+define('PARENTGROUP', '2');
 
 //automaticaly include php files that is needed on every page
 //php files should not have any executing code
