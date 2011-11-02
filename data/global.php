@@ -1,4 +1,4 @@
-n<?
+<?
 $this->gd['navs'] = array(
 	'Overview' => array(
 		'Dashboard' => '/dashboard/overview'
@@ -10,7 +10,7 @@ $this->gd['navs'] = array(
 	)
 	, 'Campers' => array(
 		'Campers' => '/campers/main'
-		, 'Current Enrollments' => '/campers/current-enrollments/main'
+		, 'Active Enrollments' => '/campers/active-enrollments/main'
 		, 'Enrollment History' => '/campers/main'
 		, 'Cabins' => '/cabins/main'
 	)
