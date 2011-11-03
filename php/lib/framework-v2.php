@@ -455,8 +455,9 @@ class FW {
 		return CR . $url; 
 	}
 	
-	private function actionUrl () {
-        return $this->url('/action' . $GLOBALS['bc']->path . '/' . $GLOBALS['bc']->page);	
+	private function actionUrl ($page = NULL) {
+		$page = $page === NULL ? '/' . $GLOBALS['bc']->page : $page;
+        return $this->url('/action' . $GLOBALS['bc']->path . $page);	
 	}
 }
 
