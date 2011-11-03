@@ -42,8 +42,9 @@ $this->gd['navs'] = array(
 		'Enrollment Report' => ''
 		, 'Sales Report' => ''
 	)
-	, 'Camp Sessions' => array(
-		'Sessions' => '/sessions/main'
+	, 'Seasons' => array(
+		'Seasons' => '/seasons/main'
+		, 'Sessions' => '/sessions/main'
 		, 'Session Categories' => '/session-categories/main'
 		, 'Specialties' => '/specialties/main'
 		, 'Specialty Categories' => '/specialty-categories/main'

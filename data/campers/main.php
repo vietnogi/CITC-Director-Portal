@@ -14,6 +14,7 @@ $filterFields = array(
 		, 'email' => 'string'
 	)
 );
+// set filter fields to inputs
 foreach ($filterFields as $table => $fields) {
 	foreach ($fields as $field => $type) {
 		$name = (empty($table) ? '' : $table . '-') . $field;
