@@ -21,7 +21,7 @@
 		blind.css({
 			'z-index': zIndex  
 		});
-		blind.show('fade', 100);
+		blind.show('fade', 200);
 		
 		// handle popup
 		var popUp = $('<div class="modal-popUp"></div>');
@@ -32,7 +32,7 @@
 		
 		var closeModal = function () {
 			outerContainer.remove();
-			blind.hide('fade', 150, function() {
+			blind.hide('fade', 200, function() {
 				$(this).remove;
 			});
 		};
