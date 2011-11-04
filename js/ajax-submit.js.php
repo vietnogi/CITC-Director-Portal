@@ -3,111 +3,171 @@
 
 	function uploadProgress (form) {
 		// handle file upload progress
-		var uploadId = $('input[name="UPLOAD_IDENTIFIER"]', form);
-		if (uploadId.length == 0) {
+		var hash = $('input[name="UPLOAD_IDENTIFIER"]', form);
+		if (hash.length == 0) {
 			return;
 		}
 		
 		// create progress bar and place into modal window
-		var progressModal = $('<div id="progress-bar-' + uploadId[0].value + '" style="width: 100px"></div>').progressbar({ value: 0 }).modal({ event: null });
+		var progressModal = $('<div id="progress-bar-' + hash[0].value + '" style="width: 100px"></div>').progressbar({ value: 0 }).modal({ event: null });
+		
+		// since check progress may occur before form with file is submitted
+		var uploadStarted = false;
+		var maxAttempts = 10;
+		var attemptCount = 0;
 		
 		// bind a custom event so we can trigger when to check for progress
-		progressModal.bind('check-progress').bind(function () {
+		progressModal.bind('check-progress', function () {
 			var progressModal = $(this);
 			$.ajax({
-				url: window.CR + '/ajax/upload-progress?upload_id' + uploadId[0].value
-				, type: method
+				url: FW.CR + '/ajax/upload-progress?hash=' + hash[0].value + '&t=' + FW.TOKEN
 				, dataType: 'json'
 				, cache: false
 				, success: function (data, textStatus, jqXHR) {
+					//window.open(this.url);
 					data.percentage = parseInt(data.percentage);
-					$('#progress-bar-' + uploadId[0].value).progressbar('option', 'value', data.percentage);
-					if (!(data.percentage < 100)) {
-						// finish
+					
+					if (!(data.percentage < 100)) { // no longer uploading
+						if (!uploadStarted) {
+							if (maxAttempts == attemptCount) {
+								console.error('Reached max attempts to check if file started uploading.');
+								return;	
+							}
+							attemptCount++;
+						}
+						else {
+							// upload complete
+							progressModal.parent().siblings('.modal-close').trigger('click');
+							return;	
+						}
 					}
-					else {
-						// set the next check
-						setTimeout(function () {
-							progressModal.trigger('check-progress');
-						}, 500);
+					else { // uploading
+						uploadStarted = true;
+						$('#progress-bar-' + hash[0].value).progressbar('option', 'value', data.percentage);
 					}
+					// set the next check
+					setTimeout(function () {
+						progressModal.trigger('check-progress');
+					}, 200);
 				} 
 				, complete: FW.ajaxComplete
 				, error: FW.error
 			});
 		});
 		
+		// cant fire trigger right away because form request may have not reached server yet
 		progressModal.trigger('check-progress');
+	}
+	
+	function submitToIframe(form) {
+		var $form = $(form);
+		var rand = Math.floor(Math.random() * 9999999);
+		// create temproary iframe to target
+		var iframe = $('<iframe name="iframe-target-' + rand + '"><iframe>');
+		iframe.hide();
+		iframe.appendTo($('#content-container'));
+		
+		// add upload hash for progress
+		var uploadHash = $('input[name="UPLOAD_IDENTIFIER"]');
+		if (uploadHash.length == 0) {
+			// * important, UPLOAD_IDENTIFIER must go before any file inputs in order for php progress to work
+			$('<input type="hidden" name="UPLOAD_IDENTIFIER" value="' + rand + '" />').prependTo(form);
+		}
+		else {
+			uploadHash[0].value = rand;
+		}
+		
+		// target iframe and submit
+		$form.attr({
+			'target': 'iframe-target-' + rand
+		});
+		form.submit();
+		
+		// remove iframe when submit completes
+		iframe.load(function () {
+			$(this).remove();
+			$form.trigger('ajax-submit-success');
+		});
+		
+		// upload progress
+		uploadProgress(form);
+	}
+	
+	function setEvents(form) {
+		var bindEvent = form.action !== undefined ? 'submit' : 'click';
+		var $form = $(form);
+			
+		// handle valform
+		if (bindEvent == 'submit') {
+			var events = $form.data('events');
+			if (events !== undefined) {
+				if (events.resetSubmit !== undefined) {
+					// bind valform-success instead of submit
+					bindEvent = 'valform-success';
+					$form.bind('submit', function() {
+						return false;
+					});
+				}
+			}
+		}
+		
+		$form.bind(bindEvent, function() {
+			var isForm = (this.action !== undefined) ? true : false;
+			
+			if (isForm) {
+				var method = this.method;
+				if ($form.attr('enctype').toLowerCase() == 'multipart/form-data') {
+					// require file upload, resort to iframe	
+					submitToIframe(this);
+					return;
+				}
+				var data = $form.serialize();
+				var url = this.action;
+			}
+			else {
+				// link or other dom element
+				if (this.href !== undefined) {
+					var url = this.href;
+				}
+				else {
+					var option = $form.metadata();
+					if (option.href === undefined) {
+						alert('Can not find href.');
+						return false;
+					}
+					var url = option.href;
+				}
+				var method = 'get';
+			}
+			
+			$.ajax({
+				url: url
+				, type: method
+				, dataType: 'json'
+				, data: data
+				, cache: true
+				, success: function (data, textStatus, jqXHR) {
+					if (data !== null && data.msg !== undefined) {
+						alert(data.msg);
+					}
+					$form.trigger('ajax-submit-success');
+				} 
+				, complete: FW.ajaxComplete
+				, error: FW.error
+			});
+			
+			// upload progress
+			if (isForm) {
+				uploadProgress(this);
+			}
+		});		
 	}
 	
 	
 	//have to be at the end because other functions have to declared
 	$.fn.ajaxSubmit = function () { //protyping object to have valform method
 		this.each(function () {
-			var bindEvent = this.action !== undefined ? 'submit' : 'click';
-			
-			// handle valform
-			if (bindEvent == 'submit') {
-				var events = $(this).data('events');
-				if (events !== undefined) {
-					if (events.resetSubmit !== undefined) {
-						// bind valform-success instead of submit
-						bindEvent = 'valform-success';
-						$(this).bind('submit', function() {
-							return false;
-						});
-					}
-				}
-			}
-			
-			$(this).bind(bindEvent, function() {
-				var $self = $(this);
-				var isForm = (this.action !== undefined) ? true : false;
-				
-				if (isForm) {
-					var method = this.method;
-					var data = $self.serialize();
-					var url = this.action;
-				}
-				else {
-					// link or other dom element
-					if (this.href !== undefined) {
-						var url = this.href;
-					}
-					else {
-						var option = $self.metadata();
-						if (option.href === undefined) {
-							alert('Can not find href.');
-							return false;
-						}
-						var url = option.href;
-					}
-					var method = 'get';
-				}
-				
-				$.ajax({
-					url: url
-					, type: method
-					, dataType: 'json'
-					, data: data
-					, cache: true
-					, success: function (data, textStatus, jqXHR) {
-						if (data !== null && data.msg !== undefined) {
-							alert(data.msg);
-						}
-						$self.trigger('ajaxSubmitSuccess');
-					} 
-					, complete: FW.ajaxComplete
-					, error: FW.error
-				});
-				
-				// upload progress
-				if (isForm) {
-					uploadProgress(this);
-				}
-				
-				return false;
-			});
+			setEvents(this);
 		});
 		
 		return this; // keep jquery strategy
