@@ -57,6 +57,7 @@
 			contentContainer.ajaxFill();
 		}
 		
+		return contentContainer;
 	}
 
 	// have to be at the end because other functions have to declared
@@ -87,6 +88,8 @@
 				});
 			}
 		});
+		
+		return this; // keep jquery strategy
 	};
 })(jQuery); //pass jQuery object into function
 

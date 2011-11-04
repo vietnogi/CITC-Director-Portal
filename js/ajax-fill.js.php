@@ -57,5 +57,6 @@
 			//setEvents(this);
 			fill(this);
 		});
+		return this; // keep jquery strategy
 	};
 })(jQuery); //pass jQuery object into function

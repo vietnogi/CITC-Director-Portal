@@ -38,5 +38,6 @@
 		this.each(function () {
 			setEvents(this);
 		});
+		return this; // keep jquery strategy
 	};
 })(jQuery); //pass jQuery object into function

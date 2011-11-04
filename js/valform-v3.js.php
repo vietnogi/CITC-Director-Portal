@@ -252,6 +252,7 @@
 			createSubmitWait(newInstance);
 			setEvents(newInstance);
 		});
+		return this; // keep jquery strategy
 	};
 	
 	var validators = {

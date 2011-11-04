@@ -1,6 +1,46 @@
 /*<script>*/
 (function ($) { //anonymous function to prevent global scope, "$" is a prototype reference
+
+	function uploadProgress (form) {
+		// handle file upload progress
+		var uploadId = $('input[name="UPLOAD_IDENTIFIER"]', form);
+		if (uploadId.length == 0) {
+			return;
+		}
 		
+		// create progress bar and place into modal window
+		var progressModal = $('<div id="progress-bar-' + uploadId[0].value + '" style="width: 100px"></div>').progressbar({ value: 0 }).modal({ event: null });
+		
+		// bind a custom event so we can trigger when to check for progress
+		progressModal.bind('check-progress').bind(function () {
+			var progressModal = $(this);
+			$.ajax({
+				url: window.CR + '/ajax/upload-progress?upload_id' + uploadId[0].value
+				, type: method
+				, dataType: 'json'
+				, cache: false
+				, success: function (data, textStatus, jqXHR) {
+					data.percentage = parseInt(data.percentage);
+					$('#progress-bar-' + uploadId[0].value).progressbar('option', 'value', data.percentage);
+					if (!(data.percentage < 100)) {
+						// finish
+					}
+					else {
+						// set the next check
+						setTimeout(function () {
+							progressModal.trigger('check-progress');
+						}, 500);
+					}
+				} 
+				, complete: FW.ajaxComplete
+				, error: FW.error
+			});
+		});
+		
+		progressModal.trigger('check-progress');
+	}
+	
+	
 	//have to be at the end because other functions have to declared
 	$.fn.ajaxSubmit = function () { //protyping object to have valform method
 		this.each(function () {
@@ -21,28 +61,28 @@
 			}
 			
 			$(this).bind(bindEvent, function() {
-				var url, method, option, data = null, $self = $(this);
+				var $self = $(this);
+				var isForm = (this.action !== undefined) ? true : false;
 				
-				if (this.action !== undefined) {
-					// form
-					method = this.method;
-					data = $self.serialize();
-					url = this.action;
+				if (isForm) {
+					var method = this.method;
+					var data = $self.serialize();
+					var url = this.action;
 				}
 				else {
 					// link or other dom element
 					if (this.href !== undefined) {
-						url = this.href;
+						var url = this.href;
 					}
 					else {
-						option = $self.metadata();
+						var option = $self.metadata();
 						if (option.href === undefined) {
 							alert('Can not find href.');
 							return false;
 						}
-						url = option.href;
+						var url = option.href;
 					}
-					method = 'get';
+					var method = 'get';
 				}
 				
 				$.ajax({
@@ -60,8 +100,16 @@
 					, complete: FW.ajaxComplete
 					, error: FW.error
 				});
+				
+				// upload progress
+				if (isForm) {
+					uploadProgress(this);
+				}
+				
 				return false;
 			});
 		});
+		
+		return this; // keep jquery strategy
 	};
 })(jQuery); //pass jQuery object into function
