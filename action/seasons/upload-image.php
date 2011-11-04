@@ -1,0 +1,4 @@
+<?
+//upload
+pr($_FILES);
+?>
