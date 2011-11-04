@@ -6,4 +6,5 @@ $(document).ready(function () {
 	Events();
 	Markup();
 	Parent();
+	Seasons();
 });

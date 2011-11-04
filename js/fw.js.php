@@ -51,6 +51,6 @@ var FW = {
 		}
 	}
 	, error: function(jqXHR, textStatus, errorThrown){
-		console.error('Unable to complete request becuase the following error occured: ' + errorThrown);
+		console.error('Unable to complete request becuase the following error occured: ' + errorThrown + ' for the URL: ' + this.url);
 	}
 };
