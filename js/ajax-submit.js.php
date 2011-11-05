@@ -7,9 +7,12 @@
 		if (hash.length == 0) {
 			return;
 		}
+				
+		var fileUploadMeta = $('<div><p>Uploading: <span class="file-name"></span></p><p><span class="uploaded"></span>/<span class="file-size"></span></p></div>');
 		
 		// create progress bar and place into modal window
-		var progressModal = $('<div id="progress-bar-' + hash[0].value + '" style="width: 100px"></div>').progressbar({ value: 0 }).modal({ event: null });
+		var progressModal = $('<div id="progress-bar-' + hash[0].value + '" style="width: 100px"></div>').progressbar({ value: 0 });
+		progressModal.appendTo(fileUploadMeta);
 		
 		// since check progress may occur before form with file is submitted
 		var uploadStarted = false;
@@ -25,9 +28,7 @@
 				, cache: false
 				, success: function (data, textStatus, jqXHR) {
 					//window.open(this.url);
-					data.percentage = parseInt(data.percentage);
-					
-					if (!(data.percentage < 100)) { // no longer uploading
+					if (data === null) { // no longer uploading
 						if (!uploadStarted) {
 							if (maxAttempts == attemptCount) {
 								console.error('Reached max attempts to check if file started uploading.');
@@ -36,12 +37,25 @@
 							attemptCount++;
 						}
 						else {
-							// upload complete
-							progressModal.parent().siblings('.modal-close').trigger('click');
+							// upload complete, clean up stuff
+							fileUploadMeta.remove();
+							form = undefined;
+							fileUploadMeta = undefined;
+							uploadStarted = undefined;
+							maxAttempts = undefined;
+							attemptCount = undefined;
+							progressModal = undefined;
 							return;	
 						}
 					}
 					else { // uploading
+						if (!uploadStarted) {
+							$('input[type="file"]', form).after(fileUploadMeta);
+						}
+						$('.file-name', fileUploadMeta).html(data.filename);
+						$('.uploaded', fileUploadMeta).html(Math.round(parseInt(data.bytes_uploaded) / 1000));
+						$('.file-size', fileUploadMeta).html(Math.round(parseInt(data.bytes_total) / 1000) + ' kb');
+						data.percentage = parseInt(data.percentage);
 						uploadStarted = true;
 						$('#progress-bar-' + hash[0].value).progressbar('option', 'value', data.percentage);
 					}
@@ -86,7 +100,6 @@
 		// remove iframe when submit completes
 		iframe.load(function () {
 			$(this).remove();
-			$form.trigger('ajax-submit-success');
 		});
 		
 		// upload progress

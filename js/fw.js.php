@@ -38,11 +38,17 @@ var FW = {
 			case 301:
 			case 302:
 			case 0: //for ie
-				try {
-					var data = $.parseJSON(jqXHR.responseText);
-					window.location.href = data.location;
-				} catch (err) {
-					alert('Error trying to redirect.');
+				if (jqXHR.responseText == ''){
+					// likely that ajax call was canceled
+					// nothing to do for now
+				}
+				else {
+					try {
+						var data = $.parseJSON(jqXHR.responseText);
+						window.location.href = data.location;
+					} catch (err) {
+						alert(jqXHR.status + ' Error: Trying to redirect.');
+					}
 				}
 			break;
 			case 404:

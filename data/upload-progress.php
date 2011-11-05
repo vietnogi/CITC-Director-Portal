@@ -3,12 +3,10 @@ $inputs = array(
 	'hash' => newInput('hash', $_GET, 'min 1')
 );
 
-$progress = uploadprogress_get_info($inputs['hash']);
+$this->ld['progress'] = uploadprogress_get_info($inputs['hash']);
+
 // prevent divison by 0
-if (empty($progress) || $progress['bytes_total'] == 0) {
-	$this->ld['percent'] = 100;
-}
-else {
-	$this->ld['percent'] =  round(($progress['bytes_uploaded'] / $progress['bytes_total']) * 100);
+if (!empty($this->ld['progress']) && $this->ld['progress']['bytes_total'] !== 0) {
+	$this->ld['progress']['percentage'] =  round(($this->ld['progress']['bytes_uploaded'] / $this->ld['progress']['bytes_total']) * 100);
 }
 ?>
