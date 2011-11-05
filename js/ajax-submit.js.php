@@ -20,7 +20,7 @@
 		var attemptCount = 0;
 		
 		// bind a custom event so we can trigger when to check for progress
-		progressModal.bind('check-progress', function () {
+		var checkProgress = function () {
 			var progressModal = $(this);
 			$.ajax({
 				url: FW.CR + '/ajax/upload-progress?hash=' + hash[0].value + '&t=' + FW.TOKEN
@@ -60,9 +60,7 @@
 						$('#progress-bar-' + hash[0].value).progressbar('option', 'value', data.percentage);
 					}
 					// set the next check
-					setTimeout(function () {
-						progressModal.trigger('check-progress');
-					}, 200);
+					setTimeout(checkProgress, 200);
 				} 
 				, complete: FW.ajaxComplete
 				, error: FW.error
@@ -70,14 +68,14 @@
 		});
 		
 		// cant fire trigger right away because form request may have not reached server yet
-		progressModal.trigger('check-progress');
+		checkProgress();
 	}
 	
 	function submitToIframe(form) {
 		var $form = $(form);
 		var rand = Math.floor(Math.random() * 9999999);
 		// create temproary iframe to target
-		var iframe = $('<iframe name="iframe-target-' + rand + '"><iframe>');
+		var iframe = $('<iframe name="iframe-target-' + rand + '"></iframe>');
 		iframe.hide();
 		iframe.appendTo($('#content-container'));
 		
