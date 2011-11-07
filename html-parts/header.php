@@ -4,7 +4,7 @@
 	if (LOGGEDIN === true) {
 		?>
 		<div class="account-info">
-			<p class="go"><a href="<?= CR ?>/action/logout<?= $token ?>">Logout</a></p>
+			<p class="go"><a href="<?= $this->url('/action/logout') ?>">Logout</a></p>
 			<p class="welcome">Welcome, <strong><?= $this->gd['staff']['first_name'] ?></strong></p>
 		</div>
 		<?

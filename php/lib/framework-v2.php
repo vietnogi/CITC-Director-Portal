@@ -390,7 +390,7 @@ class FW {
 		
 		if (!$canAccess) {
 			$_SESSION[CR]['user-error'] = 'Please login to continue.';
-			died('/nologin/login', $this->isAjax);
+			died('/up/login', $this->isAjax);
 		}
 		
 		return true;
