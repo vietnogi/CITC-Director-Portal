@@ -29,12 +29,12 @@ function isAssociativeArray ($array) {
 	return array_keys($array) !== range(0, count($array) - 1);
 }
 
-function logError ($error, $redirect = '/nologin/error', $errorLogPath = '/errors.txt') {
+function logError ($error, $redirect = '/up/error', $errorLogPath = '/errors.txt') {
 	$fh = fopen(DR . '/logs' . $errorLogPath, 'a') or die('Cannot open error file.');
 	fwrite($fh, DATETIME . ' :: ' . $_SERVER['REMOTE_ADDR'] . "\n" . $_SERVER['REQUEST_URI'] . ' : ' . $error . "\n");
 	fclose($fh);
 	
-	if (DEVELOPMENT && $redirect == '/nologin/error') {
+	if (DEVELOPMENT && $redirect == '/up/error') {
 		if ($_SESSION[CR]['debug']) {
 			?>
 			<h3 style="color:#FF0000">System Error: <?= $error ?></h3>
@@ -47,7 +47,7 @@ function logError ($error, $redirect = '/nologin/error', $errorLogPath = '/error
 	}
 	
 	if (!empty($redirect)) {
-		died($redirect, false, true);	
+		died($redirect, isAjax(), true);	
 	}
 }
 
@@ -59,5 +59,16 @@ function findDuplicates($array) {
 function newInput ($name, $source = NULL, $validate = NULL, $default = NULL) {
 	$input = new Input($name, $source, $validate, $default);
 	return $input->value;
+}
+
+function isMime ($path, $mimes = array()) {
+	$finfo = finfo_open(FILEINFO_MIME_TYPE); // return mime type ala mimetype extension
+	$mime = finfo_file($finfo, DR . $path);
+	finfo_close($finfo);
+	return in_array($mime, $mimes);
+}
+
+function isAjax() {
+	return !empty($_GET['_']);	
 }
 ?>

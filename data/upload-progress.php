@@ -1,4 +1,5 @@
 <?
+logError('a bug');
 $inputs = array(
 	'hash' => newInput('hash', $_GET, 'min 1')
 );

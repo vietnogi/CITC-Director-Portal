@@ -25,7 +25,7 @@ class Permission {
 		return $GLOBALS['mysql']->get($query, $values);
 	}
 	
-	public function isPathProtected ($uri = '', $unprotectedPaths = array('/nologin')) {
+	public function isPathProtected ($uri = '', $unprotectedPaths = array('/up')) {
 		// check if uri starts with any paths in $unprotectedPaths
 		foreach ($unprotectedPaths as $path) {
 			if (preg_match('/^' . str_replace('/', '\/', $path) . '/', $uri)) {
