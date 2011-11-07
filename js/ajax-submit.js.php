@@ -65,7 +65,7 @@
 				, complete: FW.ajaxComplete
 				, error: FW.error
 			});
-		});
+		};
 		
 		// cant fire trigger right away because form request may have not reached server yet
 		checkProgress();
