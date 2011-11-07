@@ -1,4 +1,4 @@
-<?
+<? //a change
 $inputs = array(
 	'season_id' => newInput('season_id', $_GET, 'int min 1')
 );
@@ -9,5 +9,4 @@ $this->ld['season'] = $GLOBALS['mysql']->getSingle($query, $values);
 if (empty($this->ld['season'])) {
 	logError('season is empty.');
 }
-
 ?>
