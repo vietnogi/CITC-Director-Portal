@@ -437,7 +437,7 @@ class FW {
 	
 	private function handle404 () {
 		logError('page not found', false, '/404.txt');
-		$this->p = '/nologin/404.php';
+		$this->p = '/up/404.php';
 	}
 	
 	private function url ($url, $prependPath = false) {
