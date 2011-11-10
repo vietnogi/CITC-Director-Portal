@@ -46,7 +46,8 @@ var FW = {
 					try {
 						var data = $.parseJSON(jqXHR.responseText);
 						window.location.href = data.location;
-					} catch (err) {
+					}
+					catch (err) {
 						alert(jqXHR.status + ' Error: Trying to redirect.');
 					}
 				}
@@ -57,7 +58,7 @@ var FW = {
 		}
 	}
 	, error: function(jqXHR, textStatus, errorThrown){
-		console.error('Unable to complete request becuase the following error occured: ' + errorThrown + ' for the URL: ' + this.url);
+		console.error('Unable to complete request because the following error occured: ' + errorThrown + ' for the URL: ' + this.url);
 	}
 	, addToUrlGet: function(url, parameters) {
 		if (url.indexOf('?') == -1) {

@@ -1,4 +1,7 @@
 /*<script>*/
+/*
+action page should always ouput a json with at least a success (boolean) property
+*/
 (function ($) { //anonymous function to prevent global scope, "$" is a prototype reference
 
 	function uploadProgress (form) {
@@ -18,8 +21,6 @@
 		var uploadStarted = false;
 		var maxAttempts = 10;
 		var attemptCount = 0;
-		
-		// bind a custom event so we can trigger when to check for progress
 		var checkProgress = function () {
 			var progressModal = $(this);
 			$.ajax({
@@ -71,13 +72,14 @@
 		checkProgress();
 	}
 	
+	// create a temproary iframe to submit
 	function submitToIframe(form) {
 		var $form = $(form);
 		var rand = Math.floor(Math.random() * 9999999);
 		// create temproary iframe to target
 		var iframe = $('<iframe name="iframe-target-' + rand + '"></iframe>');
 		iframe.hide();
-		iframe.appendTo($('#content-container'));
+		iframe.appendTo('body');
 		
 		// add upload hash for progress
 		var uploadHash = $('input[name="UPLOAD_IDENTIFIER"]');
@@ -105,16 +107,38 @@
 		
 		// remove iframe when submit completes
 		iframe.load(function () {
+			// handle iframe response
+			try {
+				var data = $.parseJSON($(this).contents().find('body').html());
+				handleActionResponse($form, data);
+			}
+			catch (err) { // most likly 404
+				alert('There was a problem submitting your form, please try again.');
+				console.error('Unable to parse JSON for action: ' + _action);
+			}
+			// remove iframe
 			$(this).remove();
-			// 
+			// set form back to action (w.out _)
 			$form.attr({
 				'action': _action
 			});
-			_action = undefined;
+			_action = undefined; // good to free memory if easy
 		});
 		
 		// upload progress
 		uploadProgress(form);
+	}
+	
+	function handleActionResponse($form, data) {
+		if (data.location !== undefined) { // redirect takes priority
+			window.location.href = data.location;
+		}
+		else if (data.success !== undefined && data.success === 'true') {
+			$form.trigger('ajax-submit-success', data);
+		}
+		else {
+			$form.trigger('ajax-submit-fail', data);	
+		}
 	}
 	
 	function setEvents(form) {
@@ -171,10 +195,7 @@
 				, data: data
 				, cache: true
 				, success: function (data, textStatus, jqXHR) {
-					if (data !== null && data.msg !== undefined) {
-						alert(data.msg);
-					}
-					$form.trigger('ajax-submit-success');
+					handleActionResponse($form, data);
 				} 
 				, complete: FW.ajaxComplete
 				, error: FW.error
