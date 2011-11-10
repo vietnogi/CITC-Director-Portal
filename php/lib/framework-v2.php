@@ -430,7 +430,7 @@ class FW {
 				<?
 			}
 			else {
-				died($redirectUrl, false, false, $this->isAjax);
+				died($redirectUrl, isAjax(), false, $this->isAjax);
 			}
 		}
 	}

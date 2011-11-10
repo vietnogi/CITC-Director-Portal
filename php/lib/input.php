@@ -11,23 +11,11 @@ class Input {
 		$this->validate = $validate;
 		$this->default = $default;
 		
-		if (is_array($source)) {
-			// handle if source is an array
-			if (isset($source[$this->name])) {
-				if (is_array($source[$this->name])) {
-					// handle if value is an array
-					$this->value = $this->isDate() ? $this->implodeDate($source[$this->name]) : implode($source[$this->name]);
-				}
-				else {
-					$this->value = $source[$this->name];
-				}
-			}
-			else {
-				$this->value = $default;
-			}
+		if (is_array($source)) { // handle if source is an array
+			$this->value = isset($source[$this->name]) ? $source[$this->name] : $default;
 		}
 		else {
-			$this->value = $source === NULL ? $default : $source;	
+			$this->value = ($source === NULL) ? $default : $source;	
 		}
 		
 		if ($this->isPhone()) {
@@ -57,18 +45,10 @@ class Input {
 	}
 	
 	private function cleanPhone() {
-		$this->value = preg_replace('/[^0-9]/', '', $this->value);	
+		$this->value = toInt($this->value);
 	}
 	
 	private function isID() {
 		return 	preg_match('/_id$/', $this->name);
-	}
-	
-	private function implodeDate($parts) {
-		$parts[0] = empty($parts[0]) ? '' : $parts[0];
-		$parts[1] = empty($parts[1]) ? '' : $parts[1];
-		$parts[2] = empty($parts[2]) ? '' : $parts[2];
-		
-		return $parts[2] . '-' . $parts[0] . '-' . $parts[1];
 	}
 }

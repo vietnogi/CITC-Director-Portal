@@ -93,11 +93,24 @@
 		$form.attr({
 			'target': 'iframe-target-' + rand
 		});
+		
+		// add _ to prevent cache and flag as ajax
+		var _action = $form.attr('action'); // need variable so we can set it back when submit is complete 
+		$form.attr({
+			'action': FW.addToUrlGet(_action, {
+				'_' : new Date().getTime()
+			})
+		});
 		form.submit();
 		
 		// remove iframe when submit completes
 		iframe.load(function () {
 			$(this).remove();
+			// 
+			$form.attr({
+				'action': _action
+			});
+			_action = undefined;
 		});
 		
 		// upload progress

@@ -55,8 +55,43 @@ function findDuplicates($array) {
 	return array_unique(array_diff_assoc($array, array_unique($array)));
 }
 
-// newInput is a solution to use Input and return value;
+/*
+newInput is a solution to use Input and return value;
+can use $validate recursivly
+ie.
+$inputs = array(
+	'id' => newInput('id', $_POST, 'min 1 int')
+	, 'campers' => newInput('campers', $_POST, array(
+		'first_name' => 'min 1'
+		, 'last_name' => 'min 1'
+		, 'sessions' => array(
+			'1' => array(
+				'name' => null
+				, 'date' => NULL
+			)
+			, '2' => array(
+				'name' => NULL
+				, 'date' => NULL
+			)
+		)
+	))
+);
+*/
 function newInput ($name, $source = NULL, $validate = NULL, $default = NULL) {
+	// handle recursive array
+	if (notEmptyArray($validate)) {
+		$inputs = array();
+		foreach ($validate as $subname => $subvalidate) {
+			if (!notEmptyArray($source[$name])) {
+				$source[$name] = array();
+			}
+			$subdefault = isset($default[$name]) ? $default[$name] : NULL;
+			$inputs[$subname] = newInput($subname, $source[$name], $subvalidate, $subdefault);
+		}
+		return $inputs;
+	}
+	
+	// single
 	$input = new Input($name, $source, $validate, $default);
 	return $input->value;
 }
