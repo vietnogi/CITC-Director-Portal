@@ -1,6 +1,7 @@
 /*<script>*/
 /*
-action page should always ouput a json with at least a success (boolean) property
+action page should always ouput a json with at least a success (boolean) property and a error (string) property
+binded to the form's submit event and will return false to prevent the form from submitting
 */
 (function ($) { //anonymous function to prevent global scope, "$" is a prototype reference
 
@@ -137,6 +138,10 @@ action page should always ouput a json with at least a success (boolean) propert
 			$form.trigger('ajax-submit-success', data);
 		}
 		else {
+			// automatically alert error if providded
+			if (data.error !== undefined && data.error !== null) {
+				alert(data.error);	
+			}
 			$form.trigger('ajax-submit-fail', data);	
 		}
 	}

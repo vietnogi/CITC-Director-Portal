@@ -29,28 +29,6 @@ function isAssociativeArray ($array) {
 	return array_keys($array) !== range(0, count($array) - 1);
 }
 
-function logError ($error, $redirect = '/up/error', $errorLogPath = '/errors.txt') {
-	$fh = fopen(DR . '/logs' . $errorLogPath, 'a') or die('Cannot open error file.');
-	fwrite($fh, DATETIME . ' :: ' . $_SERVER['REMOTE_ADDR'] . "\n" . $_SERVER['REQUEST_URI'] . ' : ' . $error . "\n");
-	fclose($fh);
-	
-	if (DEVELOPMENT && $redirect == '/up/error') {
-		if ($_SESSION[CR]['debug']) {
-			?>
-			<h3 style="color:#FF0000">System Error: <?= $error ?></h3>
-			<h4>Backtrace:</h4>
-			<?
-			pr(debug_backtrace());
-			die();
-		}
-		$_SESSION[CR]['error'] = $error; //so error page can output it
-	}
-	
-	if (!empty($redirect)) {
-		died($redirect, isAjax(), true);	
-	}
-}
-
 function findDuplicates($array) {
 	return array_unique(array_diff_assoc($array, array_unique($array)));
 }
@@ -96,9 +74,10 @@ function newInput ($name, $source = NULL, $validate = NULL, $default = NULL) {
 	return $input->value;
 }
 
+// warning, $path should already have DR
 function isMime ($path, $mimes = array()) {
 	$finfo = finfo_open(FILEINFO_MIME_TYPE); // return mime type ala mimetype extension
-	$mime = finfo_file($finfo, DR . $path);
+	$mime = finfo_file($finfo, $path);
 	finfo_close($finfo);
 	return in_array($mime, $mimes);
 }

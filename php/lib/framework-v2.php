@@ -345,23 +345,23 @@ class FW {
 	
 	private function handleLogin () {
 		$this->user = $GLOBALS['login']->isLoggedIn();
-		if (notEmptyArray($this->user)) { //session is available
-			//handle passive cross site fradulent request hack
+		if (notEmptyArray($this->user)) { // session is available
+			// handle passive cross site fradulent request hack
 			if ($this->systemVars['t'] != $this->user['token']) {
-				logError('Session token does not match query token (t)');
+				$this->error('Session token does not match query token (t)');
 			}
-			if ($GLOBALS['login']->isActive($this->user)) { //account is active
-				if ($GLOBALS['login']->isTimeOut($this->user)) { //session has timed out
+			if ($GLOBALS['login']->isActive($this->user)) { // account is active
+				if ($GLOBALS['login']->isTimeOut($this->user)) { // session has timed out
 					$GLOBALS['login']->logout($this->user);
 					$_SESSION[CR]['user-error'] = 'You have been logged out because your session has expired.';
 				}
-				else{ //session has not timed out yet
+				else { // session has not timed out yet
 					$GLOBALS['login']->renewSession($this->user, config('session length'));
 					define('LOGGEDIN', true);
 					define('USERID', $this->user['user_id']);
 				}
 			}
-			else{ //account is not active
+			else { // account is not active
 				$GLOBALS['login']->logout($this->user);
 				$_SESSION[CR]['user-error'] = 'You have been logged out because your account has been deactivated.';	
 			}
@@ -415,7 +415,7 @@ class FW {
 		$this->redirect = false;
 		
 		if (!file_exists(DR . $this->p)) {
-			logError('Page can not be found');
+			$this->error('Page can not be found');
 		}
 		
 		// include action file
@@ -436,7 +436,7 @@ class FW {
 	}
 	
 	private function handle404 () {
-		logError('page not found', false, '/404.txt');
+		$this->error('page not found', false, '/404.txt');
 		$this->p = '/up/404.php';
 	}
 	
@@ -458,6 +458,28 @@ class FW {
 	private function actionUrl ($page = NULL) {
 		$page = $page === NULL ? '/' . $GLOBALS['bc']->page : $page;
         return $this->url('/action' . $GLOBALS['bc']->path . $page);	
+	}
+	
+	private function error ($error, $redirect = '/up/error', $errorLogPath = '/errors.txt') {
+		$fh = fopen(DR . '/logs' . $errorLogPath, 'a') or die('Cannot open error file.');
+		fwrite($fh, DATETIME . ' :: ' . $_SERVER['REMOTE_ADDR'] . "\n" . $_SERVER['REQUEST_URI'] . ' : ' . $error . "\n");
+		fclose($fh);
+		// help with debugging
+		if (DEVELOPMENT && $redirect == '/up/error') {
+			if ($this->debug) {
+				?>
+				<h3 style="color:#FF0000">System Error: <?= $error ?></h3>
+				<h4>Backtrace:</h4>
+				<?
+				pr(debug_backtrace());
+				die();
+			}
+			$_SESSION[CR]['user_error'] = $error; //so error page can output it
+		}
+		
+		if (!empty($redirect)) {
+			died($this->url($redirect), isAjax(), false);	
+		}
 	}
 }
 
