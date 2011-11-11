@@ -31,7 +31,7 @@ class Input {
 			$checks[0] = array(
 				$validate => $this->value
 				, 'name' => $this->name
-			); 
+			);
 			$GLOBALS['validate']->many($checks);
 		}
 	}

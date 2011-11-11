@@ -82,7 +82,7 @@ function isMime ($path, $mimes = array()) {
 	return in_array($mime, $mimes);
 }
 
-function isAjax() {
+function isAjax () {
 	return !empty($_GET['_']);	
 }
 ?>

@@ -29,9 +29,9 @@ class FW {
 	
 	public function __construct () {
 		try {
-			// since .htaccess add variables like p, index, print
+			// handle variables used by framework
 			$this->handleSystemVars();
-			
+			// handle client configs and defines
 			$this->handleClient();
 			
 			session_start();
@@ -51,7 +51,6 @@ class FW {
 			$this->determinePageType();
 			// declare common classes, ie. mysql, login, permission, bc, etc/, they will be in the $GLOBALS scope
 			$this->handleClasses();
-			
 			// check if request is protected
 			$protected = $this->isProtected();
 			if ($protected) {
@@ -176,10 +175,9 @@ class FW {
 				$this->handleAction();
 			}
 			
-			if (isset($this->classes['mysql'])) {
-				$this->classes['mysql']->close();
-				unset($_mysql);	
-			}
+			// disconnect mysql so html files does not have access to it
+			$GLOBALS['mysql']->close();
+			unset($GLOBALS['mysql']);	
 			
 			if (!$this->isAction) {
 				$this->automateMeta();
@@ -319,18 +317,19 @@ class FW {
 	}
 	
 	private function handleFile () {
+		$p = newInput('p', $this->systemVars, 'min 1 path'); // make sure p is valid path
 		$this->p = '';
+		// action files are in the action folder
 		if ($this->isAction) {
 			$this->p .= '/action';
 		}
-		
+		// determine php file
 		if (empty($this->systemVars['p'])) { //no targeted file, use default
 			$this->p .= config('default page');
 		}
 		else {
 			$this->p .= '/' . $this->systemVars['p'] . '.php';
 		}
-		
 		// check if nessary files exist
 		if ($this->isAction) {
 			if (!file_exists(DR . $this->p)) {
@@ -441,7 +440,7 @@ class FW {
 	}
 	
 	private function handle404 () {
-		throw new Exception('page not found', false, '/404.txt');
+		$this->error('page not found', false, '/404.txt');
 		$this->p = '/public/404.php';
 	}
 	

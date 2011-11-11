@@ -1,5 +1,5 @@
 <?	
-class Validate{	
+class Validate {	
 
 	public function __construct() {
 		//nothing
@@ -24,7 +24,6 @@ class Validate{
 			
 			case 'alpha_num_sym':
 				return $this->isAlphaNumSym($val);
-			break;
 			
 			case 'int':
 				return $this->isInt($val);
@@ -43,6 +42,9 @@ class Validate{
 			
 			case 'string':
 				return is_string($val);
+				
+			case 'path':
+				return $this->isPath($val);
 		}
 		
 		return true;
@@ -57,18 +59,15 @@ class Validate{
 			$checkstr = $keys[0];
 			$name = isset($value['name']) ? $value['name'] : NULL;
 			$val = $value[$checkstr];
-			//foreach($value as $key => $val){
-				$checks = explode(' ', $checkstr);
-				$len = count($checks);
-				for ($i=0; $i < $len; $i++) {
-					$parameter = isset($checks[$i + 1]) ? $checks[$i + 1] : NULL;
-					$check = $this->check($val, $checks[$i], $parameter);
-					if (!$check) {
-						logError('Validate failed: index: ' . $index . ', check: ' . $checks[$i] . ', value: ' . $val . ', name: ' . (!empty($name) ? $name : ''));
-						return false;
-					}
+			$checks = explode(' ', $checkstr);
+			$len = count($checks);
+			for ($i=0; $i < $len; $i++) {
+				$parameter = isset($checks[$i + 1]) ? $checks[$i + 1] : NULL;
+				$check = $this->check($val, $checks[$i], $parameter);
+				if (!$check) {
+					throw new Exception('Validate failed: index: ' . $index . ', check: ' . $checks[$i] . ', value: ' . $val . ', name: ' . (!empty($name) ? $name : ''));
 				}
-			//}
+			}
 		}
 		return true;
 	}
@@ -169,6 +168,25 @@ class Validate{
 			}
 		}
 		return true;
+	}
+	
+	/*
+	The path does not start with "/", to prevent the user from giving an absolute path.
+    The path does not contain "..", to prevent the user from giving a path that is outside of the desired subdirectory.
+    The path does not contain ":", to prevent the use of a url (i.e. "http://", "ftp://", etc.). Should I ever run this script on a Windows server (not likely), this will also prevent absolute paths beginning with a drive specifier (i.e. "C:\"). Note: I'm aware that a colon is a valid character in a Unix filenames, but I will never be using it in a filename.
+    The path does not start with "\". Just in case I change my mind about running on a Windows server, this prevents Windows network paths from being specified (i.e. "\\someserver\someshare"). Again, I'm aware that a backslash is a valid Unix filename character, but I also won't be using it in any filenames.
+	*/
+	public function isPath ($path) {
+		$invalids = array('.', ':', '\\');
+		foreach ($invalids as $invalid) {
+			if (strpos($path, $invalid) !== false) {
+				return false;	
+			}
+		}
+		if ($path[0] == '/') {
+			return false;
+		}
+		return true;	
 	}
 
 }

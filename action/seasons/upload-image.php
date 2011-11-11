@@ -25,6 +25,10 @@ else if(!isMime($inputs['season_image']['tmp_name'], $validMimes)){
 else {
 	$error = NULL;
 	$success = true;
+	$imagePath = CLIENTFILES . '/' . $this->systemVars['client'] . '/' . $inputs['season_id'];
+	if (!move_uploaded_file($inputs['season_image']['tmp_name'], $imagePath)) {
+		throw new Exception('Unable to move uploaded file to ' . $imagePath);
+	}
 }
 
 echo json_encode(array(
