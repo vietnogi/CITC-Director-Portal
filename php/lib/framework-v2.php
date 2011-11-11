@@ -28,182 +28,187 @@ class FW {
 	private $user = array();
 	
 	public function __construct () {
-		// since .htaccess add variables like p, index, print
-		$this->handleSystemVars();
-		
-		$this->handleClient();
-		
-		session_start();
-		
-		// handle debug flag
-		if (DEVELOPMENT === true) {
-			if (!isset($_SESSION[CR]['debug'])) {
-				// set default value
-				$_SESSION[CR]['debug'] = false; 	
+		try {
+			// since .htaccess add variables like p, index, print
+			$this->handleSystemVars();
+			
+			$this->handleClient();
+			
+			session_start();
+			
+			// handle debug flag
+			if (DEVELOPMENT === true) {
+				if (!isset($_SESSION[CR]['debug'])) {
+					// set default value
+					$_SESSION[CR]['debug'] = false; 	
+				}
+				if ($this->systemVars['debug'] !== NULL) {
+					$_SESSION[CR]['debug'] = $this->systemVars['debug'];
+				}
+				$this->debug = isset($_SESSION[CR]['debug']) ? $_SESSION[CR]['debug'] : $this->debug;
 			}
-			if ($this->systemVars['debug'] !== NULL) {
-				$_SESSION[CR]['debug'] = $this->systemVars['debug'];
+			// determine if request isAction, isAjax, or isContent
+			$this->determinePageType();
+			// declare common classes, ie. mysql, login, permission, bc, etc/, they will be in the $GLOBALS scope
+			$this->handleClasses();
+			
+			// check if request is protected
+			$protected = $this->isProtected();
+			if ($protected) {
+				// check if user is logged in, set defines
+				$this->handleLogin();
+				// check if user has permission to access current uri
+				$requiredPermission = $this->handlePermission();
 			}
-			$this->debug = isset($_SESSION[CR]['debug']) ? $_SESSION[CR]['debug'] : $this->debug;
-		}
-		// determine if request isAction, isAjax, or isContent
-		$this->determinePageType();
-		// declare common classes, ie. mysql, login, permission, bc, etc/, they will be in the $GLOBALS scope
-		$this->handleClasses();
-		
-		// check if request is protected
-		$protected = $this->isProtected();
-		if ($protected) {
-			// check if user is logged in, set defines
-			$this->handleLogin();
-			// check if user has permission to access current uri
-			$requiredPermission = $this->handlePermission();
-		}
-		else {
-			define('LOGGEDIN', false);	
-		}
-		
-		if (!$this->handleFile()) {
-			$this->handle404();
-		}
-		
-		$this->handleGlobalData();
-		
-		if ($this->debug) {
-			?>
-			<style type="text/css">
-				.debug-container {
-					background: #fff;
-					color: #333;
-					font: 11px/15px Arial, Helvetica, sans-serif;
-					overflow: hidden;
-					padding: 16px 0 0;
-				}
-				.debug-container > .inner {
-					width: 960px;
-					margin: 0 auto;
-				}
-				.debug-container h1 {
-					margin: 0 0 16px;
-					font: bold 24px/1em Arial, Helvetica, sans-serif;
-				}
-				.debug-container dl {
-					margin: 0;
-				}
-				.debug-container dt {
-					font: bold 14px/1em Arial, Helvetica, sans-serif;
-				}
-				.debug-container dd {
-					margin: 4px 0 16px;
-					padding: 4px 8px;
-					max-height: 200px;
-					overflow-y: scroll;
-					border: 1px solid #ddd;
-				}
-				.debug-container dd.textarea {
-					max-height: none;
-					overflow: auto;
-					padding: 0;
-					border: none;
-				}
-				.debug-container dd.textarea textarea {
-					width: 100%;
-					height: 640px;
-				}
-				.debug-container ul {
-					margin: 0;
-					padding: 0 0 0 16px;
-					list-style: disc;
-				}
-			</style>
-			<div class="debug-container">
-				<div class="inner">
-					<h1>Request: <?= $this->p ?>?<?= $_SERVER['QUERY_STRING'] ?> (<?= $protected ? 'protected' : 'unprotected' ?>)</h1>
-					<dl>
-						<?
-						$debugData = array(
-							'Global' => $this->gd
-							, 'POST' => $_POST
-							, 'GET' => $_GET
-						);
-						if ($this->debug == '2') {
-							$debugData = array_merge($debugData, array(
-								'Login' => $this->user
-								, 'SESSION' => $_SESSION
-								, 'COOKIE' => $_COOKIE
-								, 'SERVER' => $_SERVER
-							));
-						}
-						foreach ($debugData as $type => $data) {
-							?>
-							<dt><?= $type ?> Data</dt>
-							<dd>
-								<?
-								pr($data);
-								?>
-							</dd>
+			else {
+				define('LOGGEDIN', false);	
+			}
+			
+			if (!$this->handleFile()) {
+				$this->handle404();
+			}
+			
+			$this->handleGlobalData();
+			
+			if ($this->debug) {
+				?>
+				<style type="text/css">
+					.debug-container {
+						background: #fff;
+						color: #333;
+						font: 11px/15px Arial, Helvetica, sans-serif;
+						overflow: hidden;
+						padding: 16px 0 0;
+					}
+					.debug-container > .inner {
+						width: 960px;
+						margin: 0 auto;
+					}
+					.debug-container h1 {
+						margin: 0 0 16px;
+						font: bold 24px/1em Arial, Helvetica, sans-serif;
+					}
+					.debug-container dl {
+						margin: 0;
+					}
+					.debug-container dt {
+						font: bold 14px/1em Arial, Helvetica, sans-serif;
+					}
+					.debug-container dd {
+						margin: 4px 0 16px;
+						padding: 4px 8px;
+						max-height: 200px;
+						overflow-y: scroll;
+						border: 1px solid #ddd;
+					}
+					.debug-container dd.textarea {
+						max-height: none;
+						overflow: auto;
+						padding: 0;
+						border: none;
+					}
+					.debug-container dd.textarea textarea {
+						width: 100%;
+						height: 640px;
+					}
+					.debug-container ul {
+						margin: 0;
+						padding: 0 0 0 16px;
+						list-style: disc;
+					}
+				</style>
+				<div class="debug-container">
+					<div class="inner">
+						<h1>Request: <?= $this->p ?>?<?= $_SERVER['QUERY_STRING'] ?> (<?= $protected ? 'protected' : 'unprotected' ?>)</h1>
+						<dl>
 							<?
-						}
-						?>
-					</dl>
-				</div>
-			</div>
-			<?
-		}
-		
-		if (!$this->isAction) {
-			$this->handleLocalData();
-			
-			if ($this->debug) {
-				?>
-				<div class="debug-container">
-					<div class="inner">
-						<dl>
-							<dt>Local Data</dt>
-							<dd>
-								<?
-								pr($this->ld);
+							$debugData = array(
+								'Global' => $this->gd
+								, 'POST' => $_POST
+								, 'GET' => $_GET
+							);
+							if ($this->debug == '2') {
+								$debugData = array_merge($debugData, array(
+									'Login' => $this->user
+									, 'SESSION' => $_SESSION
+									, 'COOKIE' => $_COOKIE
+									, 'SERVER' => $_SERVER
+								));
+							}
+							foreach ($debugData as $type => $data) {
 								?>
-							</dd>
+								<dt><?= $type ?> Data</dt>
+								<dd>
+									<?
+									pr($data);
+									?>
+								</dd>
+								<?
+							}
+							?>
 						</dl>
 					</div>
 				</div>
 				<?
 			}
-		}
-		else {
-			$this->handleAction();
-		}
-		
-		if (isset($this->classes['mysql'])) {
-			$this->classes['mysql']->close();
-			unset($_mysql);	
-		}
-		
-		if (!$this->isAction) {
-			$this->automateMeta();
 			
-			if ($this->debug) {
-				ob_start();	
-			}
-			
-			$this->handleHTML();
-			
-			if ($this->debug) {
-				$markup = htmlentities(ob_get_flush());
-				?>
-				<div class="debug-container">
-					<div class="inner">
-						<dl>
-							<dt>Markup</dt>
-							<dd class="textarea">
-								<textarea rows="" cols=""><?= $markup ?></textarea>
-							</dd>
-						</dl>
+			if (!$this->isAction) {
+				$this->handleLocalData();
+				
+				if ($this->debug) {
+					?>
+					<div class="debug-container">
+						<div class="inner">
+							<dl>
+								<dt>Local Data</dt>
+								<dd>
+									<?
+									pr($this->ld);
+									?>
+								</dd>
+							</dl>
+						</div>
 					</div>
-				</div>
-				<?
+					<?
+				}
 			}
+			else {
+				$this->handleAction();
+			}
+			
+			if (isset($this->classes['mysql'])) {
+				$this->classes['mysql']->close();
+				unset($_mysql);	
+			}
+			
+			if (!$this->isAction) {
+				$this->automateMeta();
+				
+				if ($this->debug) {
+					ob_start();	
+				}
+				
+				$this->handleHTML();
+				
+				if ($this->debug) {
+					$markup = htmlentities(ob_get_flush());
+					?>
+					<div class="debug-container">
+						<div class="inner">
+							<dl>
+								<dt>Markup</dt>
+								<dd class="textarea">
+									<textarea rows="" cols=""><?= $markup ?></textarea>
+								</dd>
+							</dl>
+						</div>
+					</div>
+					<?
+				}
+			}
+		}
+		catch (Exception $e) {
+			$this->error($e->getMessage());	
 		}
 	}
 	
@@ -348,7 +353,7 @@ class FW {
 		if (notEmptyArray($this->user)) { // session is available
 			// handle passive cross site fradulent request hack
 			if ($this->systemVars['t'] != $this->user['token']) {
-				$this->error('Session token does not match query token (t)');
+				throw new Exception('Session token does not match query token (t)');
 			}
 			if ($GLOBALS['login']->isActive($this->user)) { // account is active
 				if ($GLOBALS['login']->isTimeOut($this->user)) { // session has timed out
@@ -390,7 +395,7 @@ class FW {
 		
 		if (!$canAccess) {
 			$_SESSION[CR]['user-error'] = 'Please login to continue.';
-			died('/up/login', $this->isAjax);
+			died('/public/login', $this->isAjax);
 		}
 		
 		return true;
@@ -415,7 +420,7 @@ class FW {
 		$this->redirect = false;
 		
 		if (!file_exists(DR . $this->p)) {
-			$this->error('Page can not be found');
+			throw new Exception('Page can not be found');
 		}
 		
 		// include action file
@@ -436,8 +441,8 @@ class FW {
 	}
 	
 	private function handle404 () {
-		$this->error('page not found', false, '/404.txt');
-		$this->p = '/up/404.php';
+		throw new Exception('page not found', false, '/404.txt');
+		$this->p = '/public/404.php';
 	}
 	
 	private function url ($url, $prependPath = false) {
@@ -460,12 +465,12 @@ class FW {
         return $this->url('/action' . $GLOBALS['bc']->path . $page);	
 	}
 	
-	private function error ($error, $redirect = '/up/error', $errorLogPath = '/errors.txt') {
+	private function error ($error, $redirect = '/public/error', $errorLogPath = '/errors.txt') {
 		$fh = fopen(DR . '/logs' . $errorLogPath, 'a') or die('Cannot open error file.');
 		fwrite($fh, DATETIME . ' :: ' . $_SERVER['REMOTE_ADDR'] . "\n" . $_SERVER['REQUEST_URI'] . ' : ' . $error . "\n");
 		fclose($fh);
 		// help with debugging
-		if (DEVELOPMENT && $redirect == '/up/error') {
+		if (DEVELOPMENT && $redirect == '/public/error') {
 			if ($this->debug) {
 				?>
 				<h3 style="color:#FF0000">System Error: <?= $error ?></h3>

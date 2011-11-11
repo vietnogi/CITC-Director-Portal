@@ -38,7 +38,7 @@ else {
 
 if (!empty($error)) {
 	$_SESSION[CR]['user-error'] = $error;
-	$this->redirect = '/nologin/login';
+	$this->redirect = '/public/login';
 }
 else {
 	$this->redirect = '/dashboard/main?t=' . $GLOBALS['login']->getToken();	
