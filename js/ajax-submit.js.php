@@ -134,7 +134,7 @@ binded to the form's submit event and will return false to prevent the form from
 		if (data.location !== undefined) { // redirect takes priority
 			window.location.href = data.location;
 		}
-		else if (data.success !== undefined && data.success === 'true') {
+		else if (data.success !== undefined && data.success === true) {
 			$form.trigger('ajax-submit-success', data);
 		}
 		else {
