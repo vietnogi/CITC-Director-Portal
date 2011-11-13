@@ -25,7 +25,7 @@ binded to the form's submit event and will return false to prevent the form from
 		var checkProgress = function () {
 			var progressModal = $(this);
 			$.ajax({
-				url: FW.CR + '/ajax/upload-progress?hash=' + hash[0].value + '&t=' + FW.TOKEN
+				url: FW.CR + '/bare/upload-progress?hash=' + hash[0].value + '&t=' + FW.TOKEN
 				, dataType: 'json'
 				, cache: false
 				, success: function (data, textStatus, jqXHR) {
