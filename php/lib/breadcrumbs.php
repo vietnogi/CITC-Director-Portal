@@ -12,9 +12,9 @@ class Breadcrumbs {
 	function __construct() {
 		$uri = $this->removeQuery($_SERVER['REQUEST_URI']); // Edit out query string (GET)
 		
-		// Remove 'action' and 'ajax'
+		// Remove 'action' and 'bare'
 		// Add additonal keywords if needed
-		$uri = preg_replace('/\/(action|ajax)\//', '', $uri);
+		$uri = preg_replace('/\/(action|bare)\//', '', $uri);
 		if (defined('CR')) {
 			$this->crumbs = explode('/', preg_replace('/' . str_replace('/', '\/', CR) . '\/?/', '', $uri, 1));
 		}

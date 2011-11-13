@@ -8,4 +8,8 @@ $wherestr = $keyfield . ' = :' . $keyfield;
 $wherevals = array(':' . $keyfield => $inputs[$keyfield]);
 
 $GLOBALS['mysql']->delete($this->gd['comment_for'] . '_comment', $wherestr, $wherevals);
+
+echo json_encode(array(
+	'success' => true
+));
 ?>

@@ -131,15 +131,19 @@ binded to the form's submit event and will return false to prevent the form from
 	}
 	
 	function handleActionResponse($form, data) {
-		if (data.location !== undefined) { // redirect takes priority
+		if (!data) {
+			console.error('Action page should output JSON.');
+			return;
+		}
+		if (data.location) { // redirect takes priority
 			window.location.href = data.location;
 		}
-		else if (data.success !== undefined && data.success === true) {
+		else if (data.success) {
 			$form.trigger('ajax-submit-success', data);
 		}
 		else {
 			// automatically alert error if providded
-			if (data.error !== undefined && data.error !== null) {
+			if (data.error) {
 				alert(data.error);	
 			}
 			$form.trigger('ajax-submit-fail', data);	
@@ -169,10 +173,11 @@ binded to the form's submit event and will return false to prevent the form from
 			
 			if (isForm) {
 				var method = this.method;
-				if ($form.attr('enctype').toLowerCase() == 'multipart/form-data') {
+				var enctype = $form.attr('enctype');
+				if (enctype !== undefined && enctype.toLowerCase() == 'multipart/form-data') {
 					// require file upload, resort to iframe	
 					submitToIframe(this);
-					return;
+					return false; // false to stop event
 				}
 				var data = $form.serialize();
 				var url = this.action;
@@ -210,6 +215,8 @@ binded to the form's submit event and will return false to prevent the form from
 			if (isForm) {
 				uploadProgress(this);
 			}
+			
+			return false; // false stop event
 		});		
 	}
 	

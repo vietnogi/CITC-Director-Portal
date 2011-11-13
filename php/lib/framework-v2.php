@@ -1,7 +1,7 @@
 <?
 class FW {
 	private $isAction = false;
-	private $isAjax = false;
+	private $isBare = false;
 	private $isContent = false;
 	private $p = NULL;
 	private $meta = array(
@@ -47,7 +47,7 @@ class FW {
 				}
 				$this->debug = isset($_SESSION[CR]['debug']) ? $_SESSION[CR]['debug'] : $this->debug;
 			}
-			// determine if request isAction, isAjax, or isContent
+			// determine if request isAction, isBare, or isContent
 			$this->determinePageType();
 			// declare common classes, ie. mysql, login, permission, bc, etc/, they will be in the $GLOBALS scope
 			$this->handleClasses();
@@ -258,10 +258,10 @@ class FW {
 	
 	private function determinePageType () {
 		if ($this->systemVars['index'] !== NULL) {
-			$this->isAjax = $this->systemVars['index'] == 'ajax' ? true : false;
+			$this->isBare = $this->systemVars['index'] == 'bare' ? true : false;
 			$this->isAction = $this->systemVars['index'] == 'action' ? true : false;
 		}
-		$this->isContent = !$this->isAjax && !$this->isAction ? true : false;	
+		$this->isContent = !$this->isBare && !$this->isAction ? true : false;	
 	}
 	
 	private function generatePathTitle ($delimiter = '&rarr;') {
@@ -392,7 +392,9 @@ class FW {
 		$canAccess = $GLOBALS['permission']->canRead($GLOBALS['bc']->uri, $permissions);
 		
 		if (!$canAccess) {
-			$_SESSION[CR]['user-error'] = 'Please login to continue.';
+			if (empty($_SESSION[CR]['user-error'])) { // handle login may have set a user error already, ie. session expired
+				$_SESSION[CR]['user-error'] = 'Please login to continue.';
+			}
 			died('/public/login', isAjax());
 		}
 		
@@ -433,7 +435,7 @@ class FW {
 				<?
 			}
 			else {
-				died($redirectUrl, isAjax(), false, $this->isAjax);
+				died($redirectUrl, isAjax(), false, $this->isBare);
 			}
 		}
 	}

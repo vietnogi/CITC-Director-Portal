@@ -28,7 +28,7 @@
 				Events(container);
 				
 				// handle ajax submit refresh
-				$('[class*="ajax-submit"]', container).bind('ajaxSubmitSuccess', function () {
+				$('[class*="ajax-submit"]', container).bind('ajax-submit-success', function () {
 					fill(container)
 				});
 				

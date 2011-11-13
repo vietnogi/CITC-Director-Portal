@@ -41,7 +41,7 @@ function config ($key) {
 		case 'default page':
 			return '/login.php';
 		case 'session length':
-			return 6000;
+			return 1800;
 		case 'lockout length':
 			return 600;
 		case 'max failed attempts':

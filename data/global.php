@@ -73,9 +73,9 @@ $this->gd['num_nav_children'] = count($this->gd['navs'], COUNT_RECURSIVE) - $thi
 // comment
 if ($GLOBALS['bc']->path == '/comments') {
 	$this->gd['comment_for'] = newInput('for', $_GET, 'min 1');
-	$sections = array('customer', 'camper');
+	$sections = array('parent', 'camper');
 	if (!in_array($this->gd['comment_for'], $sections)) {
-		logError('comment feature is not available for: ' . $inputs['for']);	
+		throw new Exception('Comment feature is not available for: ' . $this->gd['comment_for']);
 	}
 }
 

@@ -1,6 +1,6 @@
 <?
-if($this->isAjax){
-	require DR . '/html-parts/action-msg.php';
+if(isAjax()){
+	require DR . '/html-parts/user-msg.php';
 	$htmlFile = '/html' . $this->p;
 	if (file_exists(DR . $htmlFile)) {
 		require DR . $htmlFile;

@@ -11,6 +11,7 @@
 		?>
 		<div id="content">
 			<?
+			require DR . '/html-parts/user-msg.php';
 			$html = '/html' . $this->p;
 			if (file_exists(DR . $html)) {
 				require DR . $html;

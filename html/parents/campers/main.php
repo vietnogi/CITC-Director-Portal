@@ -8,4 +8,4 @@ foreach ($this->ld['campers'] as $camper) {
 	<?
 }
 ?>
-<a href="<?= $this->url('/ajax' . $GLOBALS['bc']->path . '/add') ?>" class="modal">Enroll a new camper</a>
+<a href="<?= $this->url('/bare' . $GLOBALS['bc']->path . '/add') ?>" class="modal">Enroll a new camper</a>

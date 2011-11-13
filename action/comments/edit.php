@@ -12,4 +12,8 @@ $wherestr = $keyfield . ' = :' . $keyfield;
 $wherevals = array(':' . $keyfield => $inputs[$keyfield]);
 
 $GLOBALS['mysql']->update($this->gd['comment_for'] . '_comment', $values, $wherestr, $wherevals);
+
+echo json_encode(array(
+	'success' => true
+));
 ?>

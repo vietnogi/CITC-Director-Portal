@@ -12,4 +12,8 @@ $values = array(
 );
 
 $GLOBALS['mysql']->insert($this->gd['comment_for'] . '_comment', $values);
+
+echo json_encode(array(
+	'success' => true
+));
 ?>

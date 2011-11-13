@@ -22,4 +22,4 @@ $form->submit(array(
 	'value' => 'Save'
 ));
 ?>
-<div class="modal" data-json="{href: '<?= $this->url('/ajax' . $GLOBALS['bc']->path . '/add') ?>'}">Enroll a new camper</div>
+<div class="modal" data-json="{href: '<?= $this->url('/bare' . $GLOBALS['bc']->path . '/add') ?>'}">Enroll a new camper</div>

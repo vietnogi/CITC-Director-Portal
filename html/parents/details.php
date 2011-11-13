@@ -45,8 +45,8 @@
 		<a href="javascript: void(1)" class="toggle" data-json="{class: 'hidden', selector: '#detail, #edit-detail'}">Cancel Edit</a>
 	</div>
 </div>
-<div class="ajax-fill" data-json="{href: '<?= $this->url('/ajax/comments/main') ?>&amp;parent_id=<?= $this->ld['parent']['parent_id'] ?>&amp;for=parent'}"></div>
-<div class="ajax-fill" data-json="{href: '<?= $this->url('/ajax' . $GLOBALS['bc']->path . '/campers/main') ?>&amp;parent_id=<?= $this->ld['parent']['parent_id'] ?>'}"></div>
+<div class="ajax-fill" data-json="{href: '<?= $this->url('/bare/comments/main') ?>&amp;parent_id=<?= $this->ld['parent']['parent_id'] ?>&amp;for=parent'}"></div>
+<div class="ajax-fill" data-json="{href: '<?= $this->url('/bare' . $GLOBALS['bc']->path . '/campers/main') ?>&amp;parent_id=<?= $this->ld['parent']['parent_id'] ?>'}"></div>
 
 <h3>Outstanding Balance</h3>
 

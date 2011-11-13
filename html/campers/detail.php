@@ -45,4 +45,4 @@
 		<a href="javascript: void(1)" class="toggle" metadata="{class: 'hidden', selector: '#detail, #edit-detail'}">Cancel Edit</a>
 	</div>
 </div>
-<div class="ajax-fill" data-json="{href: '<?= $this->url('/ajax/comments/main') ?>&amp;camper_id=<?= $this->ld['camper']['camper_id'] ?>&amp;for=camper'}"></div>
+<div class="ajax-fill" data-json="{href: '<?= $this->url('/bare/comments/main') ?>&amp;camper_id=<?= $this->ld['camper']['camper_id'] ?>&amp;for=camper'}"></div>

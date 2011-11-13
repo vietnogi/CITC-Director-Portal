@@ -23,7 +23,7 @@ Options -MultiViews
 
 # Enforce https
 RewriteCond %{HTTPS} off
-#RewriteCond %{REQUEST_URI} !(action|ajax)
+#RewriteCond %{REQUEST_URI} !(action|bare)
 RewriteRule ^(.*)?$ https://%{SERVER_NAME}%{REQUEST_URI} [R=301,L]
 
 
@@ -34,9 +34,9 @@ RewriteRule ^js/(.+)\.js$ js/$1.js.php [QSA,L]
 RewriteRule ^css/minify\.css$ css/minify.php [QSA,L]
 RewriteRule ^css/(.+)\.css$ css/$1.css.php [QSA,L]
 
-# Action/Ajax
+# Action/Bare
 RewriteRule ^(action)/(.*)$ $2?index=$1 [QSA]
-RewriteRule ^(ajax)/(.*)$ ?index=$1 [QSA]
+RewriteRule ^(bare)/(.*)$ ?index=$1 [QSA]
 
 # Print
 RewriteRule ^(.*)?/print/?$ /$1?print=1 [QSA]
@@ -50,6 +50,6 @@ RewriteRule ^emails/(html|text)/([a-z0-9-]+)/?$ index.php?p=emails/$1.php&email-
 
 # Clients
 RewriteCond %{REQUEST_URI} !(alone|crons|css|flv|fonts|js|images|library|pdf|swf|testing|tinymce|uploads|videos|xml)/
-RewriteRule ^([a-z0-9-]+)/?(action|ajax)?/?(.*)/?$ index.php?p=$3&client=$1&index=$2 [QSA,L]
+RewriteRule ^([a-z0-9-]+)/?(action|bare)?/?(.*)/?$ index.php?p=$3&client=$1&index=$2 [QSA,L]
 
 ErrorDocument 404 /index.php?p=error
