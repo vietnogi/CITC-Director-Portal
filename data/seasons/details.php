@@ -9,5 +9,4 @@ $this->ld['season'] = $GLOBALS['mysql']->getSingle($query, $values);
 if (empty($this->ld['season'])) {
 	logError('season is empty.');
 }
-
 ?>

@@ -4,35 +4,10 @@ $inputs = array(
 	, 'season_image' => newInput('season_image', $_FILES, array('tmp_name' => 'min 1'))
 );
 
-// validate file size
-$maxSize = 3 * 1024 * 1000 * 1000; //MB
-$validMimes = array(
-	'image/jpeg'
-	, 'image/gif'
-	, 'image/png'
-);
-$success = false;
-
-if (!file_exists($inputs['season_image']['tmp_name'])) {
-	$error = 'The file could not be uploaded.';
-}
-else if (filesize($inputs['season_image']['tmp_name']) > $maxSize) {
-	$error = 'The uploaded file is too big; the max file size is: ' . $maxSize . ' MB';
-}
-else if(!isMime($inputs['season_image']['tmp_name'], $validMimes)){
-	$error = 'The file type is invalid, please upload a JPG, GIF or PNG file.';	
-}
-else {
-	$error = NULL;
-	$success = true;
-	$imagePath = CLIENTFILES . '/' . $this->systemVars['client'] . '/' . $inputs['season_id'];
-	if (!move_uploaded_file($inputs['season_image']['tmp_name'], $imagePath)) {
-		throw new Exception('Unable to move uploaded file to ' . $imagePath);
-	}
-}
+$error = uploadImage($inputs['season_image']['tmp_name'], CLIENTFILES . '/' . $this->systemVars['client'] . '/seasons/' . $inputs['season_id']);
 
 echo json_encode(array(
-	'success' => $success
+	'success' => ($error === NULL) ? true : false
 	, 'error' => $error
 ));
 
