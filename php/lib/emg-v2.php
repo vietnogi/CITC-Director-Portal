@@ -79,7 +79,10 @@ function isMime ($path, $mimes = array()) {
 	$finfo = finfo_open(FILEINFO_MIME_TYPE); // return mime type ala mimetype extension
 	$mime = finfo_file($finfo, $path);
 	finfo_close($finfo);
-	return in_array($mime, $mimes);
+	if (!in_array($mime, $mimes)) {
+		return false;	
+	}
+	return $mime;
 }
 
 function isAjax () {

@@ -220,7 +220,6 @@ class FW {
 				$clientDefined  = true;
 				define('CR', '/' . $this->systemVars['client']);
 			}
-			unset($this->systemVars['client']);
 		}
 		if (!$clientDefined) {
 			header('HTTP/1.1 404 Not Found');
@@ -394,7 +393,7 @@ class FW {
 		
 		if (!$canAccess) {
 			$_SESSION[CR]['user-error'] = 'Please login to continue.';
-			died('/public/login', $this->isAjax);
+			died('/public/login', isAjax());
 		}
 		
 		return true;
