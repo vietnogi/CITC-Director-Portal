@@ -467,10 +467,21 @@ class FW {
 		return CR . $url; 
 	}
 	
-	private function actionUrl ($page = NULL, $path = NULL) {
-		$page = ($page === NULL) ? '/' . $GLOBALS['bc']->page : $page;
-		$path = ($path === NULL) ? '/' . $GLOBALS['bc']->path : $path;
-		$url = $this->url('/action' . $path . $page);
+	/*
+	$path = to NULL; for automate
+	$path = 'page'; for automate path
+	$path = '/path'; for no automate
+	*/
+	private function actionUrl ($path = NULL) {
+		if (!empty($path)) {
+			if ($path[0] != '/') { //automate path
+				$path = $GLOBALS['bc']->path . '/' . $path;
+			}
+		}
+		else { // automate
+			$path = $GLOBALS['bc']->uri;
+		}
+		$url = $this->url('/action' . $path);
 		
 		// handle token/t
 		if (!empty($this->systemVars['t'])) {
