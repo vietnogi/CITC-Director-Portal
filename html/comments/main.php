@@ -17,7 +17,7 @@ foreach ($this->ld['comments'] as $comment) {
 	</form>
 	<ul>
 		<li><a href="javascript: void(1)" class="toggle" data-json="{class: 'hidden', selector: '#comment-<?= $commentid ?>, #edit-comment-form-<?= $commentid ?>'}">Edit</a></li>
-		<li><a href="<?= $this->url('/action' . $GLOBALS['bc']->path . '/delete') ?>&amp;parent_comment_id=<?= $commentid ?>&amp;for=<?= $for ?>" class="ajax-submit">Delete</a></li>
+		<li><a href="<?= $this->actionUrl('/delete') ?>&amp;parent_comment_id=<?= $commentid ?>&amp;for=<?= $for ?>" class="ajax-submit">Delete</a></li>
 	</ul>
 	<? 
 }

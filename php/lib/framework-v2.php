@@ -297,6 +297,7 @@ class FW {
 			$this->systemVars[$name] = $_GET[$name];
 			unset($_GET[$name]);
 		}
+		define('CLIENT', $this->systemVars['client']);
 		
 		//remove from $_SERVER['QUERY_STRING']
 		$queryVariables = array();
@@ -353,15 +354,16 @@ class FW {
 			if (!empty($_COOKIE['t'])) {
 				$t = newInput('t', $_COOKIE, 'len 32');
 				$GLOBALS['login']->setToken($t);
-				$GLOBALS['login']->isLoggedIn();
+				$this->user = $GLOBALS['login']->isLoggedIn();
 			}
 		}
 		if (notEmptyArray($this->user)) { // session is available
 			// handle passive cross site fradulent request hack
-			if ($this->systemVars['t'] != $this->user['token']) {
+			if ($this->isAction && $this->systemVars['t'] != $this->user['token']) {
 				throw new Exception('Session token does not match query token (t)');
 			}
-			if ($GLOBALS['login']->isActive($this->user)) { // account is active
+			// handle if account is active/inactive
+			if ($GLOBALS['login']->isActive($this->user)) { // active
 				if ($GLOBALS['login']->isTimeOut($this->user)) { // session has timed out
 					$GLOBALS['login']->logout($this->user);
 					$_SESSION[CR]['user-error'] = 'You have been logged out because your session has expired.';
@@ -370,6 +372,7 @@ class FW {
 					$GLOBALS['login']->renewSession($this->user, config('session length'));
 					define('LOGGEDIN', true);
 					define('USERID', $this->user['user_id']);
+					$this->systemVars['t'] = $this->user['token']; // need t so we can generate actionUrl
 				}
 			}
 			else { // account is not active
@@ -459,18 +462,21 @@ class FW {
 		if ($prependPath) {
 			$url = $GLOBALS['bc']->path . $url;	
 		}
+
+		return CR . $url; 
+	}
+	
+	private function actionUrl ($page = NULL, $path = NULL) {
+		$page = ($page === NULL) ? '/' . $GLOBALS['bc']->page : $page;
+		$path = ($path === NULL) ? '/' . $GLOBALS['bc']->path : $path;
+		$url = $this->url('/action' . $path . $page);
 		
 		// handle token/t
 		if (!empty($this->systemVars['t'])) {
 			$url .= (strpos($url, '?') === false) ? '?' : '&';
 			$url .= 't=' . $this->systemVars['t'];
 		}
-		return CR . $url; 
-	}
-	
-	private function actionUrl ($page = NULL) {
-		$page = $page === NULL ? '/' . $GLOBALS['bc']->page : $page;
-        return $this->url('/action' . $GLOBALS['bc']->path . $page);	
+        return $url;	
 	}
 	
 	private function error ($error, $redirect = '/public/error', $errorLogPath = '/errors.txt') {

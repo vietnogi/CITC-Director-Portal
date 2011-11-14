@@ -51,6 +51,6 @@ if (!empty($error)) {
 	$this->redirect = '/public/login';
 }
 else {
-	$this->redirect = '/dashboard/main?t=' . $GLOBALS['login']->getToken();	
+	$this->redirect = '/dashboard/main';
 }
 ?>
