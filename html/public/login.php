@@ -27,8 +27,8 @@ $form->password(array(
 
 $form->checkboxes(array(array(
 	'labelAfter' => 'Stay Signed In'
-	, 'name' => 'stay-signed-in'
-	, 'id' => 'stay-signed-in'
+	, 'name' => 'stay_signed_in'
+	, 'id' => 'stay_signed_in'
 	, 'value' => '1'
 )));
 

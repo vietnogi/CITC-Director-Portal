@@ -2,16 +2,10 @@
 
 class Login{
 	
-	//private
-	private $ckiePassIndex = '-login-password'; //for the associative index, CR is used for multiple portals
-	private $ckieLoginIndex = '-login-login'; //for the associative index, CR is used for multiple portals
 	private $sessionTokenIndex = '-login-token';
 
-	//constructors
 	public function __construct () {
-		//have to concat CR here because cant concat during declaration
-		$this->ckiePassIndex = CR . $this->ckiePassIndex; // CR is used for multiple portals
-		$this->ckieLoginIndex = CR . $this->ckieLoginIndex; //  CR is used for multiple portals
+		// does nothing
 	}
 	
 	public function isLoggedIn () {
@@ -52,7 +46,7 @@ class Login{
 		if (empty($user)) {
 			trigger_error('$user is empty', E_USER_ERROR);	
 		}
-		return $user['active'] == '1' ? true : false;	
+		return $user['active'] == '1' ? true : false;
 	}
 	
 	public function newSession ($user, $length, $authenMethod = 'Login') {
@@ -140,15 +134,6 @@ class Login{
 		return $user;
 	}
 	
-	public function authenticateWithCookie () {
-		$login = $this->getCookieLogin();
-		$password = $this->getCookiePassword();
-		if (!empty($login) && !empty($password)) {
-			return $this->authenticate($login, $password);
-		}
-		return false;
-	}
-	
 	public function create ($login, $password) {
 		// clean before check if empty in case if empty after clean
 		$this->clean($login);
@@ -182,7 +167,7 @@ class Login{
 		unset($_SESSION[CR][$this->sessionTokenIndex]);	
 	}
 	
-	private function setToken ($token) {
+	public function setToken ($token) {
 		if (empty($token)) {
 			trigger_error('$token is empty', E_USER_ERROR);
 		}
@@ -212,20 +197,6 @@ class Login{
 		return $token;	
 	}
 	
-	public function getCookieLogin () {
-		if (!isset($_COOKIE[$this->ckieLoginIndex])) {
-			return false;	
-		}
-		return decrypt($_COOKIE[$this->ckieLoginIndex]);
-	}
-	
-	private function getCookiePassword () {
-		if (!isset($_COOKIE[$this->ckiePassIndex])) {
-			return false;	
-		}
-		return decrypt($_COOKIE[$this->ckiePassIndex]);
-	}
-	
 	private function hashPassword ($login, $password) {
 		if (empty($login)) {
 			trigger_error('$login is empty', E_USER_ERROR);
@@ -234,27 +205,6 @@ class Login{
 			trigger_error('$password is empty', E_USER_ERROR);
 		}
 		return md5($login . $password);
-	}
-	
-	private function saveCookieLogin ($login, $length) {
-		if (empty($login)) {
-			trigger_error('$login is empty', E_USER_ERROR);	
-		}
-		if (!is_numeric($length)) {
-			trigger_error('$length is not numeric', E_USER_ERROR);	
-		}
-		cookie($this->ckieLoginIndex, encrypt($login), $length);
-	}
-	
-	private function saveCookiePassword ($hashedPassword, $length) {
-		if (empty($hashedPassword)) {
-			trigger_error('$hashedPassword is empty', E_USER_ERROR);	
-		}
-		if (!is_numeric($length)) {
-			trigger_error('$length is not numeric', E_USER_ERROR);	
-		}
-		$encryptedPassword = encrypt($hashedPassword);
-		cookie($this->ckiePassIndex, $encryptedPassword, $length);
 	}
 	
 	public function updateFailedLogin ($login, $length) {

@@ -40,6 +40,8 @@ function config ($key) {
 	switch ($key) {
 		case 'default page':
 			return '/login.php';
+		case 'stay signed in length':
+			return 604800;
 		case 'session length':
 			return 1800;
 		case 'lockout length':

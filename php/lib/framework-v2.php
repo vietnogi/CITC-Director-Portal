@@ -348,6 +348,14 @@ class FW {
 	
 	private function handleLogin () {
 		$this->user = $GLOBALS['login']->isLoggedIn();
+		if (empty($this->user)) { // session is not available
+			// check cookie for token
+			if (!empty($_COOKIE['t'])) {
+				$t = newInput('t', $_COOKIE, 'len 32');
+				$GLOBALS['login']->setToken($t);
+				$GLOBALS['login']->isLoggedIn();
+			}
+		}
 		if (notEmptyArray($this->user)) { // session is available
 			// handle passive cross site fradulent request hack
 			if ($this->systemVars['t'] != $this->user['token']) {
