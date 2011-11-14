@@ -48,7 +48,7 @@ if (!$allowed) {
 }
 
 // make sure image exists and is readable
-$imagePath = CLIENTFILES . '/' . $this->systemVars['client'] . '/' . $inputs['path'];
+$imagePath = CLIENTFILES . '/' . $inputs['path'];
 $extensions = array('gif', 'jpg', 'png');
 $imageExt = NULL;
 foreach ($extensions as $extension) {
@@ -60,7 +60,7 @@ if ($imageExt === NULL) {
 	throw new Exception('Image was not readable: ' . $imagePath);
 }
 
-$cachedPath = CLIENTFILES . '/' . $this->systemVars['client'] . '/image-cache/' ;
+$cachedPath = CLIENTFILES . '/image-cache/' ;
 $image = new Image($imagePath . '.' . $imageExt, $inputs['w'], $inputs['h'], $cachedPath);
 
 // no need to resample, use original file

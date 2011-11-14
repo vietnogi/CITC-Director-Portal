@@ -219,6 +219,7 @@ class FW {
 				require DR . $path;
 				$clientDefined  = true;
 				define('CR', '/' . $this->systemVars['client']);
+				define('CLIENTFILES', CLIENTDIR . '/' . $this->systemVars['client']);
 			}
 		}
 		if (!$clientDefined) {

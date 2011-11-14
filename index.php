@@ -6,7 +6,7 @@ define('LIBPATH', '/php/lib');
 define('PORTAL', 'Administration');
 define('USID', '1');
 define('PARENTGROUP', '2');
-define('CLIENTFILES', '/var/www/vhosts/campinginthecloud.info/client-files');
+define('CLIENTDIR', '/var/www/vhosts/campinginthecloud.info/client-files');
 
 //automaticaly include php files that is needed on every page
 //php files should not have any executing code
