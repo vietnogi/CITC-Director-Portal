@@ -4,11 +4,6 @@ var Events = function (container) {
 	// default container
 	container = container || $('body')[0]; 
 	
-	// Span nav parents
-	$("ul#nav li.parent > span").click(function() {
-		$(this).closest('li.parent').toggleClass('hover');
-	});
-	
 	//val form
 	$('form.val-form', container).valform({abc: 123, xyz: 'abc'});
 	
@@ -39,15 +34,21 @@ var Events = function (container) {
 		}
 	});
 	
-	// ajax fill
-	$('.ajax-fill', container).ajaxFill();
-	
-	// ajax submit, make sure valform is set before this
-	$('.ajax-submit', container).ajaxSubmit();
-	
-	// modal
-	$('.modal', container).modal();
-	
-	// address
-	$('form ul.address', container).address();
+	// set jquery plugins
+	var jPlugins = {
+		ajaxFill: '.ajax-fill'
+		, ajaxSubmit: '.ajax-submit'
+		, modal: '.modal'
+		, address: 'form ul.address'
+		, uploadImageCrop: '.upload-image-crop'
+		, checkedValidation: '.checked-validation'
+		, fresheditor: '.fresheditor'
+	};
+	var $_ = $(); // get jquery returned obj
+	$.each(jPlugins, function(func, selector) {
+		if ($.isFunction($_[func])) {
+			$(selector)[func]();
+		}
+	});
+
 };

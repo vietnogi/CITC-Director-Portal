@@ -97,7 +97,7 @@ binded to the form's submit event and will return false to prevent the form from
 			'target': 'iframe-target-' + rand
 		});
 		
-		// add _ to prevent cache and flag as ajax
+		// add _ to prevent cache and flag as ajax for the backend
 		var _action = $form.attr('action'); // need variable so we can set it back when submit is complete 
 		$form.attr({
 			'action': FW.addToUrlGet(_action, {
@@ -181,6 +181,12 @@ binded to the form's submit event and will return false to prevent the form from
 				}
 				var data = $form.serialize();
 				var url = this.action;
+				// ajax will not append _ = TIMESTAMP if method is post, we going to do it manually so backend knows its an ajax call
+				if (method.toLowerCase() == 'post') {
+					url = FW.addToUrlGet(url,  {
+						'_' : new Date().getTime()
+					});
+				}
 			}
 			else {
 				// link or other dom element
@@ -203,7 +209,7 @@ binded to the form's submit event and will return false to prevent the form from
 				, type: method
 				, dataType: 'json'
 				, data: data
-				, cache: true
+				, cache: false
 				, success: function (data, textStatus, jqXHR) {
 					handleActionResponse($form, data);
 				} 

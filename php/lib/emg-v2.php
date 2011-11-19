@@ -80,12 +80,101 @@ function isMime ($path, $mimes = array()) {
 	$mime = finfo_file($finfo, $path);
 	finfo_close($finfo);
 	if (!in_array($mime, $mimes)) {
-		return false;	
+		return false;
 	}
 	return $mime;
 }
 
-function isAjax () {
+function isAjax() {
 	return !empty($_GET['_']);	
+}
+
+function uploadImage($tmpName, $destPath = NULL, $restrictions = array()) {
+	// handle defaults
+	$restrictions = array_merge(array(
+		'max_size' => 5 * 1024 * 1000 //MB
+		, 'mimes' => array(
+			'image/jpeg' => 'jpg'
+			, 'image/gif' => 'gif'
+			, 'image/png' => 'png'
+			)
+		, 'h' => 2000
+		, 'w' => 2000
+	), $restrictions);
+	
+	$error = NULL;
+	
+	if (!file_exists($tmpName)) {
+		$error = 'The file could not be uploaded.';
+	}
+	else if (filesize($tmpName) > $restrictions['max_size']) {
+		$error = 'The uploaded file is too big; the max file size is: ' . ($restrictions['max_size'] / 1000 / 1024) . ' MB';
+	}
+	else {
+		$mime = isMime($tmpName, array_keys($restrictions['mimes']));
+		if($mime === false){
+			$error = 'The file type is invalid, please upload a JPG, GIF or PNG file.';
+		}
+		else {
+			// handle max w/h
+			$image = new imagick($tmpName); 
+			$dim = $image->getImageGeometry(); 
+  			if ($dim['width'] > $restrictions['w'] || $dim['height'] > $restrictions['h']) {
+				$image->resizeImage($restrictions['w'], $restrictions['h'], NULL, 1, true);
+				$image->writeImage($tmpName);
+			}
+			$image->clear();
+			$image->destroy();
+			
+			// handle destination path
+			if(!empty($destPath)) {
+				if (!move_uploaded_file($tmpName, $destPath . '.' . $restrictions['mimes'][$mime])) {
+					throw new Exception('Unable to move uploaded file to ' . $destPath);
+				}
+				// remove any old file that may have have diferent mime
+				foreach ($restrictions['mimes'] as $validMime => $ext) {
+					if ($validMime == $mime) { // file that was just uploaded
+						continue;
+					}
+					if (file_exists($destPath . '.' . $ext)) {
+						unlink($destPath . '.' . $ext);
+					}
+				}	
+			}
+		}
+	}
+	
+	return $error;
+}
+
+function cropImage ($src, $dest, $restrictions) {
+	$image = new imagick($src);
+	$properties = $image->identifyImage();
+	
+	$image->cropImage($restrictions['w'], $restrictions['h'], $restrictions['x'], $restrictions['y']);
+	
+	// figure out extention to use and write to destination
+	list($format) = explode(' ', $properties['format']);
+	$extensions = array(
+		'JPEG' => 'jpg'
+		, 'GIF' => 'gif'
+		, 'PNG' => 'png'
+	);
+	if (!isset($extensions[$format])) {
+		throw new Exception('Format is not supported: ' . $format);
+	}
+	
+	// clear any existing files
+	foreach ($extensions as $ext) {
+		if (is_file($dest . '.' . $ext)) {
+			unlink($dest . '.' . $ext);
+		}
+	}
+	
+	$image->writeImage($dest . '.' . $extensions[$format]);
+	$image->clear();
+	$image->destroy();
+	
+	return true;
 }
 ?>

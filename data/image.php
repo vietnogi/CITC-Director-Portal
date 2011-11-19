@@ -10,7 +10,16 @@ $allowedConfigs = array(
 		, 'ratio' => '1:1'
 		, 'quality' => '90'
 	)
+	// upload crop preview
+	, array(
+		'w' => '500'
+		, 'h' => '500'
+		, 'color' => NULL
+		, 'ratio' => NULL
+		, 'quality' => 90
+	)
 );
+
 
 /*
 image		absolute path of local image starting with "/" (e.g. /images/toast.jpg)
@@ -23,8 +32,8 @@ quality		(optional, 0-100, default: 90) quality of output image
 */
 $inputs = array(
 	'path' => newInput('path', $_GET, 'min 1 path')
-	, 'w' => newInput('w', $_GET, 'min 1 int')
-	, 'h' => newInput('h', $_GET, 'min 1 int')
+	, 'w' => newInput('w', $_GET, 'int')
+	, 'h' => newInput('h', $_GET, 'int')
 	, 'color' => newInput('color', $_GET)
 	, 'ratio' => newInput('ratio', $_GET)
 	, 'quality' => newInput('quality', $_GET, 'int', 90)
@@ -32,8 +41,8 @@ $inputs = array(
 );
 
 // prevent attack on caching
-$allowed = true;
 foreach ($allowedConfigs as $config) {
+	$allowed = true;
 	foreach ($config as $property => $value) {
 		if ($inputs[$property] != $value) {
 			$allowed = false;	
@@ -47,8 +56,9 @@ if (!$allowed) {
 	throw new Exception('Image configuration is not allowed.');
 }
 
+// determine if tmp file or client files
+$imagePath = (dirname($inputs['path']) == 'tmp') ? '/' . $inputs['path'] : CLIENTFILES . '/' . $inputs['path'];
 // make sure image exists and is readable
-$imagePath = CLIENTFILES . '/' . $inputs['path'];
 $extensions = array('gif', 'jpg', 'png');
 $imageExt = NULL;
 foreach ($extensions as $extension) {
