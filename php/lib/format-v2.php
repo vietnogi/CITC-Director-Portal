@@ -57,12 +57,13 @@ function css2Html($selector) {
 	preg_match('/(?P<tag>\w+)?(?P<class1>[.\w-]+)?(?P<id>#[\w-]+)?(?P<class2>[.\w-]+)?/', $selector, $matches);
 	
 	// Clean up matches return values
-	return array('tag' => $matches['tag']
-			   // Remove #
-			   , 'id' => str_replace('#', '', $matches['id'])
-			   // Remove leading . and replace remaining with spaces
-			   , 'class' => str_replace('.', ' ', ltrim($matches['class1'] . $matches['class2'], '.'))
-			   );
+	return array(
+		'tag' => !empty($matches['tag']) ? $matches['tag'] : ''
+		// Remove #
+		, 'id' => str_replace('#', '', (!empty($matches['id']) ? $matches['id'] : ''))
+		// Remove leading . and replace remaining with spaces
+		, 'class' => str_replace('.', ' ', ltrim((!empty($matches['class1']) ? $matches['class1'] : '') . (!empty($matches['class2']) ? $matches['class2'] : ''), '.'))
+	);
 }
 
 // Convert db rows to array
@@ -129,41 +130,6 @@ function rowsToGroups($rows, $keyField){
 }
 
 
-function decryptCreditCard ($creditCard) {
-	$encryptedFields = array('first_name'
-							 , 'last_name'
-							 , 'address'
-							 , 'address2'
-							 , 'city'
-							 , 'province'
-							 , 'zip'
-							 , 'phone'
-							 , 'credit_card_number'
-							 , 'expiration_month'
-							 , 'expiration_year'
-							 );
-	foreach ($this->encryptedFields as $field) {
-		$info[$field] = decrypt($info[$field]);
-	}
-}
-
-function encryptCreditCard ($creditCard) {
-	$encryptedFields = array('first_name'
-							 , 'last_name'
-							 , 'address'
-							 , 'address2'
-							 , 'city'
-							 , 'province'
-							 , 'zip'
-							 , 'phone'
-							 , 'credit_card_number'
-							 , 'expiration_month'
-							 , 'expiration_year'
-							 );
-	foreach ($this->encryptedFields as $field) {
-			$info[$field] = encrypt($info[$field]);
-		}	
-}
 // Takes in numeric string
 // returns US format: 1 (234) 234-5678 x 1234...
 //
@@ -224,5 +190,13 @@ function implodeDate($parts) {
 	$parts[2] = empty($parts[2]) ? '' : $parts[2];
 	
 	return $parts[2] . '-' . $parts[0] . '-' . $parts[1];
+}
+
+function dateToAge ($date) {
+	return date_diff(date_create($date), date_create('now'))->y; 
+}
+
+function jsonEncode($array) {
+	return str_replace('"', "'", json_encode($array));
 }
 ?>

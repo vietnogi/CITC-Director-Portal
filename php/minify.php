@@ -49,7 +49,7 @@ class Minify {
 		
 		// Read directory for files
 		$this->getFiles();
-		
+
 		// If update needed, write record and output files
 		if ($this->needUpdate()) {
 			$this->writeRecordfile();
@@ -61,9 +61,14 @@ class Minify {
 	}
 	
 	// Get alphabetically sorted files and modification time
-	private function getFiles() {
-		foreach (glob('*' . $this->fullFileExtension) as $fileName) {
-			$this->files[$fileName] = filemtime($fileName);
+	private function getFiles($path = '') {
+		foreach (glob($path . '*') as $fileName) {
+			if (is_dir($fileName)) {
+				$this->getFiles($fileName . '/');	
+			}
+			else if (strpos($fileName, $this->fullFileExtension) !== false) {
+				$this->files[$fileName] = filemtime($fileName);
+			}
 		}
 		
 		// Remove output file (eg. minify.css.php)

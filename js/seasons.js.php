@@ -7,12 +7,4 @@ var Seasons = function () {
 			'src' : $('#season-img').attr('src')
 		});
 	});
-	
-	$('#season-description-form').bind('submit', function() {
-		$self = $(this);
-		$('#season-description-edit').fresheditor("save", function (id, parsedHtml) {
-			$('#season-description-textarea').html(parsedHtml);
-		});
-	});
-	
 };

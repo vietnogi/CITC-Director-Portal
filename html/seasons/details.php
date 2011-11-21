@@ -17,11 +17,8 @@
 <a href="#" class="upload-image-crop" data-json="{for: 'season', id: '<?= $this->ld['season']['season_id'] ?>', crop: {aspectRatio: 4/3}}">Upload Image</a>
 
 <h3>Description</h3>
-<div class="fresheditor"></div>
-<div id="season-description-edit" style="width:500px; height: 600px; margin-top: 50px; cursor:text; overflow:auto" contenteditable="true">
-	<?= $this->ld['season']['description'] ?>
-</div>
+
 <form id="season-description-form" action="<?= $this->actionUrl('description') ?>&amp;season_id=<?= $this->ld['season']['season_id'] ?>" method="post">
-	<textarea class="hidden" name="description" id="season-description-textarea"></textarea>
+	<textarea id="wysiwyg" rows="10" cols="130" name="description"><?= $this->ld['season']['description'] ?></textarea>
 	<input type="submit" value="save" />
 </form>

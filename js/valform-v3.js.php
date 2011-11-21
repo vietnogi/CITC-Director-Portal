@@ -1,6 +1,9 @@
 /*<script>*/
 
 (function ($) { //anonymous function to prevent global scope, "$" is a prototype reference
+	// Remove <em>*</em>, tooltip
+	var labelCleanRegExp = /<em>\*<\/em>|<span class="hint">.+<\/span>|<span class="tip">.+<\/span>/gi;
+	var colonRegExp = /:$/gi;
 	
 	function instance (form, parameters) { //each form will have an instance
 		this.form = form;
@@ -69,56 +72,41 @@
 	
 	//determine label for error
 	function getLabel (field) {
-		var fieldType = field.type.toLowerCase();
 		var form = $(field).parents('form');
-		if (fieldType == 'checkbox' && field.name.indexOf('[') != -1 ) {
-			//for checkboxes, name is an array, get label base on first index id 
-			var labelFor = $('[name="' + field.name + '"]', form)[0].id;
-		}
-		else{
-			// check for combo
-			var idAsClass = classAfter(field, 'combo');
-			if (idAsClass) {
-				var labelFor = idAsClass;
-			}
-			else {
-				var labelFor = field.id;
-			}
+
+		// check for combo
+		var idAsClass = classAfter(field, 'combo');
+		var labelFor = idAsClass ? idAsClass : field.id;
+	
+		// Only get first label linked to input
+		var label = $('label[for=' + labelFor  + ']', form).first();
+		if (label.length == 0) {
+			return undefined;	
 		}
 		
-		if (labelFor == null) {
-			alert(field.name + ': label not found');
-			return;
-		}
+		return label[0];
+	}
+	
 		
-		var label = $('label[for=' + labelFor  + ']', form);
-		if (label.length > 0) {
-			var msg = label[0].innerHTML;
+	function getLabelText (field, label) {
+		var option = $(field).metadata();
+		if (option.label !== undefined) { // text base on meta data
+			return option.label;
+		}
+		if (label != undefined) { // text base on label element
+			var msg = $(label).html();
 			// Remove <em>*</em>, tooltip
-			msg = msg.replace(/<em>\*<\/em>|<span class="hint">.+<\/span>|<span class="tip">.+<\/span>/gi, '');
+			msg = msg.replace(labelCleanRegExp, '');
 			// Strip tags
 			msg = $('<tag>' + msg + '</tag>').text(); // .text() will only work when string starts with html ta
 			// Trim whitespace and ending colon
 			msg = $.trim(msg);
-			msg = msg.replace(/:$/gi, '');
-			return {
-				element: label
-				, labelFor: labelFor
-				, msg: msg
-			}; 	
+			msg = msg.replace(colonRegExp, '');
+			return msg;
 		}
 		
 		//no label, try to use default value
-		var labelForField = $('#' + labelFor);
-		if (labelForField.length > 0) {
-			return {
-				element: null
-				, labelFor: labelFor
-				, msg: labelForField[0].defaultValue
-			};
-		}
-		
-		alert('unable to locate label');
+		return field.defaultValue;
 	}
 	
 	
@@ -158,9 +146,9 @@
 	
 	function handleError (instance, field, error) {
 		var label = getLabel(field);
-		var errorMsg = label.msg + ' ' + error;
+		var errorMsg = getLabelText(field, label) + ' ' + error;
 		var classes = $(field).attr('class').split(/\s+/);
-		var errorid = label.element == null ? field.id : label.element.attr('for');
+		var errorid = (label === undefined) ? field.id : $(label).attr('for');
 		errorid += '-error';
 		
 		// combo
@@ -183,8 +171,8 @@
 		
 		$(field).addClass(instance.errorClass);
 		
-		if (label.element != null) {
-			$(label.element).addClass(instance.errorClass);
+		if (label !== undefined) {
+			$(label).addClass(instance.errorClass);
 		}
 		
 		return true;
@@ -193,7 +181,7 @@
 	function clearError (instance, field) {
 		var label = getLabel(field);
 		
-		var errorid = label.element == null ? field.id : label.element.attr('for');
+		var errorid = (label === undefined) ? field.id : $(label).attr('for');
 		errorid += '-error';
 		var $error = $('#' + errorid);
 		
@@ -201,7 +189,7 @@
 			$error.remove();
 		}
 		$(field).removeClass(instance.errorClass);
-		$(label.element).removeClass(instance.errorClass);
+		$(label).removeClass(instance.errorClass);
 	}
 	
 	function setEvents (instance) {
@@ -265,6 +253,14 @@
 			}
 		}
 		
+		, 'int': function (field) {
+			if (field.value.match(/^[\d\-,]*$/) || field.value == '') {
+				return false;
+			} 
+			else {
+				return 'needs to be a whole number.';
+			}
+		}
 		, 'req': function (field) {
 			var fieldType = field.type.toLowerCase();
 			if (fieldType == 'checkbox' || fieldType == 'radio') {

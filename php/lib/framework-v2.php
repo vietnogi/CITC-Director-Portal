@@ -353,7 +353,7 @@ class FW {
 		if (empty($this->user)) { // session is not available
 			// check cookie for token
 			if (!empty($_COOKIE['t'])) {
-				$t = newInput('t', $_COOKIE, 'len 32');
+				$t = newInput('t', $_COOKIE, 'min 1');
 				$GLOBALS['login']->setToken($t);
 				$this->user = $GLOBALS['login']->isLoggedIn();
 			}
